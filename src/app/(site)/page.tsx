@@ -1,9 +1,16 @@
-import Image from "next/image";
-
-export default function Home() {
+import Nav from "@/components/Nav";
+import Slider from "@/components/Slider";
+import Card from "@/components/Card";
+import SearchBar from "@/components/SearchBar";
+const HomePage = () => {
   return (
-    <div className="bg-neutral-900 rounded-lg h-full w-full overflow-hidden overflow-y-auto">
-      check this function
-    </div>
+    <>
+      <Nav logo={"test"} />
+      <SearchBar />
+      <Slider />
+      <Card />
+    </>
   );
-}
+};
+
+export default HomePage;
