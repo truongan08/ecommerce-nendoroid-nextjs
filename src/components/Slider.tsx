@@ -53,11 +53,11 @@ const Slider = () => {
   //   };
 
   return (
-    <div className="w-full h-screen mx-auto p-6">
+    <div className="w-full h-screen mx-auto p-6 mt-12 max-md:mt-16">
       {sliders.map((slider) => (
         <div
           key={slider.id}
-          className="container mx-auto mt-12 lg:mt-12 md:mt-12 sm:mt-2"
+          className="container mx-auto mt-12"
           style={{ display: id === slider.id ? "block" : "none" }}
         >
           <div

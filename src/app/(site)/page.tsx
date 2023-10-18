@@ -1,14 +1,17 @@
 import Nav from "@/components/Nav";
 import Slider from "@/components/Slider";
-import Card from "@/components/Card";
-import SearchBar from "@/components/SearchBar";
+import Footer from "@/components/Footer";
+
 const HomePage = () => {
   return (
     <>
-      <Nav logo={"test"} />
-      <SearchBar />
-      <Slider />
-      <Card />
+      <div>
+        <Nav logo={"WIGURE"} />
+      </div>
+      <div>
+        <Slider />
+      </div>
+      <Footer congty={"check"} />
     </>
   );
 };
