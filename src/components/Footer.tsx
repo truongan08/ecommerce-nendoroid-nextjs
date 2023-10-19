@@ -11,7 +11,7 @@ const Footer: React.FC<FooterProps> = ({}) => {
     <div className="w-full text-center border-t bg-black text-white p-4 pin-b text-lg">
       <ul className="grid grid-cols-4 gap-4 ">
         <li className="col-span-1 ">
-          <a className="opacity-70">About Us</a>
+          <span className="z-0">About Us</span>
           <ul className="text-sm">
             <li>What is Wigure?</li>
             <li>How to buy?</li>
@@ -19,7 +19,7 @@ const Footer: React.FC<FooterProps> = ({}) => {
           </ul>
         </li>
         <li className="col-span-1 border-s">
-          <a className="opacity-70">LEGAL</a>
+          <span className="z-0">LEGAL</span>
           <ul className="text-sm">
             <li>Terms of Use</li>
             <li>Privacy Policy</li>
@@ -28,14 +28,14 @@ const Footer: React.FC<FooterProps> = ({}) => {
           </ul>
         </li>
         <li className="col-span-1 border-s">
-          <a className="opacity-70">Help</a>
+          <span className="z-0">Help</span>
           <ul className="text-sm">
             <li>FAQ</li>
             <li>Contact Us</li>
           </ul>
         </li>
         <li className="col-span-1 border-s">
-          <a className="opacity-70">More Info</a>
+          <span className="z-0">More Info</span>
           <ul className="text-sm">
             <li>Advertise</li>
             <li>Our Business Partners</li>

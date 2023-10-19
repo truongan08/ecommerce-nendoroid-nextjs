@@ -5,12 +5,8 @@ import Footer from "@/components/Footer";
 const HomePage = () => {
   return (
     <>
-      <div>
-        <Nav logo={"WIGURE"} />
-      </div>
-      <div>
-        <Slider />
-      </div>
+      <Nav logo={"WIGURE"} />
+      <Slider />
       <Footer congty={"check"} />
     </>
   );
