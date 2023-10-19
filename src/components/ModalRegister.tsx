@@ -1,7 +1,6 @@
 import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
-
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 interface RegisterProps {
   modalRegister: boolean;
   clickModalRegister: () => void;
@@ -100,7 +99,11 @@ const Register: React.FC<RegisterProps> = ({
                   onClick={() => setShowPassword(!showPassword)}
                   className="flex justify-around items-center"
                 >
-                  <p className="absolute mr-10">Show password</p>
+                  {showPassword ? (
+                    <FaEye className="absolute mr-10" />
+                  ) : (
+                    <FaEyeSlash className="absolute mr-10" />
+                  )}
                 </span>
                 {/* {errors.password && touched.password && (
                 <p className="text-red-500">{errors.password}</p>
