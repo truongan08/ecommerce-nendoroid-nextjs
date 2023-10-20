@@ -3,13 +3,19 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { Session } from "@supabase/supabase-js";
+import { useAuthSupabaseContext } from "@/provider/supabase";
+
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
+
 import Button from "./Button";
 import SignIn from "@/components/ModalSignIn";
 import Register from "@/components/ModalRegister";
 import SearchBar from "./Search";
-
-const Nav = ({}) => {
+interface NavProps {
+  session: Session | null;
+}
+const Nav: React.FC<NavProps> = ({ session }) => {
   const links = [
     { name: "Home", link: "/" },
     { name: "Products", link: "/product/0" },
@@ -20,24 +26,13 @@ const Nav = ({}) => {
   const [open, setOpen] = useState(false);
   const [modalLogin, setModalLogin] = useState(false);
   const [modalRegister, setModalRegister] = useState(false);
+  const { user } = useAuthSupabaseContext();
 
   const onCLickModalLogin = () => {
-    console.log(!modalLogin);
-    if (!modalLogin) {
-      console.log("add");
-      document.body.classList.add("modal-open");
-    } else {
-      document.body.classList.remove("modal-open");
-    }
     setModalLogin(!modalLogin);
   };
 
   const onCLickModalRegister = () => {
-    if (!modalRegister) {
-      document.body.classList.add("modal-open");
-    } else {
-      document.body.classList.remove("modal-open");
-    }
     setModalRegister(!modalRegister);
   };
 
@@ -122,10 +117,23 @@ const Nav = ({}) => {
                 </Link>
               </li>
             ))}
-            <Button
-              text={"Sign In"}
-              onClickProps={() => onCLickModalLogin()}
-            ></Button>
+            {session?.user ? (
+              <Link href={"/dashboard"}>
+                <Image
+                  src="/images/avatar.png"
+                  width={40}
+                  height={40}
+                  alt="avatar"
+                  className="w-10 h-10 rounded-full ml-7 md:ml-8"
+                />
+                {user.name}
+              </Link>
+            ) : (
+              <Button
+                text={"Sign In"}
+                onClickProps={() => onCLickModalLogin()}
+              ></Button>
+            )}
           </ul>
         </div>
       </div>

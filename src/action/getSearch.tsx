@@ -12,6 +12,7 @@ const getSearch = async (textSearch: string): Promise<Product[]> => {
     .select("*")
     .textSearch("name", textSearch, {
       config: "english",
+      type: "plain",
     });
 
   if (error) {

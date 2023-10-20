@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import loginAction from "@/action/loginAction";
 interface SignInProps {
   modalLogin: boolean;
   clickModalLogin: () => void;
@@ -13,9 +14,12 @@ const SignIn: React.FC<SignInProps> = ({
   clickModalLogin,
   clickSwitchModal,
 }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const handleSubmit = () => {
-    console.log("dang dang nhap");
+
+  const handleSubmit = async () => {
+    await loginAction();
   };
 
   return (
@@ -45,18 +49,16 @@ const SignIn: React.FC<SignInProps> = ({
 
                 <div className="mt-1">
                   <input
-                    id="email"
+                    id="email-signin"
                     name="email"
                     type="email"
                     autoComplete="email"
-                    // onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => setEmail(e.target.value)}
+                    value={email}
                     required
-                    placeholder="my@gmail.com"
+                    placeholder="example@gmail.com"
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   />
-                  {/* {errors.email && touched.email && (
-                    <p className="text-red-500">{errors.email}</p>
-                  )} */}
                 </div>
               </div>
 
@@ -70,11 +72,12 @@ const SignIn: React.FC<SignInProps> = ({
 
                 <div className="flex mt-1">
                   <input
-                    id="password"
+                    id="password-signin"
                     name="password"
                     type={showPassword ? "show-password" : "password"}
                     autoComplete="current-password"
-                    // onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => setPassword(e.target.value)}
+                    value={password}
                     required
                     placeholder="••••••••"
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -89,9 +92,6 @@ const SignIn: React.FC<SignInProps> = ({
                       <FaEyeSlash className="absolute mr-10" />
                     )}
                   </span>
-                  {/* {errors.password && touched.password && (
-                    <p className="text-red-500">{errors.password}</p>
-                  )} */}
                 </div>
               </div>
 

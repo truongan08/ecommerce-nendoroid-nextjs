@@ -1,23 +1,15 @@
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
-import { Product } from "../../types";
-interface Props {
-  user: string;
-}
-const getNendoroid = async (): Promise<user> => {
-  const supabase = createServerComponentClient({
-    cookies: cookies,
-  });
+import supabase from "@/utils/userAction";
 
-  let { data, error } = await supabase.auth.signInWithPassword({
-    email: "truonganfi@gmail.com",
-    password: "test",
-  });
-
-  if (error) {
-    console.log(error.message);
+const loginAction = async () => {
+  try {
+    let { data, error } = await supabase.auth.signInWithPassword({
+      email: "truonganfi@gmail.com",
+      password: "test",
+    });
+    return data as any;
+  } catch (error) {
+    console.log(error);
   }
-  return (data as any) || [];
 };
 
-export default getNendoroid;
+export default loginAction;

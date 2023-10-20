@@ -1,12 +1,17 @@
+import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
 
-export function middleware(request: NextRequest) {
-  if (request.nextUrl.pathname.startsWith("/product")) {
-    return NextResponse.rewrite(new URL("/product/0", request.url));
-  }
+import { NextRequest } from "next/server";
 
-  if (request.nextUrl.pathname.startsWith("/dashboard")) {
-    return NextResponse.rewrite(new URL("/dashboard/user", request.url));
+export async function middleware(req: NextRequest) {
+  const res = NextResponse.next();
+  const supabase = createMiddlewareClient({req, res});
+  await supabase.auth.getSession();
+  if (req.nextUrl.pathname.startsWith("/product")) {
+    return NextResponse.rewrite(new URL("/product/0", req.url));
   }
+  if (req.nextUrl.pathname.startsWith("/dashboard")) {
+    return NextResponse.rewrite(new URL("/dashboard/user", req.url));
+  }
+  return res;
 }
