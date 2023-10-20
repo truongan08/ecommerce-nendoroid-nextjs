@@ -1,13 +1,13 @@
-import Nav from "@/components/Nav";
 import Slider from "@/components/Slider";
-import Footer from "@/components/Footer";
+import PageContent from "./components/PageContent";
+import getTrendNendoroid from "@/action/getTrendNendoroid";
 
-const HomePage = () => {
+const HomePage = async () => {
+  const nendoroid = await getTrendNendoroid();
   return (
     <>
-      <Nav logo={"WIGURE"} />
       <Slider />
-      <Footer congty={"check"} />
+      <PageContent nendoroids={nendoroid} />;
     </>
   );
 };

@@ -1,7 +1,7 @@
 function formatPrice(price: number) {
-  return (price / 100).toLocaleString("en-US", {
+  return (price * 1000).toLocaleString("vi-VN", {
     style: "currency",
-    currency: "USD",
+    currency: "VND",
   });
 }
 interface PriceTagProps {

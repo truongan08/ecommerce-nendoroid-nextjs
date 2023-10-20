@@ -2,11 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-interface FooterProps {
-  congty: string;
-}
-
-const Footer: React.FC<FooterProps> = ({}) => {
+const Footer = ({}) => {
   return (
     <div className="w-full text-center border-t bg-black text-white p-4 pin-b text-lg">
       <ul className="grid grid-cols-4 gap-4 ">

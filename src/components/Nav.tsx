@@ -4,19 +4,15 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
-import { BiSearch } from "react-icons/bi";
 import Button from "./Button";
 import SignIn from "@/components/ModalSignIn";
 import Register from "@/components/ModalRegister";
+import SearchBar from "./Search";
 
-interface HeaderProps {
-  logo: string;
-}
-
-const Nav: React.FC<HeaderProps> = ({}) => {
+const Nav = ({}) => {
   const links = [
     { name: "Home", link: "/" },
-    { name: "Products", link: "/product" },
+    { name: "Products", link: "/product/0" },
     { name: "About", link: "/" },
     { name: "Blog's", link: "/" },
     { name: "Contact", link: "/" },
@@ -69,33 +65,34 @@ const Nav: React.FC<HeaderProps> = ({}) => {
     <>
       <div className="w-full fixed shadow top-0 left-0 right-0">
         <div className="md:flex items-center justify-between bg-white py-4 md:px-10 px-7">
+          <SignIn
+            modalLogin={modalLogin}
+            clickModalLogin={() => onCLickModalLogin()}
+            clickSwitchModal={(e) => {
+              onCLickSwitchModal(e);
+            }}
+          />
+          <Register
+            modalRegister={modalRegister}
+            clickModalRegister={() => onCLickModalRegister()}
+            clickSwitchModal={(e) => {
+              onCLickSwitchModal(e);
+            }}
+          />
           <div className="text-2xl flex items-center cursor-pointer font-bold text-blue-800">
-            <span className="w-full">
+            <Link href={"/"} className="w-full">
               <Image
                 src="/images/wigure.jpg"
                 alt=""
                 width={65}
                 height={65}
-                style={{ objectFit: "contain" }}
+                style={{ objectFit: "contain", maxWidth: "65px" }}
               />
-            </span>
+            </Link>
           </div>
-          <div className="">
-            <div className="flex items-center bg-gray-100 rounded-full p-2 mt-2">
-              <button>
-                <BiSearch size={20} className="opacity-50" />
-              </button>
-              <input
-                type="text"
-                className="outline-none bg-transparent ml-2 caret-blue-500 placeholder:font-light placeholder:text-gray-600 text-[15px]"
-                placeholder="Search"
-                autoComplete="false"
-              />
-              <button className="text-blue-800 ml-8 max-md:hidden max-sm:hidden text-sm border-s-2 mr-4">
-                <div className="ml-4">Search</div>
-              </button>
-            </div>
-          </div>
+
+          <SearchBar />
+
           <div
             onClick={() => {
               setOpen(!open);
@@ -109,9 +106,9 @@ const Nav: React.FC<HeaderProps> = ({}) => {
             )}
           </div>
           <ul
-            className={`md:flex md:items-center md:pb-0 pb-12 absolute md:static bg-white md:z-auto z-[-1] left-0 w-full md:w-auto md:pl-0 pl-9 transition-all duration-300 ${
+            className={`md:flex md:items-center md:pb-0 absolute md:static bg-white md:z-auto z-[-1] left-0 w-full md:w-auto md:pl-0 pl-9 transition-all duration-300 ${
               open
-                ? "top-16 opacity-100"
+                ? "top-16 opacity-100 mt-12"
                 : "top-[-350px] md:opacity-100 opacity-0"
             }`}
           >
@@ -129,20 +126,6 @@ const Nav: React.FC<HeaderProps> = ({}) => {
               text={"Sign In"}
               onClickProps={() => onCLickModalLogin()}
             ></Button>
-            <SignIn
-              modalLogin={modalLogin}
-              clickModalLogin={() => onCLickModalLogin()}
-              clickSwitchModal={(e) => {
-                onCLickSwitchModal(e);
-              }}
-            />
-            <Register
-              modalRegister={modalRegister}
-              clickModalRegister={() => onCLickModalRegister()}
-              clickSwitchModal={(e) => {
-                onCLickSwitchModal(e);
-              }}
-            />
           </ul>
         </div>
       </div>

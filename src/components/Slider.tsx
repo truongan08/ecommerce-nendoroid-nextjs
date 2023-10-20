@@ -53,7 +53,7 @@ const Slider = () => {
   //   };
 
   return (
-    <div className="w-full h-screen mx-auto p-6 mt-12 max-md:mt-16">
+    <div className="w-full mx-auto p-6 mt-12 max-md:mt-16">
       {sliders.map((slider) => (
         <div
           key={slider.id}

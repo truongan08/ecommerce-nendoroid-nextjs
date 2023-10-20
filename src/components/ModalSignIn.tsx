@@ -21,7 +21,7 @@ const SignIn: React.FC<SignInProps> = ({
   return (
     <div
       className={
-        "min-h-screen bg-gray-100 flex flex-col justify-centerS py-12 sm:px-6 lg:px-8 fixed inset-0  bg-opacity-30 backdrop-blur-sm z-70" +
+        "min-h-screen bg-gray-100 flex flex-col justify-centerS py-12 sm:px-6 lg:px-8 fixed inset-0  bg-opacity-30 backdrop-blur-sm z-100" +
         (modalLogin ? "" : " hidden")
       }
     >
