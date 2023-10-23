@@ -3,19 +3,32 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Session } from "@supabase/supabase-js";
-import { useAuthSupabaseContext } from "@/provider/supabase";
 
-import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
+import {
+  AiOutlineClose,
+  AiOutlineMenu,
+  AiOutlineShoppingCart,
+} from "react-icons/ai";
+import { FaSignOutAlt } from "react-icons/fa";
 
 import Button from "./Button";
+import SearchBar from "./Search";
 import SignIn from "@/components/ModalSignIn";
 import Register from "@/components/ModalRegister";
-import SearchBar from "./Search";
-interface NavProps {
-  session: Session | null;
-}
-const Nav: React.FC<NavProps> = ({ session }) => {
+import {
+  selectIsLoggedInUser,
+  useAppDispatch,
+  useAppSelector,
+  signOut,
+  selectLoggedInUser,
+} from "@/lib/redux";
+import { useRouter } from "next/navigation";
+import { User } from "@/types/user";
+
+const Nav = () => {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+
   const links = [
     { name: "Home", link: "/" },
     { name: "Products", link: "/product/0" },
@@ -26,7 +39,13 @@ const Nav: React.FC<NavProps> = ({ session }) => {
   const [open, setOpen] = useState(false);
   const [modalLogin, setModalLogin] = useState(false);
   const [modalRegister, setModalRegister] = useState(false);
-  const { user } = useAuthSupabaseContext();
+
+  const isLoggedInUser: boolean = useAppSelector(selectIsLoggedInUser);
+  const loggedInUser: User = useAppSelector(selectLoggedInUser);
+
+  const SignOut = async () => {
+    await dispatch(signOut());
+  };
 
   const onCLickModalLogin = () => {
     setModalLogin(!modalLogin);
@@ -45,11 +64,9 @@ const Nav: React.FC<NavProps> = ({ session }) => {
       return () => clearInterval(timeout);
     }
     if (e == "register") {
-      console.log("doi register");
       setModalLogin(!modalLogin);
       const timeout = await setTimeout(() => {
         setModalRegister(!modalRegister);
-        console.log("delay");
       }, 1000);
       console.log("login");
       return () => clearInterval(timeout);
@@ -117,17 +134,33 @@ const Nav: React.FC<NavProps> = ({ session }) => {
                 </Link>
               </li>
             ))}
-            {session?.user ? (
-              <Link href={"/dashboard"}>
-                <Image
-                  src="/images/avatar.png"
-                  width={40}
-                  height={40}
-                  alt="avatar"
-                  className="w-10 h-10 rounded-full ml-7 md:ml-8"
-                />
-                {user.name}
-              </Link>
+            {isLoggedInUser ? (
+              <div>
+                <ul>
+                  <li>
+                    <Link href={"/dashboard"}>
+                      <Image
+                        src="/images/avatar.png"
+                        width={40}
+                        height={40}
+                        alt="avatar"
+                        className="w-10 h-10 rounded-full ml-7 md:ml-8"
+                      />
+                      {loggedInUser?.email.substring(0, 7) + "..."}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href={"/cart"}>
+                      <AiOutlineShoppingCart />{" "}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href={"/"} className="inline">
+                      <FaSignOutAlt onClick={SignOut} />
+                    </Link>
+                  </li>
+                </ul>
+              </div>
             ) : (
               <Button
                 text={"Sign In"}

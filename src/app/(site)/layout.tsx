@@ -1,7 +1,4 @@
-import Nav from "@/components/Nav";
-import Footer from "@/components/Footer";
-
-export default async function RootLayout({
+export default async function Layout({
   children,
 }: {
   children: React.ReactNode;

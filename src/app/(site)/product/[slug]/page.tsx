@@ -1,6 +1,6 @@
 import getNenPagination from "@/action/getNenPagination";
-
 import getRange from "@/action/getRange";
+
 import ProductContent from "./components/ProductContent";
 import NotFound from "@/components/404";
 

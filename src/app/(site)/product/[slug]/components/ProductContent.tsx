@@ -19,11 +19,11 @@ const ProductContent: React.FC<PageContentProps> = ({ nendoroids, page }) => {
         <NendoroidItem data={nendoroids} />
       </div>
       <nav aria-label="Page navigation">
-        <ul className="flex">
+        <ul className="flex z-0">
           <li>
             <Link
               className={
-                " relative block rounded bg-transparent px-3 py-1.5 text-sm text-neutral-500 transition-all duration-300 hover:text-white hover:bg-neutral-700" +
+                " relative block rounded bg-transparent px-2 py-1.5 text-sm text-neutral-500 transition-all duration-300 hover:text-white hover:bg-neutral-700" +
                 (page == 0 ? " pointer-events-none" : "")
               }
               href={"/product/" + [page - 1]}
@@ -33,7 +33,7 @@ const ProductContent: React.FC<PageContentProps> = ({ nendoroids, page }) => {
           </li>
           <li>
             <Link
-              className="relative block rounded bg-transparent px-3 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-700 hover:text-white hover:"
+              className="relative block rounded bg-transparent px-2 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-700 hover:text-white hover:"
               href={"/product/" + [page - 1]}
             >
               {page == 0 ? "" : Number(page - 1)}
@@ -41,7 +41,7 @@ const ProductContent: React.FC<PageContentProps> = ({ nendoroids, page }) => {
           </li>
           <li aria-current="page">
             <a
-              className="relative block rounded bg-primary-100 px-3 py-1.5 text-sm font-medium text-primary-700 transition-all duration-300 "
+              className="relative block rounded bg-primary-100 px-2 py-1.5 text-sm font-medium text-primary-700 transition-all duration-300 "
               href="#!"
             >
               {page}
@@ -52,7 +52,7 @@ const ProductContent: React.FC<PageContentProps> = ({ nendoroids, page }) => {
           </li>
           <li>
             <a
-              className="relative block rounded bg-transparent px-3 py-1.5 text-sm text-neutral-600 transition-all duration-300   hover:bg-neutral-700 hover:text-white"
+              className="relative block rounded bg-transparent px-2 py-1.5 text-sm text-neutral-600 transition-all duration-300   hover:bg-neutral-700 hover:text-white"
               href={"/product/" + [page + 1]}
             >
               {page == 5 ? "" : Number(page + 1)}
@@ -60,7 +60,7 @@ const ProductContent: React.FC<PageContentProps> = ({ nendoroids, page }) => {
           </li>
           <li>
             <Link
-              className="relative block rounded bg-transparent px-3 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-700 hover:text-white"
+              className="relative block rounded bg-transparent px-2 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-700 hover:text-white"
               href={"/product/" + (page + 1)}
             >
               Next

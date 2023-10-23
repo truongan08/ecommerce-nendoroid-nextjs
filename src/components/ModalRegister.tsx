@@ -1,6 +1,8 @@
 import { useState } from "react";
 import Link from "next/link";
+import { FormEvent } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import Loading from "./Loading";
 interface RegisterProps {
   modalRegister: boolean;
   clickModalRegister: () => void;
@@ -12,10 +14,12 @@ const Register: React.FC<RegisterProps> = ({
   clickModalRegister,
   clickSwitchModal,
 }) => {
+  const [fullname, setFullname] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const handleSubmit = () => {
-    console.log("dang dang nhap");
-  };
+  const [isLoading, setIsLoading] = useState(false);
+
   return (
     <div
       className={
@@ -31,7 +35,10 @@ const Register: React.FC<RegisterProps> = ({
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          <form
+            className="space-y-6"
+            onSubmit={(e) => handleSubmit(e, email, password)}
+          >
             <div>
               <label
                 htmlFor="firstname"
@@ -41,17 +48,16 @@ const Register: React.FC<RegisterProps> = ({
               </label>
               <div className="mt-1">
                 <input
-                  id="firstname"
-                  name="firstname"
+                  id="fullname"
+                  name="fullname"
                   type="text"
-                  autoComplete="firstname"
+                  autoComplete="fullname"
+                  value={fullname}
+                  onChange={(e) => setFullname(e.target.value)}
                   required
                   placeholder="Your name"
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 />
-                {/* {errors.firstname && touched.firstname && (
-                <p className="text-red-500">{errors.firstname}</p>
-              )} */}
               </div>
             </div>
 
@@ -69,12 +75,11 @@ const Register: React.FC<RegisterProps> = ({
                   type="email"
                   autoComplete="email"
                   placeholder="my@gmail.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 />
-                {/* {errors.email && touched.email && (
-                <p className="text-red-500">{errors.email}</p>
-              )} */}
               </div>
             </div>
 
@@ -91,6 +96,8 @@ const Register: React.FC<RegisterProps> = ({
                   name="password"
                   type={showPassword ? "show-password" : "password"}
                   autoComplete="current-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   required
                   placeholder="••••••••"
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -105,9 +112,6 @@ const Register: React.FC<RegisterProps> = ({
                     <FaEyeSlash className="absolute mr-10" />
                   )}
                 </span>
-                {/* {errors.password && touched.password && (
-                <p className="text-red-500">{errors.password}</p>
-              )} */}
               </div>
             </div>
 
@@ -124,7 +128,7 @@ const Register: React.FC<RegisterProps> = ({
 
             <div className="z-10 py-6 w-full flex justify-center space-x-36">
               <Link
-                href={"/"}
+                href={"#"}
                 type="submit"
                 onClick={() => clickModalRegister()}
                 className="py-2 px-7 border border-transparent text-sm font-medium rounded-md text-black bg-gray-200 hover:bg-gray-300 mr-5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -133,10 +137,12 @@ const Register: React.FC<RegisterProps> = ({
               </Link>
               <button
                 type="submit"
-                disabled={false}
-                className="py-2 px-7 border border-transparent text-sm font-medium rounded-md text-black bg-gray-200 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                disabled={isLoading}
+                className={`py-2 px-7 border border-transparent text-sm font-medium rounded-md text-black bg-gray-200  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${
+                  isLoading ? "" : "hover:bg-gray-300"
+                }`}
               >
-                Register
+                {isLoading ? <Loading /> : "Register"}
               </button>
             </div>
           </form>

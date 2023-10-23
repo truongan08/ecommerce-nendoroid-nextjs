@@ -1,31 +1,65 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import loginAction from "@/action/loginAction";
+
+import Loading from "./Loading";
+import {
+  selectIsLoggedInUser,
+  selectSignInError,
+  selectSignInStatus,
+  signIn,
+  useAppDispatch,
+  useAppSelector,
+} from "@/lib/redux";
+import { CustomError, RequestStatus } from "@/types/user";
+import { useRouter } from "next/navigation";
+
 interface SignInProps {
   modalLogin: boolean;
   clickModalLogin: () => void;
   clickSwitchModal: (e: any) => void;
 }
+
 const SignIn: React.FC<SignInProps> = ({
   modalLogin,
   clickModalLogin,
   clickSwitchModal,
 }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = async () => {
-    await loginAction();
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+
+  const isLoggedInUser: boolean = useAppSelector(selectIsLoggedInUser);
+  const signInStatus: CustomError | null = useAppSelector(selectSignInStatus);
+  const signInError: RequestStatus = useAppSelector(selectSignInError);
+
+  const handleSubmit = async (event: any) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+    const formEntries = Object.fromEntries(formData);
+    const email: string = formEntries.email as string;
+    const password: string = formEntries.password as string;
+
+    await dispatch(signIn({ email, password }));
   };
+
+  useEffect(() => {
+    if (isLoggedInUser) {
+      router.refresh();
+      if (signInStatus === RequestStatus.COMPLETED) {
+        clickModalLogin();
+      }
+    }
+  }, [isLoggedInUser]);
 
   return (
     <div
       className={
-        "min-h-screen bg-gray-100 flex flex-col justify-centerS py-12 sm:px-6 lg:px-8 fixed inset-0  bg-opacity-30 backdrop-blur-sm z-100" +
+        "min-h-screen bg-gray-100 flex flex-col justify-centerS py-12 sm:px-6 lg:px-8 fixed inset-0  bg-opacity-30 backdrop-blur-sm z-10" +
         (modalLogin ? "" : " hidden")
       }
     >
@@ -41,7 +75,7 @@ const SignIn: React.FC<SignInProps> = ({
             <div className="rounded-md py-6 shadow-sm -space-y-px-10">
               <div className="form-outline mb-4">
                 <label
-                  htmlFor="email"
+                  htmlFor="email-signin"
                   className="block text-sm font-medium text-gray-700"
                 >
                   Email
@@ -53,10 +87,8 @@ const SignIn: React.FC<SignInProps> = ({
                     name="email"
                     type="email"
                     autoComplete="email"
-                    onChange={(e) => setEmail(e.target.value)}
-                    value={email}
                     required
-                    placeholder="example@gmail.com"
+                    placeholder="Email"
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   />
                 </div>
@@ -64,7 +96,7 @@ const SignIn: React.FC<SignInProps> = ({
 
               <div className="form-outline mb-4 mt-6">
                 <label
-                  htmlFor="password"
+                  htmlFor="password-signin"
                   className="block text-sm font-medium text-gray-700"
                 >
                   Password
@@ -76,8 +108,6 @@ const SignIn: React.FC<SignInProps> = ({
                     name="password"
                     type={showPassword ? "show-password" : "password"}
                     autoComplete="current-password"
-                    onChange={(e) => setPassword(e.target.value)}
-                    value={password}
                     required
                     placeholder="••••••••"
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -114,7 +144,7 @@ const SignIn: React.FC<SignInProps> = ({
             <div className="flex items-center justify-between ">
               <div className="text-sm">
                 <Link
-                  href={"/"}
+                  href={"#"}
                   className="font-medium text-indigo-600 hover:text-indigo-500"
                   onClick={(e) => clickSwitchModal("register")}
                 >
@@ -135,7 +165,7 @@ const SignIn: React.FC<SignInProps> = ({
 
             <div className="py-6 w-full flex justify-center space-x-36">
               <Link
-                href={"/"}
+                href={"#"}
                 type="submit"
                 onClick={() => clickModalLogin()}
                 className="py-2 px-7 border border-transparent text-sm font-medium rounded-md text-black bg-gray-200 hover:bg-gray-300 mr-5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -144,13 +174,22 @@ const SignIn: React.FC<SignInProps> = ({
               </Link>
               <button
                 type="submit"
-                disabled={false}
-                className="py-2 px-7 border border-transparent text-sm font-medium rounded-md text-black bg-gray-200 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                disabled={signInStatus === RequestStatus.LOADING}
+                className={`py-2 px-7 border border-transparent text-sm font-medium rounded-md text-black bg-gray-200focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 bg-gray-200 ${
+                  signInStatus === RequestStatus.LOADING
+                    ? ""
+                    : "hover:bg-gray-300"
+                }`}
               >
-                Login
+                {signInStatus === RequestStatus.LOADING ? <Loading /> : "Login"}
               </button>
             </div>
           </form>
+          {signInStatus === RequestStatus.FAILED && (
+            <div className="mb-3 p-2 text-center bg-red-100 text-red-600 rounded">
+              {signInError?.message}
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -4,7 +4,8 @@ import { PropsWithChildren } from "react";
 
 import "./globals.css";
 
-import AuthSupabaseProvider from "@/provider/supabase";
+import AuthSupabaseContextProvider from "@/provider/supabase";
+import { Providers } from "@/lib/provider";
 
 import Footer from "@/components/Footer";
 
@@ -20,7 +21,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en">
       <body className={font.className}>
-        <AuthSupabaseProvider>
+        <Providers>
           <main
             id="skip"
             className="min-h-[calc(100dvh-4rem)] md:min-h[calc(100dvh-5rem)]"
@@ -28,7 +29,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
             {children}
           </main>
           <Footer />
-        </AuthSupabaseProvider>
+        </Providers>
       </body>
     </html>
   );
