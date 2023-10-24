@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Session } from "@/types/user";
 import {
@@ -10,6 +10,8 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "@/lib/redux";
+import Loading from "@/components/Loading";
+import Image from "next/image";
 
 type SessionProviderProps = {
   children: ReactNode;
@@ -18,23 +20,34 @@ type SessionProviderProps = {
 export const SessionProvider = ({ children }: SessionProviderProps) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const [isLoading, setIsLoading] = useState(false);
 
   const isLoggedInSession: boolean = useAppSelector(selectIsLoggedInSession);
 
   useEffect(() => {
-    if (!isLoggedInSession) getLoggedInUserDataOrRedirectToSignInPage();
+    if (!isLoggedInSession) getLoggedInUserDataOrNone();
   }, []);
 
-  const getLoggedInUserDataOrRedirectToSignInPage = () => {
+  const getLoggedInUserDataOrNone = () => {
     const localSessionData: Session | null = selectLocalSessionData();
 
     if (!localSessionData) {
-      // router.push("/");
+      setIsLoading(true);
+      router.refresh();
       return;
     }
 
     dispatch(setSessionFromLocalSessionData(localSessionData));
+    setIsLoading(true);
   };
 
-  return <>{isLoggedInSession ? children : "Loading ..."}</>;
+  return (
+    <>
+      {!isLoading ? (
+        <Image src={"/images/figre.gif"} alt="figure-loading" fill />
+      ) : (
+        children
+      )}
+    </>
+  );
 };

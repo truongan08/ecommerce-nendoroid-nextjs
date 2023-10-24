@@ -94,5 +94,5 @@ export const initialState: AuthState = {
 	signUpStatus: RequestStatus.IDLE,
 	signUpError: null,
 	signOutStatus: RequestStatus.IDLE,
-	signOutError: null
+	signOutError: null,
 }

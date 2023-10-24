@@ -33,8 +33,8 @@ const SignIn: React.FC<SignInProps> = ({
   const router = useRouter();
 
   const isLoggedInUser: boolean = useAppSelector(selectIsLoggedInUser);
-  const signInStatus: CustomError | null = useAppSelector(selectSignInStatus);
-  const signInError: RequestStatus = useAppSelector(selectSignInError);
+  const signInStatus: RequestStatus = useAppSelector(selectSignInStatus);
+  const signInError: CustomError | null = useAppSelector(selectSignInError);
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
@@ -54,7 +54,7 @@ const SignIn: React.FC<SignInProps> = ({
         clickModalLogin();
       }
     }
-  }, [isLoggedInUser]);
+  }, [isLoggedInUser, router, signInStatus]);
 
   return (
     <div
@@ -125,7 +125,7 @@ const SignIn: React.FC<SignInProps> = ({
                 </div>
               </div>
 
-              <div className="flex items-center">
+              {/* <div className="flex items-center">
                 <input
                   id="remember_me"
                   name="remember_me"
@@ -138,7 +138,7 @@ const SignIn: React.FC<SignInProps> = ({
                 >
                   Remember me
                 </label>
-              </div>
+              </div> */}
             </div>
 
             <div className="flex items-center justify-between ">

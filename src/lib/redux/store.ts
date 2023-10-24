@@ -8,7 +8,7 @@ import {
 
 import { rootReducer } from './rootReducer'
 import { appOutputs } from '@/types/user'
-// import { middleware } from './middleware'
+import { middleware } from './middleware'
 
 
 export type RootState = ReturnType<typeof reduxStore.getState>
@@ -28,7 +28,7 @@ export const reduxStore = configureStore({
 				isSerializable: () => true,
 			},
 			thunk: { extraArgument: appOutputs },
-		}),
+		}).concat(middleware),
 	],
 	devTools: process.env.NODE_ENV !== "production",
 })

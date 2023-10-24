@@ -41,7 +41,7 @@ const Nav = () => {
   const [modalRegister, setModalRegister] = useState(false);
 
   const isLoggedInUser: boolean = useAppSelector(selectIsLoggedInUser);
-  const loggedInUser: User = useAppSelector(selectLoggedInUser);
+  const loggedInUser: User | null = useAppSelector(selectLoggedInUser);
 
   const SignOut = async () => {
     await dispatch(signOut());
@@ -141,17 +141,15 @@ const Nav = () => {
                     <Link href={"/dashboard"}>
                       <Image
                         src="/images/avatar.png"
-                        width={40}
-                        height={40}
+                        fill
                         alt="avatar"
-                        className="w-10 h-10 rounded-full ml-7 md:ml-8"
+                        className="rounded-full ml-7 md:ml-8 object-contain"
                       />
-                      {loggedInUser?.email.substring(0, 7) + "..."}
                     </Link>
                   </li>
                   <li>
                     <Link href={"/cart"}>
-                      <AiOutlineShoppingCart />{" "}
+                      <AiOutlineShoppingCart />
                     </Link>
                   </li>
                   <li>

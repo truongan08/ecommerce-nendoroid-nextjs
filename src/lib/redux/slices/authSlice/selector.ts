@@ -2,7 +2,7 @@
 /* Instruments */
 import type { RootState } from '@/lib/redux'
 import { createSelector } from '@reduxjs/toolkit'
-import { Session, User, CustomError, RequestStatus } from '@/types/user'
+import { Session, User, CustomError, RequestStatus, GetLocalStatus } from '@/types/user'
 
 export const selectLocalSessionData = (): Session | null => {
     const localSessionDataString: string | null = localStorage.getItem(

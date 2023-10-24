@@ -4,8 +4,8 @@ import { PropsWithChildren } from "react";
 
 import "./globals.css";
 
-import AuthSupabaseContextProvider from "@/provider/supabase";
 import { Providers } from "@/lib/provider";
+import { SessionProvider } from "@/provider/session-provider";
 
 import Footer from "@/components/Footer";
 
@@ -22,13 +22,15 @@ export default function RootLayout({ children }: PropsWithChildren) {
     <html lang="en">
       <body className={font.className}>
         <Providers>
-          <main
-            id="skip"
-            className="min-h-[calc(100dvh-4rem)] md:min-h[calc(100dvh-5rem)]"
-          >
-            {children}
-          </main>
-          <Footer />
+          <SessionProvider>
+            <main
+              id="skip"
+              className="min-h-[calc(100dvh-4rem)] md:min-h[calc(100dvh-5rem)]"
+            >
+              {children}
+            </main>
+            <Footer />
+          </SessionProvider>
         </Providers>
       </body>
     </html>
