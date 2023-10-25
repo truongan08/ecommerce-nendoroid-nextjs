@@ -4,12 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-import {
-  AiOutlineClose,
-  AiOutlineMenu,
-  AiOutlineShoppingCart,
-} from "react-icons/ai";
-import { FaSignOutAlt } from "react-icons/fa";
+import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 
 import Button from "./Button";
 import SearchBar from "./Search";
@@ -19,11 +14,9 @@ import {
   selectIsLoggedInUser,
   useAppDispatch,
   useAppSelector,
-  signOut,
-  selectLoggedInUser,
 } from "@/lib/redux";
 import { useRouter } from "next/navigation";
-import { User } from "@/types/user";
+import SideBar from "./SideBar";
 
 const Nav = () => {
   const router = useRouter();
@@ -37,15 +30,10 @@ const Nav = () => {
     { name: "Contact", link: "/" },
   ];
   const [open, setOpen] = useState(false);
+  const [openSidebar, setOpenSidebar] = useState(false);
   const [modalLogin, setModalLogin] = useState(false);
   const [modalRegister, setModalRegister] = useState(false);
-
   const isLoggedInUser: boolean = useAppSelector(selectIsLoggedInUser);
-  const loggedInUser: User | null = useAppSelector(selectLoggedInUser);
-
-  const SignOut = async () => {
-    await dispatch(signOut());
-  };
 
   const onCLickModalLogin = () => {
     setModalLogin(!modalLogin);
@@ -73,24 +61,14 @@ const Nav = () => {
     }
   };
 
+  const onCLickOpenSidebar = () => {
+    setOpenSidebar(!openSidebar);
+  };
+
   return (
     <>
       <div className="w-full fixed shadow top-0 left-0 right-0">
         <div className="md:flex items-center justify-between bg-white py-4 md:px-10 px-7">
-          <SignIn
-            modalLogin={modalLogin}
-            clickModalLogin={() => onCLickModalLogin()}
-            clickSwitchModal={(e) => {
-              onCLickSwitchModal(e);
-            }}
-          />
-          <Register
-            modalRegister={modalRegister}
-            clickModalRegister={() => onCLickModalRegister()}
-            clickSwitchModal={(e) => {
-              onCLickSwitchModal(e);
-            }}
-          />
           <div className="text-2xl flex items-center cursor-pointer font-bold text-blue-800">
             <Link href={"/"} className="w-full">
               <Image
@@ -125,7 +103,7 @@ const Nav = () => {
             }`}
           >
             {links.map((link, index) => (
-              <li key={index} className="md:ml-8 text-sm md:my-0 my-7">
+              <li key={index} className="md:ml-8 text-sm md:my-0 my-7 ml-2">
                 <Link
                   href={link.link}
                   className="text-gray-800 hover:text-gray-400 duration-500"
@@ -134,38 +112,51 @@ const Nav = () => {
                 </Link>
               </li>
             ))}
-            {isLoggedInUser ? (
-              <div>
-                <ul>
-                  <li>
-                    <Link href={"/dashboard"}>
-                      <Image
-                        src="/images/avatar.png"
-                        fill
-                        alt="avatar"
-                        className="rounded-full ml-7 md:ml-8 object-contain"
-                      />
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href={"/cart"}>
-                      <AiOutlineShoppingCart />
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href={"/"} className="inline">
-                      <FaSignOutAlt onClick={SignOut} />
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-            ) : (
-              <Button
-                text={"Sign In"}
-                onClickProps={() => onCLickModalLogin()}
-              ></Button>
-            )}
           </ul>
+
+          <div>
+            {isLoggedInUser ? (
+              <>
+                <Image
+                  onClick={() => setOpenSidebar(!openSidebar)}
+                  src="/images/avatar.png"
+                  width={40}
+                  height={40}
+                  alt="avatar"
+                  className="rounded-full relative"
+                  style={{ objectFit: "contain", maxWidth: "40px" }}
+                />
+
+                <SideBar
+                  openSidebar={openSidebar}
+                  onCLickOpenSidebar={() => onCLickOpenSidebar()}
+                />
+              </>
+            ) : (
+              <>
+                <Button
+                  text={"Sign In"}
+                  onClickProps={() => onCLickModalLogin()}
+                ></Button>
+
+                <SignIn
+                  modalLogin={modalLogin}
+                  clickModalLogin={() => onCLickModalLogin()}
+                  clickSwitchModal={(e) => {
+                    onCLickSwitchModal(e);
+                  }}
+                />
+
+                <Register
+                  modalRegister={modalRegister}
+                  clickModalRegister={() => onCLickModalRegister()}
+                  clickSwitchModal={(e) => {
+                    onCLickSwitchModal(e);
+                  }}
+                />
+              </>
+            )}
+          </div>
         </div>
       </div>
     </>

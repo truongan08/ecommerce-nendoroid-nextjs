@@ -45,23 +45,24 @@ const SignIn: React.FC<SignInProps> = ({
     const password: string = formEntries.password as string;
 
     await dispatch(signIn({ email, password }));
+    event.target.reset();
+  };
+  const handleReset = () => {
+    clickModalLogin;
   };
 
   useEffect(() => {
     if (isLoggedInUser) {
       router.refresh();
-      if (signInStatus === RequestStatus.COMPLETED) {
-        clickModalLogin();
-      }
+      handleReset;
     }
   }, [isLoggedInUser, router, signInStatus]);
 
   return (
     <div
-      className={
-        "min-h-screen bg-gray-100 flex flex-col justify-centerS py-12 sm:px-6 lg:px-8 fixed inset-0  bg-opacity-30 backdrop-blur-sm z-10" +
-        (modalLogin ? "" : " hidden")
-      }
+      className={`min-h-screen bg-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8 fixed inset-0  bg-opacity-30 backdrop-blur-sm z-10 + ${
+        modalLogin ? "" : "hidden"
+      }`}
     >
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md mb-28 bg-white py-1 px-4 shadow sm:rounded-lg sm:px-10 mb-26 ">
         <div className="sm:mx-auto sm:w-full sm:max-w-md ">
@@ -70,7 +71,12 @@ const SignIn: React.FC<SignInProps> = ({
           </h2>
         </div>
         <div className="">
-          <form className=" space-y-6" onSubmit={handleSubmit}>
+          <form
+            id="formSignin"
+            className="space-y-6"
+            onSubmit={handleSubmit}
+            onReset={handleReset}
+          >
             <input type="hidden" name="remember" value="true" />
             <div className="rounded-md py-6 shadow-sm -space-y-px-10">
               <div className="form-outline mb-4">
@@ -124,21 +130,6 @@ const SignIn: React.FC<SignInProps> = ({
                   </span>
                 </div>
               </div>
-
-              {/* <div className="flex items-center">
-                <input
-                  id="remember_me"
-                  name="remember_me"
-                  type="checkbox"
-                  className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                />
-                <label
-                  htmlFor="remember_me"
-                  className="ml-2 block text-sm text-gray-900"
-                >
-                  Remember me
-                </label>
-              </div> */}
             </div>
 
             <div className="flex items-center justify-between ">
@@ -146,13 +137,13 @@ const SignIn: React.FC<SignInProps> = ({
                 <Link
                   href={"#"}
                   className="font-medium text-indigo-600 hover:text-indigo-500"
-                  onClick={(e) => clickSwitchModal("register")}
+                  onClick={() => clickSwitchModal("register")}
                 >
                   <b>Register</b>
                 </Link>
               </div>
 
-              <div className="text-sm">
+              {/* <div className="text-sm">
                 <Link
                   href="/Forget"
                   className="font-medium text-indigo-600 hover:text-indigo-500"
@@ -160,22 +151,22 @@ const SignIn: React.FC<SignInProps> = ({
                 >
                   <b>Forgot password?</b>
                 </Link>
-              </div>
+              </div> */}
             </div>
 
             <div className="py-6 w-full flex justify-center space-x-36">
-              <Link
-                href={"#"}
-                type="submit"
+              <button
+                type="reset"
                 onClick={() => clickModalLogin()}
                 className="py-2 px-7 border border-transparent text-sm font-medium rounded-md text-black bg-gray-200 hover:bg-gray-300 mr-5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
                 Close
-              </Link>
+              </button>
+
               <button
                 type="submit"
                 disabled={signInStatus === RequestStatus.LOADING}
-                className={`py-2 px-7 border border-transparent text-sm font-medium rounded-md text-black bg-gray-200focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 bg-gray-200 ${
+                className={`py-2 px-7 border border-transparent text-sm font-medium rounded-md text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 bg-gray-200 ${
                   signInStatus === RequestStatus.LOADING
                     ? ""
                     : "hover:bg-gray-300"

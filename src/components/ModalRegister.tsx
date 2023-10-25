@@ -1,7 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { FormEvent } from "react";
+import {
+  selectIsLoggedInUser,
+  selectSignUpError,
+  selectSignUpStatus,
+  signUp,
+  useAppDispatch,
+  useAppSelector,
+} from "@/lib/redux";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { CustomError, RequestStatus } from "@/types/user";
+import { useRouter } from "next/navigation";
 import Loading from "./Loading";
 interface RegisterProps {
   modalRegister: boolean;
@@ -14,11 +23,33 @@ const Register: React.FC<RegisterProps> = ({
   clickModalRegister,
   clickSwitchModal,
 }) => {
-  const [fullname, setFullname] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const isLoggedInUser: boolean = useAppSelector(selectIsLoggedInUser);
+  const signUpStatus: RequestStatus = useAppSelector(selectSignUpStatus);
+  const signUpError: CustomError | null = useAppSelector(selectSignUpError);
+
+  const handleSubmit = async (event: any) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+    const formEntries = Object.fromEntries(formData);
+    const email: string = formEntries.email as string;
+    const password: string = formEntries.password as string;
+
+    await dispatch(signUp({ email, password }));
+  };
+
+  useEffect(() => {
+    if (isLoggedInUser) {
+      router.refresh();
+      if (signUpStatus === RequestStatus.COMPLETED) {
+        clickModalRegister();
+      }
+    }
+  }, [isLoggedInUser, router, signUpStatus]);
 
   return (
     <div
@@ -35,10 +66,7 @@ const Register: React.FC<RegisterProps> = ({
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form
-            className="space-y-6"
-            onSubmit={(e) => handleSubmit(e, email, password)}
-          >
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label
                 htmlFor="firstname"
@@ -52,8 +80,6 @@ const Register: React.FC<RegisterProps> = ({
                   name="fullname"
                   type="text"
                   autoComplete="fullname"
-                  value={fullname}
-                  onChange={(e) => setFullname(e.target.value)}
                   required
                   placeholder="Your name"
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -75,8 +101,6 @@ const Register: React.FC<RegisterProps> = ({
                   type="email"
                   autoComplete="email"
                   placeholder="my@gmail.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
                   required
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 />
@@ -96,8 +120,6 @@ const Register: React.FC<RegisterProps> = ({
                   name="password"
                   type={showPassword ? "show-password" : "password"}
                   autoComplete="current-password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
                   required
                   placeholder="••••••••"
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -137,15 +159,26 @@ const Register: React.FC<RegisterProps> = ({
               </Link>
               <button
                 type="submit"
-                disabled={isLoading}
-                className={`py-2 px-7 border border-transparent text-sm font-medium rounded-md text-black bg-gray-200  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${
-                  isLoading ? "" : "hover:bg-gray-300"
+                disabled={signUpStatus === RequestStatus.LOADING}
+                className={`py-2 px-7 border border-transparent text-sm font-medium rounded-md text-black bg-gray-200focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 bg-gray-200 ${
+                  signUpStatus === RequestStatus.LOADING
+                    ? ""
+                    : "hover:bg-gray-300"
                 }`}
               >
-                {isLoading ? <Loading /> : "Register"}
+                {signUpStatus === RequestStatus.LOADING ? (
+                  <Loading />
+                ) : (
+                  "Register"
+                )}
               </button>
             </div>
           </form>
+          {signUpStatus === RequestStatus.FAILED && (
+            <div className="mb-3 p-2 text-center bg-red-100 text-red-600 rounded">
+              {signUpError?.message}
+            </div>
+          )}
         </div>
       </div>
     </div>

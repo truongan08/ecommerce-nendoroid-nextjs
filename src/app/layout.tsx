@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en">
-      <body className={font.className}>
+      <body className={font.className + " relative"}>
         <Providers>
           <SessionProvider>
             <main
