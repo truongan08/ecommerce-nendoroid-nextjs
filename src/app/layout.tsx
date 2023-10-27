@@ -20,6 +20,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en">
+      <link
+        rel="preload"
+        href="/next/static/css/app/layout.css?v=1698229897614 wa"
+        as="style"
+      />
       <body className={font.className + " relative"}>
         <Providers>
           <SessionProvider>

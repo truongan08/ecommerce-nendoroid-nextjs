@@ -1,4 +1,4 @@
-import supabase from "@/utils/userAction";
+import supabase from "@/utils/SupabaseUser";
 
 export async function getUser() {
   try {

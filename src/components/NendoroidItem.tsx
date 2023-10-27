@@ -2,8 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
+
 import { Product } from "../../types";
 import PriceTag from "./PriceTag";
+import { AiOutlineShoppingCart } from "react-icons/ai";
 interface NendoroidItemProps {
   data: Product[];
 }
@@ -17,8 +19,7 @@ const NendoroidItem: React.FC<NendoroidItemProps> = ({ data }) => {
               // onClick={() => handle()}
               href={`productdetail/${item.product_id}`}
             >
-              {/* Hiển thị ảnh sản phẩm */}
-              <div className="product-image py-2 px-4 ">
+              <div className="py-2 px-4 ">
                 <div className="flex justify-center items-center md:h-auto bg-white ">
                   <Image
                     src={"https://1.bp.blogspot.com" + item?.image_url}
@@ -30,7 +31,6 @@ const NendoroidItem: React.FC<NendoroidItemProps> = ({ data }) => {
                 </div>
               </div>
 
-              {/* Hiển thị tên sản phẩm */}
               <div
                 className="product-name overflow-hidden mt-2 ml-4 line-clamp-2 min-h-[50px] pr-2"
                 title={item.name}
@@ -38,7 +38,7 @@ const NendoroidItem: React.FC<NendoroidItemProps> = ({ data }) => {
                 {item.name}
               </div>
             </Link>
-            {/* Hiển thị giá sản phẩm */}
+
             <div className="product-price mt-2 mb-1 flex">
               <PriceTag
                 price={item.price}
@@ -49,18 +49,16 @@ const NendoroidItem: React.FC<NendoroidItemProps> = ({ data }) => {
                 // onClick={() => handlecart(data.product_id)}
                 className="ml-auto mr-4 hover:bg-gray-300 rounded-full w-8 h-8 flex justify-center items-center"
               >
-                {/* <AddShoppingCartIcon /> */}
+                <AiOutlineShoppingCart />
               </Link>
             </div>
-            {true ? (
-              <div className="rounded-full bg-gray-700 ml-2 mr-2 mb-2 flex items-center justify-center">
-                <span className=" text-white">Sold out</span>
+            {item.stock != null ? (
+              <div className="rounded-full bg-red-700 ml-2 mr-2 mb-2 flex items-center justify-center">
+                <span className=" text-white">{item.stock} products left</span>
               </div>
             ) : (
-              <div className="rounded-full bg-red-700 ml-2 mr-2 mb-2 flex items-center justify-center">
-                <span className=" text-white">
-                  {item.product_id} sản phẩm có sẵn
-                </span>
+              <div className="rounded-full bg-gray-700 ml-2 mr-2 mb-2 flex items-center justify-center">
+                <span className=" text-white">Sold out</span>
               </div>
             )}
           </div>

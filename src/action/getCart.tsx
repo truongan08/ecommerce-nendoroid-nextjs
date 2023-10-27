@@ -1,4 +1,4 @@
-import supabase from "@/utils/userAction";
+import supabase from "@/utils/SupabaseUser";
 
 // const getCart = async ({ session }: { session: Session | null }) => {
 const getCart = async (id: string) => {

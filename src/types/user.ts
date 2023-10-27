@@ -31,6 +31,15 @@ export interface AuthState {
 	signOutError: CustomError | null
 }
 
+export interface CartOutput {
+addToCart(
+	signInDto: SignInDto
+): Promise<{ session: Session | null; error: CustomError | null }>
+
+signUp(signUpDto: SignUpDto): Promise<{ error: CustomError | null }>
+
+removeFromCart(): Promise<{ error: CustomError | null }>}
+
 // enum
 
 export enum AuthCallTypes {
@@ -45,7 +54,6 @@ export enum RequestStatus {
 	COMPLETED = "COMPLETED",
 	FAILED = "FAILED",
 }
-
 
 //type
 

@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import Loading from "./Loading";
 import {
@@ -45,6 +47,7 @@ const SignIn: React.FC<SignInProps> = ({
     const password: string = formEntries.password as string;
 
     await dispatch(signIn({ email, password }));
+
     event.target.reset();
   };
   const handleReset = () => {
@@ -55,6 +58,9 @@ const SignIn: React.FC<SignInProps> = ({
     if (isLoggedInUser) {
       router.refresh();
       handleReset;
+    }
+    if (signInStatus === RequestStatus.FAILED) {
+      toast(signInError?.message);
     }
   }, [isLoggedInUser, router, signInStatus]);
 
@@ -176,11 +182,7 @@ const SignIn: React.FC<SignInProps> = ({
               </button>
             </div>
           </form>
-          {signInStatus === RequestStatus.FAILED && (
-            <div className="mb-3 p-2 text-center bg-red-100 text-red-600 rounded">
-              {signInError?.message}
-            </div>
-          )}
+          {signInStatus === RequestStatus.FAILED && <ToastContainer />}
         </div>
       </div>
     </div>
