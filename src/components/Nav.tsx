@@ -112,6 +112,32 @@ const Nav = () => {
                 </Link>
               </li>
             ))}
+            {/* {open &&  */}
+            <li
+              className={`md:ml-8 text-sm md:my-0 my-7 ml-2 ${
+                open ? "" : "hidden"
+              }`}
+            >
+              {isLoggedInUser ? (
+                <Image
+                  onClick={() => setOpenSidebar(!openSidebar)}
+                  src="/images/avatar.png"
+                  width={40}
+                  height={40}
+                  alt="avatar"
+                  className="rounded-full relative md:hidden"
+                  style={{ objectFit: "contain", maxWidth: "40px" }}
+                />
+              ) : (
+                <SignIn
+                  modalLogin={modalLogin}
+                  clickModalLogin={() => onCLickModalLogin()}
+                  clickSwitchModal={(e) => {
+                    onCLickSwitchModal(e);
+                  }}
+                />
+              )}
+            </li>
           </ul>
 
           <div>
@@ -123,7 +149,7 @@ const Nav = () => {
                   width={40}
                   height={40}
                   alt="avatar"
-                  className="rounded-full relative"
+                  className="rounded-full relative max-md:hidden"
                   style={{ objectFit: "contain", maxWidth: "40px" }}
                 />
 
