@@ -3,6 +3,7 @@ import { PropsWithChildren } from "react";
 import localFont from "next/font/local";
 
 import "./globals.css";
+const myFont = localFont({ src: "../assets/fonts/fontawesome-webfont.woff2" });
 
 import { Providers } from "@/lib/provider";
 import { SessionProvider } from "@/provider/session-provider";
@@ -18,12 +19,12 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en">
-      <body>
+      <body className={myFont.className}>
         <Providers>
           <SessionProvider>
             <main
               id="skip"
-              className="min-h-[calc(100dvh-4rem)] md:min-h[calc(100dvh-5rem)]"
+              className="min-h-[calc(100dvh-4rem)] md:min-h-[calc(100dvh-5rem)]"
             >
               {children}
             </main>

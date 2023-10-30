@@ -13,7 +13,7 @@ const NendoroidItem: React.FC<NendoroidItemProps> = ({ data }) => {
   return (
     <>
       {data?.map((item) => (
-        <div key={item.product_id} className="hover:shadow-xl">
+        <div key={item.product_id} className="hover:shadow-xl z-[-1]">
           <div className="col-span-1 border-2 rounded-lg">
             <Link
               // onClick={() => handle()}

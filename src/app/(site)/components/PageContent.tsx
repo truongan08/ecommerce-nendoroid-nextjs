@@ -47,9 +47,9 @@ const PageContent = () => {
   }
 
   return (
-    <div className="md:w-4/5 sm:w-2/3 lg:w-3/4 xl:w-4/5 mx-7 flex">
+    <div className="flex">
       <div>
-        <span>Trending Nendoroid</span>
+        <div className="text-xl">Trending Nendoroid</div>
         {getProductByStatusStatus === ProductRequestStatus.LOADING ? (
           <Loading />
         ) : (

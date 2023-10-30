@@ -59,7 +59,7 @@ const Nav = () => {
 
   return (
     <>
-      <div className="w-full shadow top-0 left-0 right-0 bottom-0 absolute">
+      <div className="w-full shadow top-0 left-0 right-0 fixed z-50">
         <div className="md:flex items-center justify-between bg-white py-4 md:px-10 px-7">
           <div className="text-2xl flex items-center cursor-pointer font-bold text-blue-800">
             <Link href={"/"} className="w-full">
@@ -88,10 +88,10 @@ const Nav = () => {
             )}
           </div>
           <ul
-            className={`md:flex md:items-center md:pb-0 absolute md:static bg-white md:z-auto z-[-1] left-0 w-full md:w-auto md:pl-0 pl-9 transition-all duration-300 ${
+            className={`md:flex md:items-center md:pb-0 absolute md:static bg-white md:z-auto left-0 w-full z-[-1] md:w-auto md:pl-0 pl-9 transition-all duration-300 ${
               open
-                ? "top-16 mt-16 bg-white z-100"
-                : "top-[-350px] md:opacity-100 opacity-0 "
+                ? "top-16 opacity-100 mt-16 fixed "
+                : "top-[-350px] md:opacity-100 opacity-0"
             }`}
           >
             {links.map((link, index) => (
@@ -121,13 +121,19 @@ const Nav = () => {
                   style={{ objectFit: "contain", maxWidth: "40px" }}
                 />
               ) : (
-                <SignIn
-                  modalLogin={modalLogin}
-                  clickModalLogin={() => onCLickModalLogin()}
-                  clickSwitchModal={(e) => {
-                    onCLickSwitchModal(e);
-                  }}
-                />
+                <div>
+                  <SignIn
+                    modalLogin={modalLogin}
+                    clickModalLogin={() => onCLickModalLogin()}
+                    clickSwitchModal={(e) => {
+                      onCLickSwitchModal(e);
+                    }}
+                  />
+                  <Button
+                    text={"Sign In"}
+                    onClickProps={() => onCLickModalLogin()}
+                  ></Button>
+                </div>
               )}
             </li>
           </ul>
@@ -153,6 +159,7 @@ const Nav = () => {
             ) : (
               <>
                 <Button
+                  className={"max-md:hidden"}
                   text={"Sign In"}
                   onClickProps={() => onCLickModalLogin()}
                 ></Button>
