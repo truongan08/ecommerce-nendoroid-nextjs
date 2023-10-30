@@ -1,16 +1,36 @@
 "use client";
-import { Product } from "../../../../../../types";
+import { Product } from "@/types/user";
 import NendoroidItem from "@/components/NendoroidItem";
 import Link from "next/link";
+import Image from "next/image";
 
-interface PageContentProps {
+interface ProductContentProps {
   nendoroids: Product[];
   page: number;
 }
 
-const ProductContent: React.FC<PageContentProps> = ({ nendoroids, page }) => {
+const ProductContent: React.FC<ProductContentProps> = ({
+  nendoroids,
+  page,
+}) => {
   if (nendoroids.length === 0) {
-    return <div className="mt-4 text-neutral-400">Sold out nendoroid</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="max-w-md mx-auto text-center">
+          <Image
+            src="/images/PNF.png"
+            alt="product-not-found"
+            height={500}
+            width={500}
+            className="object-contain overflow-hidden"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            loading="eager"
+          />
+
+          <div className="text-neutral-400 text-lg">No products</div>
+        </div>
+      </div>
+    );
   }
 
   return (

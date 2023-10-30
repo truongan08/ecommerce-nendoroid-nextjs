@@ -53,15 +53,15 @@ const Slider = () => {
   //   };
 
   return (
-    <div className="w-full mx-auto p-6 mt-12 max-md:mt-16">
+    <div className="w-full mx-auto p-6 max-md:mt-16">
       {sliders.map((slider) => (
         <div
           key={slider.id}
-          className="container mx-auto mt-12"
+          className="container mx-auto "
           style={{ display: id === slider.id ? "block" : "none" }}
         >
           <div
-            className="bg-cover bg-center h-auto text-white py-40 px-10 object-fill"
+            className="bg-cover bg-center h-auto text-white py-40 px-10 "
             style={{
               backgroundImage: `url(${slider.image})`,
             }}

@@ -1,5 +1,6 @@
-import { AuthCallTypes, CustomError, RequestStatus, AuthState, Session, GetLocalStatus } from '@/types/user';
+import { AuthCallTypes, CustomError, RequestStatus, AuthState, Session } from '@/types/user';
 import { PayloadAction } from "@reduxjs/toolkit";
+
 export const cartReducers = {
     startCall:(
         state: AuthState,

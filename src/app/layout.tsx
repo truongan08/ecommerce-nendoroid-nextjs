@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import { PropsWithChildren } from "react";
+import localFont from "next/font/local";
 
 import "./globals.css";
 
@@ -8,8 +8,6 @@ import { Providers } from "@/lib/provider";
 import { SessionProvider } from "@/provider/session-provider";
 
 import Footer from "@/components/Footer";
-
-const font = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Wigure",
@@ -20,12 +18,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en">
-      <link
-        rel="preload"
-        href="/next/static/css/app/layout.css?v=1698229897614 wa"
-        as="style"
-      />
-      <body className={font.className + " relative"}>
+      <body>
         <Providers>
           <SessionProvider>
             <main

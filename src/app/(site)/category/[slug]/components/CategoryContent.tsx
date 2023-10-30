@@ -2,46 +2,49 @@
 
 import { useEffect } from "react";
 import {
-  selectGetProductByStatusError,
-  selectGetProductByStatusStatus,
   useAppSelector,
-  getProductByStatus,
   useAppDispatch,
   selectProductInState,
+  selectGetProductByCategoryStatus,
+  selectGetProductByCategoryError,
+  getProductByCategory,
 } from "@/lib/redux";
 import { CustomError, Product, ProductRequestStatus } from "@/types/user";
 
 import Loading from "@/components/Loading";
 import NendoroidItem from "@/components/NendoroidItem";
 
-const PageContent = () => {
+interface CategoryContentProps {
+  type: string;
+}
+const CategoryContent: React.FC<CategoryContentProps> = ({ type }) => {
   const dispatch = useAppDispatch();
 
-  const getProductByStatusStatus: ProductRequestStatus = useAppSelector(
-    selectGetProductByStatusStatus
+  const getProductByCategoryStatus: ProductRequestStatus = useAppSelector(
+    selectGetProductByCategoryStatus
   );
 
-  const getProductByStatusError: CustomError | null = useAppSelector(
-    selectGetProductByStatusError
+  const getProductByCategoryError: CustomError | null = useAppSelector(
+    selectGetProductByCategoryError
   );
 
   const nendoroids: Product[] | null = useAppSelector(selectProductInState);
 
   useEffect(() => {
-    async function fetchData(status: any) {
-      await dispatch(getProductByStatus({ status }));
+    async function fetchData(type: any) {
+      await dispatch(getProductByCategory({ type }));
     }
-    fetchData("trending");
+    fetchData(type);
   }, []);
 
   if (nendoroids?.length === 0) {
     return <div className="mt-4 text-neutral-400">No products found</div>;
   }
 
-  if (getProductByStatusStatus === ProductRequestStatus.FAILED) {
+  if (getProductByCategoryStatus === ProductRequestStatus.FAILED) {
     return (
       <div className="mt-4 text-neutral-400">
-        {getProductByStatusError?.message}
+        {getProductByCategoryError?.message}
       </div>
     );
   }
@@ -50,19 +53,17 @@ const PageContent = () => {
     <div className="md:w-4/5 sm:w-2/3 lg:w-3/4 xl:w-4/5 mx-7 flex">
       <div>
         <span>Trending Nendoroid</span>
-        {getProductByStatusStatus === ProductRequestStatus.LOADING ? (
-          <Loading />
+        {getProductByCategoryStatus === ProductRequestStatus.LOADING ? (
+          <div className="gap-4 mt-4">
+            <Loading />
+          </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mt-4 ">
             <NendoroidItem data={nendoroids} />
           </div>
         )}
       </div>
-
-      <div className="md:w-1/5 sm:w-1/3 lg:w-1/4 xl:w-1/5 flex mx-7">
-        isLoggedIn
-      </div>
     </div>
   );
 };
-export default PageContent;
+export default CategoryContent;

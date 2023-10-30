@@ -1,10 +1,10 @@
 import { stripe } from "@/utils/Stripe";
 
-const checkOut = async () => {
+const checkOut = async ({ data }) => {
   try {
     let session;
+    let priceId = data.priceId;
     session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
       billing_address_collection: "required",
       customer,
       customer_update: {
@@ -12,18 +12,17 @@ const checkOut = async () => {
       },
       line_items: [
         {
-          price: price.id,
-          quantity,
+          price: priceId,
+          quantity: 10,
         },
       ],
       mode: "payment",
-      allow_promotion_codes: true,
-      success_url: `localhost:3000/account`,
+      success_url: `localhost:3000/`,
       cancel_url: `$localhost:3000/`,
     });
 
     if (session) {
-      return console.log(session);
+      return session;
     } else {
       return console.log("session undefine");
     }

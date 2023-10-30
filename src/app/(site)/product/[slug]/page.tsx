@@ -1,11 +1,12 @@
 import getNenPagination from "@/action/getNenPagination";
-import getRange from "@/action/getRange";
+import getRange from "@/action/getPagination";
 
 import ProductContent from "./components/ProductContent";
 import NotFound from "@/components/404";
 
 const Product = async ({ params }: { params: { slug: number } }) => {
-  const { from, to } = getRange(Number(params.slug));
+  const from = 1;
+  const to = 3;
   const nendoroid = await getNenPagination(from, to);
 
   if (isNaN(Number(params.slug))) {

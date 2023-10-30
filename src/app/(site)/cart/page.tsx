@@ -15,16 +15,8 @@ const Cart = () => {
     {
       id: 1,
       name: "Neko Arc",
-      price: 12,
-      quatity: 8,
-      image_url:
-        "/-DNr1T5JvK1k/X4GwL-e8jHI/AAAAAAAAo-I/H13V1KYu6owNCRVAUxFIFPv4lhmAQuDfgCLcBGAsYHQ/s135/000-Neko-Arc-Melty-Blood-Video-Games-Nendoroid-3.jpg",
-    },
-    {
-      id: 2,
-      name: "Neko Arc",
-      price: 125,
-      quatity: 1,
+      price: 150000,
+      quantity: 50,
       image_url:
         "/-DNr1T5JvK1k/X4GwL-e8jHI/AAAAAAAAo-I/H13V1KYu6owNCRVAUxFIFPv4lhmAQuDfgCLcBGAsYHQ/s135/000-Neko-Arc-Melty-Blood-Video-Games-Nendoroid-3.jpg",
     },
@@ -47,7 +39,7 @@ const Cart = () => {
                   Price
                 </th>
                 <th className="hidden lg:table-cell px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                  Quatity
+                  Quantity
                 </th>
                 <th className="hidden lg:table-cell px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
                   Total
@@ -97,7 +89,7 @@ const Cart = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <span className="text-sm font-medium text-gray-700 mr-4">
-                          {(item.price * 100).toLocaleString("vi-VN", {
+                          {item.price.toLocaleString("vi-VN", {
                             style: "currency",
                             currency: "VND",
                           })}
@@ -110,30 +102,30 @@ const Cart = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div className="flex items-center justify-between px-2 py-1 bg-gray-200 rounded w-[70px]">
-                          {/* <button
-                              className="text-sm font-medium text-gray-700 focus:outline-none"
-                              onClick={() =>
-                                decreaseCount(item.item_id, item.sku, item.qty)
-                              }
-                            >
-                              -
-                            </button> */}
-                          <span className="text-sm font-medium text-gray-700">
-                            {item.quatity}
+                          <button
+                            className="text-sm font-medium text-gray-700 focus:outline-none "
+                            //   onClick={() =>
+                            //     decreaseCount(item.item_id, item.sku, item.qty)
+                            //   }
+                          >
+                            -
+                          </button>
+                          <span className="text-sm font-medium text-gray-700 border-x-2">
+                            {item.quantity}
                           </span>
-                          {/* <button
-                              className="text-sm font-medium text-gray-700 focus:outline-none"
-                              onClick={() =>
-                                increaseCount(item.item_id, item.sku, item.qty)
-                              }
-                            >
-                              +
-                            </button> */}
+                          <button
+                            className="text-sm font-medium text-gray-700 focus:outline-none"
+                            // onClick={() =>
+                            //   increaseCount(item.item_id, item.sku, item.qty)
+                            // }
+                          >
+                            +
+                          </button>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <span className="text-sm font-medium text-gray-700 mr-4">
-                          {(item.price * item.quatity * 100).toLocaleString(
+                          {(item.price * item.quantity).toLocaleString(
                             "vi-VN",
                             {
                               style: "currency",
@@ -147,14 +139,14 @@ const Cart = () => {
                           </span>
                         )} */}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <td className="px-6 py-4 whitespace-nowrap text-md font-medium">
                         <Link
                           href={"#"}
                           // onClick={() => handledelete(item.item_id)}
                           onClick={() => toast("Feature developing")}
                           className="cursor-pointer "
                         >
-                          <AiOutlineDelete />
+                          <AiOutlineDelete className="text-red-700" />
                           <ToastContainer />
                         </Link>
                       </td>
@@ -200,7 +192,7 @@ const Cart = () => {
                 {cart.length <= 0
                   ? 0
                   : cart
-                      .reduce((a, b) => a + b.price * 100 * b.quatity, 0)
+                      .reduce((a, b) => a + b.price * b.quantity, 0)
                       .toLocaleString("vi-VN", {
                         style: "currency",
                         currency: "VND",

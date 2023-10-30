@@ -15,12 +15,12 @@ const Checkout = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const response = await fetch("/api/checkout1", {
+    const response = await fetch("/api/checkout", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ priceId: "price_1O6139C45JnkZGbw28fwb1Xm" }),
+      body: JSON.stringify({ priceId: "price_1O64MsC45JnkZGbwuokMsSvt" }),
     });
     const data = await response.json();
     window.location.assign(data);
@@ -92,7 +92,7 @@ const Checkout = () => {
 
   // const res = await dispatch(Checkout({ method: payment }));
   // const check = unwrapResult(res);
-  //       toast("Thanh Toán Thành Công");
+  //       toast("Payment success");
   //       router.push("/");
 
   // return check;
@@ -195,7 +195,7 @@ const Checkout = () => {
     //       <div className="max-w-2xl mx-auto">
     <form
       onSubmit={handleSubmit}
-      className="pb-1 pl-12 pr-12 pt-8 shadow-2xl border-2 rounded-3xl mt-12"
+      className="pb-1 pl-12 pr-12 pt-8 shadow-2xl border-2 rounded-3xl mt-16"
     >
       <div className="block mb-8">
         <h1 className="font-bold mb-2">Method payment</h1>

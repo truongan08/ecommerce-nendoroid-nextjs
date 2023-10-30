@@ -8,12 +8,12 @@ export async function middleware(req: NextRequest) {
   const supabase = createMiddlewareClient({req, res});
   
   await supabase.auth.getSession();
-  if (req.nextUrl.pathname.startsWith("/product")) {
-    return NextResponse.rewrite(new URL("/product/0", req.url));
-  }
-  if (req.nextUrl.pathname.startsWith("/dashboard")) {
-    return NextResponse.rewrite(new URL("/dashboard/user", req.url));
-  }
+  // if (req.nextUrl.pathname.startsWith("/product")) {
+  //   return NextResponse.rewrite(new URL("/product/0", req.url));
+  // }
+  // if (req.nextUrl.pathname.startsWith("/dashboard")) {
+  //   return NextResponse.rewrite(new URL("/dashboard/user", req.url));
+  // }
   if (req.nextUrl.pathname.startsWith("/search")) {
     return NextResponse.rewrite(new URL("/", req.url));
   }

@@ -1,6 +1,7 @@
 //interface
 
 import { AuthSupabase } from "@/action/authAction";
+import { ProductSupabase } from "@/action/productAction";
 
 export interface Product {
     product_id: string;
@@ -9,8 +10,15 @@ export interface Product {
     description: string;
     image_url: string[];
     price: number;
+	status: string;
+    stock: number;
 }
 
+export interface ProductOutput {
+	getProductByStatus(status: StatusProduct): Promise<{product: Product[] | null; error: CustomError | null}>
+	getProductByCategory(type: TypeProduct): Promise<{product: Product[] | null; error: CustomError | null}>
+	getProductPagination({ query: { page } }: { query: { page?: number | undefined; }; }): Promise<{product: Product[] | null;count : number | null; error: CustomError | null}>
+}
 export interface AuthOutput {
 	signIn(
 		signInDto: SignInDto
@@ -30,6 +38,16 @@ export interface AuthState {
 	signOutStatus: RequestStatus
 	signOutError: CustomError | null
 }
+export interface ProductState {
+	product: Product[] | null
+	getProductByStatusStatus: ProductRequestStatus
+	getProductByStatusError: CustomError | null
+	getProductByCategoryStatus: ProductRequestStatus
+	getProductByCategoryError: CustomError | null
+	getProductPaginationStatus: ProductRequestStatus
+	getProductPaginationError: CustomError | null
+}
+
 
 export interface CartOutput {
 addToCart(
@@ -48,6 +66,12 @@ export enum AuthCallTypes {
     SIGN_OUT = "signOutStatus",
 }
 
+export enum ProductCallTypes {
+    GET_BY_STATUS = "getProductByStatusStatus",
+    GET_BY_TYPE = "getProductByCategoryStatus",
+    GET_PAGINATION = "getProductPaginationStatus",
+}
+
 export enum RequestStatus {
 	IDLE = "IDLE",
 	LOADING = "LOADING",
@@ -55,10 +79,24 @@ export enum RequestStatus {
 	FAILED = "FAILED",
 }
 
+export enum ProductRequestStatus {
+	IDLE = "IDLE",
+	LOADING = "LOADING",
+	FAILED = "FAILED",
+}
+
 //type
 
 export type CustomError = {
 	message: string
+}
+
+export type StatusProduct = {
+	status: string
+}
+
+export type TypeProduct = {
+	type: string
 }
 
 export type SignInDto = {
@@ -87,15 +125,17 @@ export type Session = {
 
 export type AppOutputs = {
 	authOutput: AuthOutput
+	productOutput: ProductOutput
 }
 
 //const
 
 export const appOutputs: AppOutputs = {
 	authOutput: new AuthSupabase(),
+	productOutput: new ProductSupabase(),
 }
 
-export const initialState: AuthState = {
+export const initialStateAuth: AuthState = {
 	session: null,
 	signInStatus: RequestStatus.IDLE,
 	signInError: null,
@@ -103,4 +143,14 @@ export const initialState: AuthState = {
 	signUpError: null,
 	signOutStatus: RequestStatus.IDLE,
 	signOutError: null,
+}
+
+export const initialStateProduct: ProductState = {
+	product: [],
+	getProductByStatusStatus: ProductRequestStatus.IDLE,
+	getProductByStatusError: null,
+	getProductByCategoryStatus: ProductRequestStatus.IDLE,
+	getProductByCategoryError:  null,
+	getProductPaginationStatus: ProductRequestStatus.IDLE,
+	getProductPaginationError:  null,
 }

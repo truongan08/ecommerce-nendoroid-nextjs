@@ -1,11 +1,9 @@
-import { RxDotFilled } from "react-icons/rx";
+import { BiLoader } from "react-icons/bi";
 
 const Loading = () => {
   return (
     <>
-      <svg className="h-5 w-5 animate-spin inline items-center">
-        <RxDotFilled />
-      </svg>
+      <BiLoader size={20} className="text-blue-400 animate-spin" />
     </>
   );
 };

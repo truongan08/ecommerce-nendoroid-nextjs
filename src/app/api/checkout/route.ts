@@ -1,27 +1,23 @@
-import { NextResponse, NextRequest } from "next/server";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
-import { stripe } from '@/utils/Stripe';
+import {stripe} from "@/utils/Stripe"
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: NextRequest) {
-    const supabase = createServerComponentClient({ cookies })
-
-    try {
-        const { data: { user } } = await supabase.auth.getUser()
-
-        if (!user) throw Error()
-
-        const body = await req.json();
-
-        const res = await stripe.paymentIntents.create({
-            amount: Number(body.amount),
-            currency: 'vnd',
-            automatic_payment_methods: { enabled: true },
-        });
-
-        return NextResponse.json(res);
-    } catch (error) {
-        console.log(error);
-        return new NextResponse('Something went wrong', { status: 400 });
-    }
+export async function POST(request: NextRequest) {
+  if (request.method !== 'POST') {
+    console.log('Only POST requests allowed')
+    return
+  }
+  let data = await request.json();
+  let priceId = data.priceId;
+  const session = await stripe.checkout.sessions.create({
+    mode: "payment",
+    line_items: [
+      {
+      price: priceId,
+      quantity: 5,
+      }
+    ],
+    success_url: `http://localhost:3000`,
+    cancel_url: `http://localhost:3000`
+  })
+  return NextResponse.json(session.url);
 }

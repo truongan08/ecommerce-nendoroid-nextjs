@@ -1,13 +1,13 @@
 import Slider from "@/components/Slider";
 import PageContent from "./components/PageContent";
-import getTrendNendoroid from "@/action/getTrendNendoroid";
+import CategoryGrid from "@/components/CategoryGrid";
 
-const HomePage = async () => {
-  const nendoroid = await getTrendNendoroid();
+const HomePage = () => {
   return (
     <>
       <Slider />
-      <PageContent nendoroids={nendoroid} />;
+      <CategoryGrid />
+      <PageContent />
     </>
   );
 };

@@ -10,18 +10,10 @@ import Button from "./Button";
 import SearchBar from "./Search";
 import SignIn from "@/components/ModalSignIn";
 import Register from "@/components/ModalRegister";
-import {
-  selectIsLoggedInUser,
-  useAppDispatch,
-  useAppSelector,
-} from "@/lib/redux";
-import { useRouter } from "next/navigation";
+import { selectIsLoggedInUser, useAppSelector } from "@/lib/redux";
 import SideBar from "./SideBar";
 
 const Nav = () => {
-  const router = useRouter();
-  const dispatch = useAppDispatch();
-
   const links = [
     { name: "Home", link: "/" },
     { name: "Products", link: "/product/0" },
@@ -67,7 +59,7 @@ const Nav = () => {
 
   return (
     <>
-      <div className="w-full fixed shadow top-0 left-0 right-0">
+      <div className="w-full shadow top-0 left-0 right-0 bottom-0 absolute">
         <div className="md:flex items-center justify-between bg-white py-4 md:px-10 px-7">
           <div className="text-2xl flex items-center cursor-pointer font-bold text-blue-800">
             <Link href={"/"} className="w-full">
@@ -98,8 +90,8 @@ const Nav = () => {
           <ul
             className={`md:flex md:items-center md:pb-0 absolute md:static bg-white md:z-auto z-[-1] left-0 w-full md:w-auto md:pl-0 pl-9 transition-all duration-300 ${
               open
-                ? "top-16 opacity-100 mt-12"
-                : "top-[-350px] md:opacity-100 opacity-0"
+                ? "top-16 mt-16 bg-white z-100"
+                : "top-[-350px] md:opacity-100 opacity-0 "
             }`}
           >
             {links.map((link, index) => (
@@ -125,7 +117,7 @@ const Nav = () => {
                   width={40}
                   height={40}
                   alt="avatar"
-                  className="rounded-full relative md:hidden"
+                  className="rounded-full relative md:hidden cursor-pointer"
                   style={{ objectFit: "contain", maxWidth: "40px" }}
                 />
               ) : (
@@ -149,7 +141,7 @@ const Nav = () => {
                   width={40}
                   height={40}
                   alt="avatar"
-                  className="rounded-full relative max-md:hidden"
+                  className="rounded-full relative max-md:hidden cursor-pointer"
                   style={{ objectFit: "contain", maxWidth: "40px" }}
                 />
 

@@ -3,16 +3,16 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { Product } from "../../types";
+import { Product } from "@/types/user";
 import PriceTag from "./PriceTag";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 interface NendoroidItemProps {
-  data: Product[];
+  data: Product[] | null;
 }
 const NendoroidItem: React.FC<NendoroidItemProps> = ({ data }) => {
   return (
     <>
-      {data.map((item) => (
+      {data?.map((item) => (
         <div key={item.product_id} className="hover:shadow-xl">
           <div className="col-span-1 border-2 rounded-lg">
             <Link
@@ -39,7 +39,7 @@ const NendoroidItem: React.FC<NendoroidItemProps> = ({ data }) => {
               </div>
             </Link>
 
-            <div className="product-price mt-2 mb-1 flex">
+            <div className="mt-2 mb-1 flex">
               <PriceTag
                 price={item.price}
                 className="text-lg font-bold text-red-700 ml-4"

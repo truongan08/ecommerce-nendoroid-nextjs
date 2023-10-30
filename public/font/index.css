@@ -1,0 +1,17 @@
+
+@font-face {
+    font-family: 'bebasKai';
+    src: url('./BebasKai.ttf');
+}
+
+@font-face {
+    font-family: 'khila';
+    src: url('./Khila.otf');
+}
+
+.bebas-kai{
+    font-family: 'bebasKai', sans-serif;
+}
+.khila{
+    font-family: 'khila', sans-serif;
+}
