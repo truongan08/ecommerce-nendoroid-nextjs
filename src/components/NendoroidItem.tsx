@@ -5,66 +5,65 @@ import Link from "next/link";
 
 import { Product } from "@/types/user";
 import PriceTag from "./PriceTag";
-import { AiOutlineShoppingCart } from "react-icons/ai";
+import { AiOutlineHeart, AiOutlineShoppingCart } from "react-icons/ai";
 interface NendoroidItemProps {
   data: Product[] | null;
 }
 const NendoroidItem: React.FC<NendoroidItemProps> = ({ data }) => {
   return (
-    <>
+    <div className="grid grid-cols-1 md:grid-cols-4 max-md:grid-cols-3 gap-4 mt-4 ml-6 h-full">
       {data?.map((item) => (
-        <div key={item.product_id} className="hover:shadow-xl z-[-1]">
-          <div className="col-span-1 border-2 rounded-lg">
-            <Link
-              // onClick={() => handle()}
-              href={`productdetail/${item.product_id}`}
-            >
-              <div className="py-2 px-4 ">
-                <div className="flex justify-center items-center md:h-auto bg-white ">
-                  <Image
-                    src={"https://1.bp.blogspot.com" + item?.image_url}
-                    alt={item.name}
-                    width={800}
-                    height={400}
-                    className="object-cover max-w-full h-[120px] rounded-lg priority"
-                  />
-                </div>
-              </div>
-
-              <div
-                className="product-name overflow-hidden mt-2 ml-4 line-clamp-2 min-h-[50px] pr-2"
-                title={item.name}
-              >
-                {item.name}
-              </div>
-            </Link>
-
-            <div className="mt-2 mb-1 flex">
-              <PriceTag
-                price={item.price}
-                className="text-lg font-bold text-red-700 ml-4"
-              />
-              <Link
-                href={"/"}
-                // onClick={() => handlecart(data.product_id)}
-                className="ml-auto mr-4 hover:bg-gray-300 rounded-full w-8 h-8 flex justify-center items-center"
-              >
-                <AiOutlineShoppingCart />
-              </Link>
+        <div
+          key={item.product_id}
+          className="group relative m-5 w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md grid col-span-1"
+        >
+          <Link
+            className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl"
+            href={`/detail/${item.product_id}`}
+          >
+            <Image
+              className="absolute top-0 right-0 h-full w-full object-cover"
+              width={294}
+              height={240}
+              src={item.image_url[0]}
+              alt="product"
+            />
+            <div className="absolute -right-16 bottom-0 mr-2 mb-4 space-y-2 transition-all duration-300 group-hover:right-0">
+              <button className="flex h-10 w-10 items-center justify-center bg-gray-900 text-white transition hover:bg-gray-700">
+                <AiOutlineHeart className="w-5 h-5" />
+              </button>
             </div>
-            {item.stock != null ? (
-              <div className="rounded-full bg-red-700 ml-2 mr-2 mb-2 flex items-center justify-center">
-                <span className=" text-white">{item.stock} products left</span>
-              </div>
-            ) : (
-              <div className="rounded-full bg-gray-700 ml-2 mr-2 mb-2 flex items-center justify-center">
-                <span className=" text-white">Sold out</span>
-              </div>
-            )}
+          </Link>
+
+          <div className="mt-4 px-5 pb-5">
+            <Link href="#">
+              <h5 className="text-xl tracking-tight text-slate-900">
+                {item.name}
+              </h5>
+            </Link>
+            <div className="mt-2 mb-5 flex items-center justify-between">
+              <p>
+                <PriceTag
+                  price={item.price}
+                  className="text-3xl font-bold text-slate-900"
+                />
+
+                {/* <span className="text-sm text-slate-900 line-through">
+                  $699
+                </span> */}
+              </p>
+            </div>
+            <Link
+              href="#"
+              className="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300"
+            >
+              <AiOutlineShoppingCart className="mr-2 w-6 h-6" />
+              Add to cart
+            </Link>
           </div>
         </div>
       ))}
-    </>
+    </div>
   );
 };
 

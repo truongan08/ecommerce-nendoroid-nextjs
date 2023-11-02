@@ -14,10 +14,33 @@ export interface Product {
     stock: number;
 }
 
+export interface ProductDetail {
+	product_id: string;
+    category_id: string;
+    name: string;
+    description: string;
+    image_url: string[];
+    price: number;
+	status: string;
+    stock: number;
+	product_detail: Productdetail[]
+}
+
+export interface Productdetail {
+	product_detail_id: string;
+	product_id: string;
+	sku: string;
+	franchise: string;
+	set: string;
+	year: string;
+}
+
+
 export interface ProductOutput {
 	getProductByStatus(status: StatusProduct): Promise<{product: Product[] | null; error: CustomError | null}>
 	getProductByCategory(type: TypeProduct): Promise<{product: Product[] | null; error: CustomError | null}>
 	getProductPagination({ query: { page } }: { query: { page?: number | undefined; }; }): Promise<{product: Product[] | null;count : number | null; error: CustomError | null}>
+	getProductDetail(product_id: string): Promise<{productDetail: ProductDetail | null; error: CustomError | null}>
 }
 export interface AuthOutput {
 	signIn(
@@ -40,12 +63,15 @@ export interface AuthState {
 }
 export interface ProductState {
 	product: Product[] | null
+	productDetail: ProductDetail | null
 	getProductByStatusStatus: ProductRequestStatus
 	getProductByStatusError: CustomError | null
 	getProductByCategoryStatus: ProductRequestStatus
 	getProductByCategoryError: CustomError | null
 	getProductPaginationStatus: ProductRequestStatus
 	getProductPaginationError: CustomError | null
+	getProductDetailStatus: ProductDetailRequestStatus
+	getProductDetailError: CustomError | null
 }
 
 
@@ -70,6 +96,7 @@ export enum ProductCallTypes {
     GET_BY_STATUS = "getProductByStatusStatus",
     GET_BY_TYPE = "getProductByCategoryStatus",
     GET_PAGINATION = "getProductPaginationStatus",
+	GET_DETAIL = "getProductDetailStatus"
 }
 
 export enum RequestStatus {
@@ -80,6 +107,12 @@ export enum RequestStatus {
 }
 
 export enum ProductRequestStatus {
+	IDLE = "IDLE",
+	LOADING = "LOADING",
+	FAILED = "FAILED",
+}
+
+export enum ProductDetailRequestStatus {
 	IDLE = "IDLE",
 	LOADING = "LOADING",
 	FAILED = "FAILED",
@@ -147,10 +180,13 @@ export const initialStateAuth: AuthState = {
 
 export const initialStateProduct: ProductState = {
 	product: [],
+	productDetail: null,
 	getProductByStatusStatus: ProductRequestStatus.IDLE,
 	getProductByStatusError: null,
 	getProductByCategoryStatus: ProductRequestStatus.IDLE,
 	getProductByCategoryError:  null,
 	getProductPaginationStatus: ProductRequestStatus.IDLE,
 	getProductPaginationError:  null,
+	getProductDetailStatus: ProductDetailRequestStatus.IDLE,
+	getProductDetailError: null,
 }

@@ -60,7 +60,7 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ type }) => {
         ) : (
           <div className="w-screen h-screen m-auto p-6 mt-11 text-center">
             <span className="text-5xl">{type}</span>
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mt-4 ">
+            <div>
               <NendoroidItem data={nendoroids} />
             </div>
           </div>

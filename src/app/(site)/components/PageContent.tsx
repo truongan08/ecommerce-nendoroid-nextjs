@@ -34,7 +34,10 @@ const PageContent = () => {
     fetchData("trending");
   }, []);
 
-  if (nendoroids?.length === 0) {
+  if (
+    nendoroids?.length === 0 &&
+    getProductByStatusStatus === ProductRequestStatus.IDLE
+  ) {
     return <div className="mt-4 text-neutral-400">No products found</div>;
   }
 
@@ -49,19 +52,18 @@ const PageContent = () => {
   return (
     <div className="flex">
       <div>
-        <div className="text-xl">Trending Nendoroid</div>
+        <div className="text-xl font-bold mx-6 antialiased">
+          Trending Nendoroid
+        </div>
         {getProductByStatusStatus === ProductRequestStatus.LOADING ? (
           <Loading />
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mt-4 ">
+          <div>
             <NendoroidItem data={nendoroids} />
           </div>
         )}
       </div>
-
-      <div className="md:w-1/5 sm:w-1/3 lg:w-1/4 xl:w-1/5 flex mx-7">
-        isLoggedIn
-      </div>
+      <div className="md:w-1/5 sm:w-1/3 lg:w-1/4 xl:w-1/5 flex mx-7">tst</div>
     </div>
   );
 };

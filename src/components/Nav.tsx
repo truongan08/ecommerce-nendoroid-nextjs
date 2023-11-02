@@ -122,13 +122,6 @@ const Nav = () => {
                 />
               ) : (
                 <div>
-                  <SignIn
-                    modalLogin={modalLogin}
-                    clickModalLogin={() => onCLickModalLogin()}
-                    clickSwitchModal={(e) => {
-                      onCLickSwitchModal(e);
-                    }}
-                  />
                   <Button
                     text={"Sign In"}
                     onClickProps={() => onCLickModalLogin()}

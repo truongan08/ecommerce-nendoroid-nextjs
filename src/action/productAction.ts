@@ -5,6 +5,7 @@ import {
   StatusProduct,
   Product,
   TypeProduct,
+  ProductDetail,
 } from "@/types/user";
 import getPagination from "./getPagination";
 
@@ -47,5 +48,14 @@ export class ProductSupabase implements ProductOutput {
       .order("product_id", { ascending: true })
       .range(from, to);
     return Promise.resolve({ product, count, page: +page, error });
+  }
+
+  async getProductDetail(product_id: string): Promise<{ productDetail: ProductDetail | null; error: CustomError | null; }> {
+    const { data: productDetail, error } = await supabase
+    .from('product')
+    .select(`*, product_detail(*)`)
+    .eq('product_id', product_id)
+    .single();
+    return Promise.resolve({ productDetail, error });
   }
 }

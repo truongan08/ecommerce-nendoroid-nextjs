@@ -1,4 +1,4 @@
-import { ProductCallTypes, CustomError, ProductState, ProductRequestStatus, Product } from '@/types/user';
+import { ProductCallTypes, CustomError, ProductState, ProductRequestStatus, Product, ProductDetail, ProductDetailRequestStatus } from '@/types/user';
 import { PayloadAction } from "@reduxjs/toolkit";
 
 export const productReducers = {
@@ -6,7 +6,11 @@ export const productReducers = {
         state: ProductState,
         {payload}:PayloadAction<{callType: ProductCallTypes}>
     ) => {
-        state[payload.callType] = ProductRequestStatus.LOADING
+        if(payload.callType != ProductCallTypes.GET_DETAIL) {
+            state[payload.callType] = ProductRequestStatus.LOADING
+        } else {
+            state[payload.callType] = ProductDetailRequestStatus.LOADING
+        }
     },
     getProductByStatus: (
         state: ProductState,
@@ -24,5 +28,10 @@ export const productReducers = {
         state.product= payload.product
         state.getProductByCategoryStatus = payload.error ? ProductRequestStatus.FAILED : ProductRequestStatus.IDLE
         state.getProductByCategoryError = payload.error
+    },
+    getProductDetail: (state: ProductState, {payload}:PayloadAction<{productDetail: ProductDetail | null; error: CustomError | null}>) => {
+        state.productDetail = payload.productDetail
+        state.getProductDetailStatus = payload.error ? ProductDetailRequestStatus.FAILED : ProductDetailRequestStatus.IDLE
+        state.getProductDetailError = payload.error
     },
 }
