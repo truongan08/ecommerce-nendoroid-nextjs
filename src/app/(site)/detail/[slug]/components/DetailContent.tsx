@@ -37,7 +37,7 @@ const DetailContent: React.FC<DetailContentProps> = ({ product_id }) => {
 
   useEffect(() => {
     async function fetchData(product_id: string) {
-      await dispatch(getProductDetail(product_id));
+      await dispatch(getProductDetail({ product_id }));
     }
     fetchData(product_id);
   }, [product_id]);

@@ -6,11 +6,7 @@ export const productReducers = {
         state: ProductState,
         {payload}:PayloadAction<{callType: ProductCallTypes}>
     ) => {
-        if(payload.callType != ProductCallTypes.GET_DETAIL) {
-            state[payload.callType] = ProductRequestStatus.LOADING
-        } else {
-            state[payload.callType] = ProductDetailRequestStatus.LOADING
-        }
+        state[payload.callType] = ProductRequestStatus.LOADING
     },
     getProductByStatus: (
         state: ProductState,
@@ -28,10 +24,5 @@ export const productReducers = {
         state.product= payload.product
         state.getProductByCategoryStatus = payload.error ? ProductRequestStatus.FAILED : ProductRequestStatus.IDLE
         state.getProductByCategoryError = payload.error
-    },
-    getProductDetail: (state: ProductState, {payload}:PayloadAction<{productDetail: ProductDetail | null; error: CustomError | null}>) => {
-        state.productDetail = payload.productDetail
-        state.getProductDetailStatus = payload.error ? ProductDetailRequestStatus.FAILED : ProductDetailRequestStatus.IDLE
-        state.getProductDetailError = payload.error
     },
 }

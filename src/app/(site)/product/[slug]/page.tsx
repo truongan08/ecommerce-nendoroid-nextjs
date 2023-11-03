@@ -1,5 +1,5 @@
-import getNenPagination from "@/action/getNenPagination";
-import getRange from "@/action/getPagination";
+import getNenPagination from "@/lib/redux/action/getNenPagination";
+import getRange from "@/lib/redux/action/getPagination";
 
 import ProductContent from "./components/ProductContent";
 import NotFound from "@/components/404";

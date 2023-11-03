@@ -3,7 +3,7 @@ import SearchContent from "./components/SearchContent";
 import { useSearchParams } from "next/navigation";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
-import getSearch from "@/action/getSearch";
+import getSearch from "@/lib/redux/action/getSearch";
 
 const Search = ({}) => {
   // const searchParams = useSearchParams();

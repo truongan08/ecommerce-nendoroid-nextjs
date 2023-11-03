@@ -1,7 +1,8 @@
 //interface
 
-import { AuthSupabase } from "@/action/authAction";
-import { ProductSupabase } from "@/action/productAction";
+import { AuthSupabase } from "@/lib/redux/action/authAction";
+import { ProductSupabase } from "@/lib/redux/action/productAction";
+import { ProductDetailSupabase } from './../lib/redux/action/productDetailAction';
 
 export interface Product {
     product_id: string;
@@ -23,7 +24,7 @@ export interface ProductDetail {
     price: number;
 	status: string;
     stock: number;
-	product_detail: Productdetail[]
+	product_detail: Productdetail
 }
 
 export interface Productdetail {
@@ -40,8 +41,12 @@ export interface ProductOutput {
 	getProductByStatus(status: StatusProduct): Promise<{product: Product[] | null; error: CustomError | null}>
 	getProductByCategory(type: TypeProduct): Promise<{product: Product[] | null; error: CustomError | null}>
 	getProductPagination({ query: { page } }: { query: { page?: number | undefined; }; }): Promise<{product: Product[] | null;count : number | null; error: CustomError | null}>
-	getProductDetail(product_id: string): Promise<{productDetail: ProductDetail | null; error: CustomError | null}>
 }
+
+export interface ProductDetailOutput {
+	getProductDetail(product_id: ProductIdType): Promise<{productDetail: ProductDetail | null; error: CustomError | null}>
+}
+
 export interface AuthOutput {
 	signIn(
 		signInDto: SignInDto
@@ -63,13 +68,17 @@ export interface AuthState {
 }
 export interface ProductState {
 	product: Product[] | null
-	productDetail: ProductDetail | null
 	getProductByStatusStatus: ProductRequestStatus
 	getProductByStatusError: CustomError | null
 	getProductByCategoryStatus: ProductRequestStatus
 	getProductByCategoryError: CustomError | null
 	getProductPaginationStatus: ProductRequestStatus
 	getProductPaginationError: CustomError | null
+	
+}
+
+export interface ProductDetailState {
+	productDetail: ProductDetail | null
 	getProductDetailStatus: ProductDetailRequestStatus
 	getProductDetailError: CustomError | null
 }
@@ -96,6 +105,10 @@ export enum ProductCallTypes {
     GET_BY_STATUS = "getProductByStatusStatus",
     GET_BY_TYPE = "getProductByCategoryStatus",
     GET_PAGINATION = "getProductPaginationStatus",
+	
+}
+
+export enum ProductDetailCallTypes {
 	GET_DETAIL = "getProductDetailStatus"
 }
 
@@ -131,6 +144,9 @@ export type StatusProduct = {
 export type TypeProduct = {
 	type: string
 }
+export type ProductIdType = {
+	product_id: string
+}
 
 export type SignInDto = {
 	email: string
@@ -159,6 +175,7 @@ export type Session = {
 export type AppOutputs = {
 	authOutput: AuthOutput
 	productOutput: ProductOutput
+	productDetailOutput: ProductDetailOutput
 }
 
 //const
@@ -166,6 +183,7 @@ export type AppOutputs = {
 export const appOutputs: AppOutputs = {
 	authOutput: new AuthSupabase(),
 	productOutput: new ProductSupabase(),
+	productDetailOutput: new ProductDetailSupabase(),
 }
 
 export const initialStateAuth: AuthState = {
@@ -180,13 +198,16 @@ export const initialStateAuth: AuthState = {
 
 export const initialStateProduct: ProductState = {
 	product: [],
-	productDetail: null,
 	getProductByStatusStatus: ProductRequestStatus.IDLE,
 	getProductByStatusError: null,
 	getProductByCategoryStatus: ProductRequestStatus.IDLE,
 	getProductByCategoryError:  null,
 	getProductPaginationStatus: ProductRequestStatus.IDLE,
 	getProductPaginationError:  null,
+}
+
+export const initialStateProductDetail: ProductDetailState = {
+	productDetail: null,
 	getProductDetailStatus: ProductDetailRequestStatus.IDLE,
 	getProductDetailError: null,
 }
