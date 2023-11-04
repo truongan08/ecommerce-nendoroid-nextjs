@@ -6,9 +6,6 @@ import "./globals.css";
 const myFont = localFont({ src: "../assets/fonts/fontawesome-webfont.woff2" });
 
 import { Providers } from "@/lib/provider";
-import { SessionProvider } from "@/provider/session-provider";
-
-import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Wigure",
@@ -21,15 +18,12 @@ export default function RootLayout({ children }: PropsWithChildren) {
     <html lang="en">
       <body className={myFont.className}>
         <Providers>
-          <SessionProvider>
-            <main
-              id="skip"
-              className="min-h-[calc(100dvh-4rem)] md:min-h-[calc(100dvh-5rem)]"
-            >
-              {children}
-            </main>
-            <Footer />
-          </SessionProvider>
+          <main
+            id="skip"
+            className="min-h-[calc(100dvh-4rem)] md:min-h-[calc(100dvh-5rem)]"
+          >
+            {children}
+          </main>
         </Providers>
       </body>
     </html>

@@ -7,6 +7,7 @@ import {
   selectCartInState,
   removeFromCart,
   addToCart,
+  deleteCartItem,
 } from "@/lib/redux";
 import { cart, cartItem } from "@/types/user";
 import Image from "next/image";
@@ -30,6 +31,11 @@ const Cart = () => {
 
   const CLickRemoveFromCart = async (data: any) => {
     await dispatch(removeFromCart(data));
+  };
+
+  const CLickDeleteCart = async (data: any) => {
+    console.log(cart);
+    await dispatch(deleteCartItem(data));
   };
 
   return (
@@ -122,9 +128,7 @@ const Cart = () => {
                         <div className="flex items-center justify-between px-2 py-1 bg-gray-200 rounded w-[70px]">
                           <button
                             className="text-sm font-medium text-gray-700 focus:outline-none "
-                            //   onClick={() =>
-                            //     decreaseCount(item.item_id, item.sku, item.qty)
-                            //   }
+                            onClick={() => CLickRemoveFromCart(item.product)}
                           >
                             -
                           </button>
@@ -155,14 +159,13 @@ const Cart = () => {
                         )} */}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-md font-medium">
-                        <Link
-                          href={"#"}
-                          onClick={() => CLickRemoveFromCart(item.product)}
+                        <button
+                          onClick={() => CLickDeleteCart(item.product)}
                           className="cursor-pointer "
                         >
                           <AiOutlineDelete className="text-red-700" />
                           <ToastContainer />
-                        </Link>
+                        </button>
                       </td>
                     </tr>
                   );

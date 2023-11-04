@@ -12,25 +12,37 @@ export const cartReducers = {
             state.cartItems.push({product , quantity})
         }
         state.total = state.cartItems.reduce( 
-              (total, item) => total + item.product.price * item.quantity,
-              0
+              (total, item) => total + item.product.price * item.quantity, 0
             );
     },
+
     removeFromCart: (state: CartState, {payload}: PayloadAction<{product: Product}>) => {
         const {product} = payload;
         const cartItem = state.cartItems?.find((item)=>(item.product.product_id === product.product_id))
 
-        if (cartItem && cartItem.quantity > 0) {
+        if (cartItem && cartItem.quantity >= 2) {
           cartItem.quantity =  cartItem.quantity - 1; 
         } else {
-          state.cartItems.filter((item) => (item) !== cartItem); 
+          state.cartItems = state.cartItems.filter((item) => (item) !== cartItem); 
         }
 
         state.total = state.cartItems.reduce( 
-            (total, item) => total + item.product.price * item.quantity, 
-            0
+            (total, item) => total + item.product.price * item.quantity, 0
         );
-      },
+    },
+
+    deleteCartItem: (state: CartState, {payload}: PayloadAction<{product: Product}>) => {
+        const {product} = payload;
+        const cartItem = state.cartItems?.find((item)=>(item.product.product_id === product.product_id))
+
+        if(cartItem) {
+          state.cartItems = state.cartItems.filter((item) => (item) !== cartItem);
+        }
+        state.total = state.cartItems.reduce( 
+          (total, item) => total + item.product.price * item.quantity, 
+          0
+        );
+    },
 
     setCartWithLocalData: (
         state: CartState,

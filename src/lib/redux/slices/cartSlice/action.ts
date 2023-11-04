@@ -15,6 +15,10 @@ export const removeFromCart = (product: Product) => async(dispatch: any)=> {
 	dispatch(actions.removeFromCart({ product }))
 	}
 
+export const deleteCartItem = (product: Product) => async(dispatch: any)=> {
+	dispatch(actions.deleteCartItem({ product }))
+	}
+
 export const setCartFromLocalCartData =
 	(localCartData: cartItem[] | null) => async (dispatch: any) => {
 		dispatch(actions.setCartWithLocalData({ localCartData }))

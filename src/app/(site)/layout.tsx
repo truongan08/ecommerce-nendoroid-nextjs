@@ -1,4 +1,6 @@
 import Nav from "@/components/Nav";
+import Footer from "@/components/Footer";
+import { SessionProvider } from "@/provider/session-provider";
 
 export default async function Layout({
   children,
@@ -7,8 +9,11 @@ export default async function Layout({
 }) {
   return (
     <>
-      <Nav />
-      {children}
+      <SessionProvider>
+        <Nav />
+        {children}
+        <Footer />
+      </SessionProvider>
     </>
   );
 }
