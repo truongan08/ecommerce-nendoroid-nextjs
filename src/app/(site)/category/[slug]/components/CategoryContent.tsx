@@ -58,9 +58,9 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ type }) => {
             <Loading />
           </div>
         ) : (
-          <div className="w-screen h-screen m-auto p-6 mt-11 text-center">
+          <div className="w-auto h-auto m-auto mr-2 p-0 max-md:p-6 mt-11 max-md:mt-16 text-center">
             <span className="text-5xl">{type}</span>
-            <div>
+            <div className="">
               <NendoroidItem data={nendoroids} />
             </div>
           </div>

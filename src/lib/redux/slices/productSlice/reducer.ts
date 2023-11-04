@@ -10,7 +10,7 @@ export const productReducers = {
     },
     getProductByStatus: (
         state: ProductState,
-        {payload}:PayloadAction<{product: Product[] | null; error: CustomError | null}>
+        {payload}:PayloadAction<{product: Product[] ; error: CustomError | null}>
     ) => {
         state.product= payload.product
         state.getProductByStatusStatus = payload.error ? ProductRequestStatus.FAILED : ProductRequestStatus.IDLE
@@ -19,7 +19,7 @@ export const productReducers = {
     },
     getProductByCategory: (
         state: ProductState,
-        {payload}:PayloadAction<{product: Product[] | null; error: CustomError | null}>
+        {payload}:PayloadAction<{product: Product[] ; error: CustomError | null}>
     ) => {
         state.product= payload.product
         state.getProductByCategoryStatus = payload.error ? ProductRequestStatus.FAILED : ProductRequestStatus.IDLE

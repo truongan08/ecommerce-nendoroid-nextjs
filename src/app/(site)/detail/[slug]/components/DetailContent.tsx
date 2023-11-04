@@ -10,6 +10,8 @@ import {
   selectGetProductDetailStatus,
   selectGetProductDetailError,
   selectProductDetailInState,
+  addToCart,
+  selectIsLoggedInSession,
 } from "@/lib/redux";
 import {
   ProductDetail,
@@ -17,6 +19,12 @@ import {
   CustomError,
 } from "@/types/user";
 import PriceTag from "@/components/PriceTag";
+import {
+  AiOutlineGroup,
+  AiOutlineNumber,
+  AiOutlineTrademark,
+} from "react-icons/ai";
+import { LuCalendarDays } from "react-icons/lu";
 
 interface DetailContentProps {
   product_id: string;
@@ -34,6 +42,12 @@ const DetailContent: React.FC<DetailContentProps> = ({ product_id }) => {
   const getProductDetailError: CustomError | null = useAppSelector(
     selectGetProductDetailError
   );
+
+  const isLoggedInSession: boolean = useAppSelector(selectIsLoggedInSession);
+
+  const CLickAddToCart = async (data: any) => {
+    await dispatch(addToCart(data));
+  };
 
   useEffect(() => {
     async function fetchData(product_id: string) {
@@ -75,15 +89,15 @@ const DetailContent: React.FC<DetailContentProps> = ({ product_id }) => {
                   <Image
                     src={`${productDetail?.image_url[0]}`}
                     alt=""
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                     fill
                     sizes="(max-width: 768px) 100vw, 33vw"
                   />
                 ) : null}
               </div>
               <div className="flex-wrap hidden md:flex ">
-                {/* {{productDetail?.image_url}.map((item) ={">"} {
-                  <div className="w-1/2 p-2 sm:w-1/4">
+                {productDetail?.image_url.map((item) => (
+                  <div className="w-1/2 p-2 sm:w-1/4" key={item}>
                     <Link
                       href="#"
                       className="block border border-blue-100  hover:border-blue-300 "
@@ -91,13 +105,13 @@ const DetailContent: React.FC<DetailContentProps> = ({ product_id }) => {
                       <Image
                         src={item}
                         alt=""
-                        className="object-cover w-full lg:h-32"
-                        width={200}
-                        height={200}
+                        className="object-contain w-full lg:h-32"
+                        width={400}
+                        height={400}
                       />
                     </Link>
                   </div>
-                })} */}
+                ))}
               </div>
             </div>
           </div>
@@ -114,14 +128,7 @@ const DetailContent: React.FC<DetailContentProps> = ({ product_id }) => {
                   Lorem ispum dor amet Lorem ispum dor amet Lorem ispum dor amet
                   Lorem ispum dor amet Lorem ispum dor amet
                 </p>
-                <div className="p-4 mb-8 border border-gray-300 ">
-                  <div className="mb-1 text-xs font-medium text-gray-700">
-                    Hurry up! left {productDetail?.stock} in Stock
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2.5">
-                    <div className="bg-blue-600 h-2.5 rounded-full w-5/12"></div>
-                  </div>
-                </div>
+
                 <p className="inline-block text-2xl font-semibold text-gray-700  ">
                   <span>
                     {productDetail?.price && (
@@ -130,40 +137,94 @@ const DetailContent: React.FC<DetailContentProps> = ({ product_id }) => {
                   </span>
                 </p>
               </div>
-              <div className="mb-8">
-                <h2 className="mb-2 text-xl font-bold ">Color</h2>
-                <div className="flex flex-wrap -mb-2">
-                  <button className="p-1 mb-2 mr-2 border border-transparent rounded-full hover:border-gray-400  ">
-                    <div className="w-6 h-6 bg-red-600 rounded-full"></div>
-                  </button>
-                  <button className="p-1 mb-2 mr-2 border border-transparent rounded-full hover:border-gray-400 ">
-                    <div className="w-6 h-6 bg-green-600 rounded-full"></div>
-                  </button>
-                  <button className="p-1 mb-2 border border-transparent rounded-full hover:border-gray-400 ">
-                    <div className="w-6 h-6 bg-yellow-500 rounded-full"></div>
-                  </button>
-                  <button className="p-1 mb-2 border border-transparent rounded-full hover:border-gray-400 ">
-                    <div className="w-6 h-6 rounded-full bg-sky-400"></div>
-                  </button>
+
+              <div className="pb-6 mb-6 border-b border-gray-200">
+                <h2 className="mb-2 text-lg font-bold text-gray-700">
+                  Details :
+                </h2>
+                <div className="bg-gray-100 rounded-xl">
+                  <div className="p-3 lg:p-5 ">
+                    <div className="p-2 rounded-xl lg:p-6  bg-gray-50">
+                      <div className="flex flex-wrap justify-center gap-x-10 gap-y-4">
+                        <div className="w-full mb-4 md:w-2/5">
+                          <div className="flex ">
+                            <span className="mr-3 text-gray-500 ">
+                              <AiOutlineNumber className="w-6 h-6" />
+                            </span>
+                            <div>
+                              <p className="mb-2 text-sm font-medium text-gray-500 ">
+                                SKU
+                              </p>
+                              <h2 className="text-base font-semibold text-gray-700 ">
+                                {productDetail?.product_detail[0].sku}
+                              </h2>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="w-full mb-4 md:w-2/5">
+                          <div className="flex ">
+                            <span className="mr-3 text-gray-500 ">
+                              <AiOutlineTrademark className="w-6 h-6" />
+                            </span>
+                            <div>
+                              <p className="mb-2 text-sm font-medium text-gray-500 ">
+                                Franchise
+                              </p>
+                              <h2 className="text-base font-semibold text-gray-700 ">
+                                {productDetail?.product_detail[0].franchise}
+                              </h2>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="w-full mb-4 lg:mb-0 md:w-2/5">
+                          <div className="flex ">
+                            <span className="mr-3 text-gray-500 ">
+                              <AiOutlineGroup className="w-6 h-6" />
+                            </span>
+                            <div>
+                              <p className="mb-2 text-sm font-medium text-gray-500 ">
+                                Sets
+                              </p>
+                              <h2 className="text-base font-semibold text-gray-700 ">
+                                {productDetail?.product_detail[0].sets === null
+                                  ? "None"
+                                  : productDetail?.product_detail[0].sets}
+                              </h2>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="w-full mb-4 lg:mb-0 md:w-2/5">
+                          <div className="flex ">
+                            <span className="mr-3 text-gray-500 ">
+                              <LuCalendarDays className="w-6 h-6" />
+                            </span>
+                            <div>
+                              <p className="mb-2 text-sm font-medium text-gray-500 ">
+                                Year
+                              </p>
+                              <h2 className="text-base font-semibold text-gray-700 ">
+                                {productDetail?.product_detail[0].year === null
+                                  ? "None"
+                                  : productDetail?.product_detail[0].year}
+                              </h2>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className="pb-6 mb-8 border-b border-gray-300 ">
-                <h2 className="mb-2 text-xl font-bold ">Size</h2>
-                <div className="flex flex-wrap -mb-2">
-                  <button className="py-1 mb-2 mr-1 border w-11 hover:border-blue-400  hover:text-blue-600 ">
-                    XL
-                  </button>
-                  <button className="py-1 mb-2 mr-1 border w-11 hover:border-blue-400 hover:text-blue-600  ">
-                    S
-                  </button>
-                  <button className="py-1 mb-2 mr-1 border w-11 hover:border-blue-400 hover:text-blue-600 ">
-                    M
-                  </button>
-                  <button className="py-1 mb-2 mr-1 border w-11 hover:border-blue-400 hover:text-blue-600 ">
-                    XS
-                  </button>
+
+              <div className="pb-6 mb-6 border-b border-gray-200">
+                <div className="mb-1 text-md font-medium text-green-600 ">
+                  Hurry up! left {productDetail?.stock} in Stock
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2.5  ">
+                  <div className="bg-blue-600 0 h-2.5 rounded-full w-5/12"></div>
                 </div>
               </div>
+
               <div className="flex flex-wrap items-center ">
                 <div className="mb-4 mr-4 lg:mb-0">
                   <div className="w-28">
@@ -187,7 +248,11 @@ const DetailContent: React.FC<DetailContentProps> = ({ product_id }) => {
                   </button>
                 </div>
                 <div className="mb-4 mr-4 lg:mb-0">
-                  <button className="flex items-center justify-center w-full h-10 p-2 text-gray-700 border border-gray-300 lg:w-11 hover:text-gray-50  hover:bg-blue-600 hover:border-blue-600 ">
+                  <button
+                    className="flex items-center justify-center w-full h-10 p-2 text-gray-700 border border-gray-300 lg:w-11 hover:text-gray-50  hover:bg-blue-600 hover:border-blue-600 "
+                    disabled={!isLoggedInSession}
+                    onClick={() => CLickAddToCart(productDetail)}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="16"

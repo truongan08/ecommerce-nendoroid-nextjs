@@ -3,6 +3,8 @@ import { ProductOutput, CustomError, StatusProduct, ProductCallTypes, Product, T
 
 const { actions } = productSlice
 
+//call many reducer on 1 action
+
 export const getProductByStatus = (status: StatusProduct) =>
 	async (
 		dispatch: any,
@@ -11,7 +13,7 @@ export const getProductByStatus = (status: StatusProduct) =>
 	) => {
 		dispatch(actions.startCall({ callType: ProductCallTypes.GET_BY_STATUS }))
 
-		const ProductStatusRo: { product: Product[] | null; error: CustomError | null } =
+		const ProductStatusRo: { product: Product[] ; error: CustomError | null } =
 			await productOutput.getProductByStatus(status)
 
 		dispatch(actions.getProductByStatus(ProductStatusRo))
@@ -25,7 +27,7 @@ export const getProductByCategory = (type: TypeProduct) =>
 	) => {
 		dispatch(actions.startCall({ callType: ProductCallTypes.GET_BY_TYPE }))
 
-		const ProductTypeRo: { product: Product[] | null; error: CustomError | null } =
+		const ProductTypeRo: { product: Product[] ; error: CustomError | null } =
 			await productOutput.getProductByCategory(type)
 
 		dispatch(actions.getProductByCategory(ProductTypeRo))

@@ -9,7 +9,7 @@ import { AnyAction, combineReducers } from '@reduxjs/toolkit'
 
 export const appReducers = combineReducers({
 	[authSlice.name]: authSlice.reducer,
-  // [cartSlice.name]: cartSlice.reducer,
+  [cartSlice.name]: cartSlice.reducer,
   [productSlice.name]: productSlice.reducer,
   [productDetailSlice.name]: productDetailSlice.reducer,
 })

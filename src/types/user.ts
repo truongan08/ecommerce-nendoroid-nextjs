@@ -3,44 +3,17 @@
 import { AuthSupabase } from "@/lib/redux/action/authAction";
 import { ProductSupabase } from "@/lib/redux/action/productAction";
 import { ProductDetailSupabase } from './../lib/redux/action/productDetailAction';
+import { CartSupabase } from "@/lib/redux/action/cartAction";
 
-export interface Product {
-    product_id: string;
-    category_id: string;
-    name: string;
-    description: string;
-    image_url: string[];
-    price: number;
-	status: string;
-    stock: number;
+export interface cart {
+	cartItems: cartItem[];
+	total: number;
 }
-
-export interface ProductDetail {
-	product_id: string;
-    category_id: string;
-    name: string;
-    description: string;
-    image_url: string[];
-    price: number;
-	status: string;
-    stock: number;
-	product_detail: Productdetail
-}
-
-export interface Productdetail {
-	product_detail_id: string;
-	product_id: string;
-	sku: string;
-	franchise: string;
-	set: string;
-	year: string;
-}
-
 
 export interface ProductOutput {
-	getProductByStatus(status: StatusProduct): Promise<{product: Product[] | null; error: CustomError | null}>
-	getProductByCategory(type: TypeProduct): Promise<{product: Product[] | null; error: CustomError | null}>
-	getProductPagination({ query: { page } }: { query: { page?: number | undefined; }; }): Promise<{product: Product[] | null;count : number | null; error: CustomError | null}>
+	getProductByStatus(status: StatusProduct): Promise<{product: Product[]; error: CustomError | null}>
+	getProductByCategory(type: TypeProduct): Promise<{product: Product[]; error: CustomError | null}>
+	getProductPagination({ query: { page } }: { query: { page?: number | undefined; }; }): Promise<{product: Product[];count : number | null; error: CustomError | null}>
 }
 
 export interface ProductDetailOutput {
@@ -57,6 +30,11 @@ export interface AuthOutput {
 	signOut(): Promise<{ error: CustomError | null }>
 }
 
+export interface CartOutput {
+	fetchCart(): Promise<{ cart: cart | null; error: CustomError | null }>
+	getCart():  Promise<{ cart: cart | null; error: CustomError | null }>
+}
+
 export interface AuthState {
 	session: Session | null
 	signInStatus: RequestStatus
@@ -67,7 +45,7 @@ export interface AuthState {
 	signOutError: CustomError | null
 }
 export interface ProductState {
-	product: Product[] | null
+	product: Product[] 
 	getProductByStatusStatus: ProductRequestStatus
 	getProductByStatusError: CustomError | null
 	getProductByCategoryStatus: ProductRequestStatus
@@ -83,15 +61,11 @@ export interface ProductDetailState {
 	getProductDetailError: CustomError | null
 }
 
+export interface CartState {
+	cartItems: cartItem[];
+	total: number;
+}
 
-export interface CartOutput {
-addToCart(
-	signInDto: SignInDto
-): Promise<{ session: Session | null; error: CustomError | null }>
-
-signUp(signUpDto: SignUpDto): Promise<{ error: CustomError | null }>
-
-removeFromCart(): Promise<{ error: CustomError | null }>}
 
 // enum
 
@@ -105,7 +79,6 @@ export enum ProductCallTypes {
     GET_BY_STATUS = "getProductByStatusStatus",
     GET_BY_TYPE = "getProductByCategoryStatus",
     GET_PAGINATION = "getProductPaginationStatus",
-	
 }
 
 export enum ProductDetailCallTypes {
@@ -131,7 +104,9 @@ export enum ProductDetailRequestStatus {
 	FAILED = "FAILED",
 }
 
+
 //type
+
 
 export type CustomError = {
 	message: string
@@ -172,10 +147,48 @@ export type Session = {
 	expires_at?: number
 }
 
+export type Product = {
+    product_id: string;
+    category_id: string;
+    name: string;
+    description: string;
+    image_url: string[];
+    price: number;
+	status: string;
+    stock: number;
+}
+
+export type ProductDetail = {
+	product_id: string;
+    category_id: string;
+    name: string;
+    description: string;
+    image_url: string[];
+    price: number;
+	status: string;
+    stock: number;
+	product_detail: Productdetail
+}
+
+export type Productdetail = {
+	product_detail_id: string;
+	product_id: string;
+	sku: string;
+	franchise: string;
+	set: string;
+	year: string;
+}
+
+export type cartItem  = {
+	product: Product;
+	quantity: number;
+}
+
 export type AppOutputs = {
 	authOutput: AuthOutput
 	productOutput: ProductOutput
 	productDetailOutput: ProductDetailOutput
+	cartOutput: CartOutput
 }
 
 //const
@@ -184,6 +197,7 @@ export const appOutputs: AppOutputs = {
 	authOutput: new AuthSupabase(),
 	productOutput: new ProductSupabase(),
 	productDetailOutput: new ProductDetailSupabase(),
+	cartOutput: new CartSupabase(),
 }
 
 export const initialStateAuth: AuthState = {
@@ -210,4 +224,9 @@ export const initialStateProductDetail: ProductDetailState = {
 	productDetail: null,
 	getProductDetailStatus: ProductDetailRequestStatus.IDLE,
 	getProductDetailError: null,
+}
+
+export const initialStateCart: CartState = {
+	cartItems: [],
+	total: 0,
 }

@@ -3,6 +3,8 @@ import { AuthOutput, SignInDto, SignUpDto, Session, CustomError, AuthCallTypes }
 
 const { actions } = authSlice
 
+//call many reducer on 1 action
+
 export const signIn = (signInDto: SignInDto) =>
 	async (
 		dispatch: any,

@@ -2,16 +2,16 @@
 
 import { ReactNode, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Session } from "@/types/user";
+import { Session, cart, cartItem } from "@/types/user";
 import {
   selectIsLoggedInSession,
+  selectLocalCartData,
   selectLocalSessionData,
+  setCartFromLocalCartData,
   setSessionFromLocalSessionData,
   useAppDispatch,
   useAppSelector,
 } from "@/lib/redux";
-import Loading from "@/components/Loading";
-import Image from "next/image";
 
 type SessionProviderProps = {
   children: ReactNode;
@@ -30,24 +30,32 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
 
   const getLoggedInUserDataOrNone = () => {
     const localSessionData: Session | null = selectLocalSessionData();
+    const cart: cartItem[] | null = selectLocalCartData();
 
     if (!localSessionData) {
       setIsLoading(true);
       router.refresh();
       return;
     }
-
-    dispatch(setSessionFromLocalSessionData(localSessionData));
+    if (cart) {
+      dispatch(setCartFromLocalCartData(cart));
+      dispatch(setSessionFromLocalSessionData(localSessionData));
+    } else {
+      dispatch(setSessionFromLocalSessionData(localSessionData));
+    }
     setIsLoading(true);
   };
 
   return (
-    <>
+    <div className="max-h-screen max-w-screen">
       {!isLoading ? (
-        <Image src={"/images/figre.gif"} alt="figure-loading" fill />
+        <div
+          className="min-h-screen min-w-screen bg-fixed bg-auto bg-no-repeat bg-center"
+          style={{ backgroundImage: `url(/images/figre.gif)` }}
+        ></div>
       ) : (
         children
       )}
-    </>
+    </div>
   );
 };

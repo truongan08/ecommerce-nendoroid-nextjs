@@ -3,8 +3,9 @@ import {
   signOut,
   useAppDispatch,
   useAppSelector,
+  selectCartInState,
 } from "@/lib/redux";
-import { User } from "@/types/user";
+import { User, cartItem } from "@/types/user";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -25,6 +26,8 @@ const SideBar: React.FC<SideBarProps> = ({
   onCLickOpenSidebar,
 }) => {
   const dispatch = useAppDispatch();
+
+  const cart: cartItem[] = useAppSelector(selectCartInState);
   const loggedInUser: User | null = useAppSelector(selectLoggedInUser);
 
   const SignOut = async () => {
@@ -99,7 +102,7 @@ const SideBar: React.FC<SideBarProps> = ({
                   Cart
                 </span>
                 <span className="px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-green-500 bg-green-50 rounded-full">
-                  15
+                  {cart.length}
                 </span>
               </Link>
             </li>

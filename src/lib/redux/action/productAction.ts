@@ -10,7 +10,7 @@ import getPagination from "./getPagination";
 
 export class ProductSupabase implements ProductOutput {
   async getProductByStatus({ status }: StatusProduct): Promise<{
-    product: Product[] | null;
+    product: Product[];
     error: CustomError | null;
   }> {
     const { data: product, error } = await supabase
@@ -21,7 +21,7 @@ export class ProductSupabase implements ProductOutput {
   }
 
   async getProductByCategory({ type }: TypeProduct): Promise<{
-    product: Product[] | null;
+    product: Product[];
     error: CustomError | null;
   }> {
     const { data: product, error } = await supabase
@@ -32,7 +32,7 @@ export class ProductSupabase implements ProductOutput {
   }
 
   async getProductPagination({ query: { page = 1 } }): Promise<{
-    product: Product[] | null;
+    product: Product[] ;
     count: number | null;
     error: CustomError | null;
   }> {

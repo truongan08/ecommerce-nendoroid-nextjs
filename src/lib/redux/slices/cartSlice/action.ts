@@ -1,54 +1,21 @@
+import { useAppSelector } from "../.."
+import { selectProductInState } from '..';
 import { cartSlice } from "./cartSlice"
-import { AuthOutput, SignInDto, SignUpDto, Session, CustomError, AuthCallTypes } from "@/types/user"
+import {  cart, cartItem, Product } from "@/types/user"
 
 const { actions } = cartSlice
 
-export const addToCart = (signInDto: SignInDto) =>
-	async (
-		dispatch: any,
-		_: any,
-		{ authOutput }: { authOutput: AuthOutput }
-	) => {
-		dispatch(actions.startCall({ callType: AuthCallTypes.SIGN_IN }))
+//call many reducer on 1 action
 
-		const signInRo: { session: Session | null; error: CustomError | null } =
-			await authOutput.signIn(signInDto)
-
-		dispatch(actions.signIn(signInRo))
+export const addToCart = (product: Product, quantity?: number) => async(dispatch: any)=> {
+	dispatch(actions.addToCart({ product, quantity }))
 	}
 
-export const removeFromCart =
-	() =>
-	async (
-		dispatch: any,
-		_: any,
-		{ authOutput }: { authOutput: AuthOutput }
-	) => {
-		dispatch(actions.startCall({ callType: AuthCallTypes.SIGN_OUT }))
-
-		const signOutRo: { error: CustomError | null } =
-			await authOutput.signOut()
-
-		dispatch(actions.signOut(signOutRo))
+export const removeFromCart = (product: Product) => async(dispatch: any)=> {
+	dispatch(actions.removeFromCart({ product }))
 	}
 
-export const signUp =
-	(signUpDto: SignUpDto) =>
-	async (
-		dispatch: any,
-		_: any,
-		{ authOutput }: { authOutput: AuthOutput }
-	) => {
-		dispatch(actions.startCall({ callType: AuthCallTypes.SIGN_UP }))
-
-		const signUpRo: { error: CustomError | null } = await authOutput.signUp(
-			signUpDto
-		)
-
-		dispatch(actions.signUp(signUpRo))
-	}
-
-export const setSessionFromLocalSessionData =
-	(localSessionData: Session) => async (dispatch: any) => {
-		dispatch(actions.setLoggedInUserWithLocalData({ localSessionData }))
+export const setCartFromLocalCartData =
+	(localCartData: cartItem[] | null) => async (dispatch: any) => {
+		dispatch(actions.setCartWithLocalData({ localCartData }))
 	}

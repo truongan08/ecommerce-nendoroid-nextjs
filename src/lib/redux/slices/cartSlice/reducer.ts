@@ -1,45 +1,41 @@
-import { AuthCallTypes, CustomError, RequestStatus, AuthState, Session } from '@/types/user';
+import { CartState, Product, cartItem ,cart} from '@/types/user';
 import { PayloadAction } from "@reduxjs/toolkit";
 
 export const cartReducers = {
-    startCall:(
-        state: AuthState,
-        {payload}:PayloadAction<{callType: AuthCallTypes}>
-    ) => {
-        state[payload.callType] = RequestStatus.LOADING
-    },
-    signIn: (
-        state: AuthState,
-        {payload}:PayloadAction<{session: Session | null; error: CustomError | null}>
-    ) => {
-        state.session= payload.session
-        state.signInError = payload.error
-        state.signInStatus = payload.error ? RequestStatus.FAILED : RequestStatus.COMPLETED
-    },
-    signUp: (
-        state: AuthState,
-        {payload}:PayloadAction<{ error: CustomError | null}>
-    ) => {
-        state.signUpError = payload.error
-        state.signUpStatus = payload.error ? RequestStatus.FAILED : RequestStatus.COMPLETED
-    },
-    signOut: (
-        state: AuthState,
-        {payload}:PayloadAction<{error: CustomError | null}>
-    ) => {
-        state.signOutError = payload.error
-        if(!payload.error)
-        {
-            state.signOutStatus = RequestStatus.COMPLETED
-            state.session = null
-            return
+    addToCart: (state: CartState, {payload}: PayloadAction<{product: Product; quantity?: number}>) => {
+        const {product, quantity = 1} = payload;
+        const cartItemIndex = state.cartItems?.findIndex((item)=>(item.product?.product_id === product.product_id))
+        
+        if (cartItemIndex !== -1) {
+            state.cartItems[cartItemIndex].quantity += quantity
+        } else {
+            state.cartItems.push({product , quantity})
         }
-        state.signOutStatus = RequestStatus.FAILED 
+        state.total = state.cartItems.reduce( 
+              (total, item) => total + item.product.price * item.quantity,
+              0
+            );
     },
-    setLoggedInUserWithLocalData: (
-        state: AuthState,
-        {payload}: PayloadAction<{localSessionData: Session}>
-        )=> {
-            state.session = payload.localSessionData
+    removeFromCart: (state: CartState, {payload}: PayloadAction<{product: Product}>) => {
+        const {product} = payload;
+        const cartItem = state.cartItems?.find((item)=>(item.product.product_id === product.product_id))
+
+        if (cartItem && cartItem.quantity > 0) {
+          cartItem.quantity =  cartItem.quantity - 1; 
+        } else {
+          state.cartItems.filter((item) => (item) !== cartItem); 
+        }
+
+        state.total = state.cartItems.reduce( 
+            (total, item) => total + item.product.price * item.quantity, 
+            0
+        );
+      },
+
+    setCartWithLocalData: (
+        state: CartState,
+        {payload}: PayloadAction<{localCartData: any }>
+        ) => {
+            state.cartItems.push(payload.localCartData);
         },
 }

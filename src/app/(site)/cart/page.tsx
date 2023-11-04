@@ -1,29 +1,40 @@
 "use client";
 
-import { selectIsLoggedInSession, useAppSelector } from "@/lib/redux";
+import {
+  selectIsLoggedInSession,
+  useAppDispatch,
+  useAppSelector,
+  selectCartInState,
+  removeFromCart,
+  addToCart,
+} from "@/lib/redux";
+import { cart, cartItem } from "@/types/user";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect } from "react";
 
 import { AiOutlineDelete } from "react-icons/ai";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Cart = () => {
+  const dispatch = useAppDispatch();
+
+  const cart: cartItem[] = useAppSelector(selectCartInState);
+
   const isLoggedInSession: boolean = useAppSelector(selectIsLoggedInSession);
-  // const cart = getCart(user);
-  const cart = [
-    {
-      id: 1,
-      name: "Neko Arc",
-      price: 150000,
-      quantity: 50,
-      image_url:
-        "/-DNr1T5JvK1k/X4GwL-e8jHI/AAAAAAAAo-I/H13V1KYu6owNCRVAUxFIFPv4lhmAQuDfgCLcBGAsYHQ/s135/000-Neko-Arc-Melty-Blood-Video-Games-Nendoroid-3.jpg",
-    },
-  ];
+
+  const CLickAddToCart = async (data: any) => {
+    await dispatch(addToCart(data));
+  };
+
+  const CLickRemoveFromCart = async (data: any) => {
+    await dispatch(removeFromCart(data));
+  };
+
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 mt-16">
-      <div className="lg:col-span-2 lg:ml-16 lg:mr-16">
+    <div className="max-md:mt-[130px] grid grid-cols-1 lg:grid-cols-3 mt-16">
+      <div className="max-md:px-2 lg:col-span-2 lg:ml-16 lg:mr-16">
         <div className="text-lg font-bold mt-6 mb-4 lg:mt-11 lg:mb-10 lg:ml-2">
           <h2>Your cart</h2>
         </div>
@@ -71,25 +82,32 @@ const Cart = () => {
               </tbody>
             ) : (
               <tbody>
-                {cart.map((item) => {
+                {cart?.map((item, index) => {
                   return (
-                    <tr key={item.id}>
+                    <tr key={index}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div className="flex items-center">
-                          <Image
-                            src={"https://1.bp.blogspot.com" + item?.image_url}
-                            alt={item.name}
-                            width={800}
-                            height={400}
-                            className="w-20 h-20 object-contain mr-2"
-                          />
+                          {item.product && (
+                            <Image
+                              src={item?.product?.image_url
+                                ?.slice(0)
+                                .toString()}
+                              alt={item?.product?.name}
+                              width={60}
+                              height={40}
+                              quality={70}
+                              className="w-20 h-20 object-contain mr-2"
+                            />
+                          )}
 
-                          <span className="font-bold">{item.name}</span>
+                          <span className="font-bold">
+                            {item?.product?.name}
+                          </span>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <span className="text-sm font-medium text-gray-700 mr-4">
-                          {item.price.toLocaleString("vi-VN", {
+                          {item?.product?.price?.toLocaleString("vi-VN", {
                             style: "currency",
                             currency: "VND",
                           })}
@@ -111,13 +129,11 @@ const Cart = () => {
                             -
                           </button>
                           <span className="text-sm font-medium text-gray-700 border-x-2">
-                            {item.quantity}
+                            {item?.quantity}
                           </span>
                           <button
                             className="text-sm font-medium text-gray-700 focus:outline-none"
-                            // onClick={() =>
-                            //   increaseCount(item.item_id, item.sku, item.qty)
-                            // }
+                            onClick={() => CLickAddToCart(item.product)}
                           >
                             +
                           </button>
@@ -125,13 +141,12 @@ const Cart = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <span className="text-sm font-medium text-gray-700 mr-4">
-                          {(item.price * item.quantity).toLocaleString(
-                            "vi-VN",
-                            {
-                              style: "currency",
-                              currency: "VND",
-                            }
-                          )}
+                          {(
+                            item?.product?.price * item?.quantity
+                          ).toLocaleString("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                          })}
                         </span>
                         {/* {!isSmallScreen && (
                           <span className="hidden lg:inline-block text-gray-400">
@@ -142,8 +157,7 @@ const Cart = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-md font-medium">
                         <Link
                           href={"#"}
-                          // onClick={() => handledelete(item.item_id)}
-                          onClick={() => toast("Feature developing")}
+                          onClick={() => CLickRemoveFromCart(item.product)}
                           className="cursor-pointer "
                         >
                           <AiOutlineDelete className="text-red-700" />
@@ -158,7 +172,7 @@ const Cart = () => {
           </table>
         </div>
       </div>
-      <div className="lg:col-span-1 mt-4 lg:mt-28 lg:mr-16">
+      <div className="lg:col-span-1 max-md:px-2 mt-4 lg:mt-28 lg:mr-16">
         <div className="grid grid-rows-2">
           {/* <div className="bg-white border-2 rounded-lg p-4 shadow-2xl row-span-1 lg:mb-8">
             <h2 className="text-lg font-bold mb-4">Promotion</h2>
@@ -192,7 +206,7 @@ const Cart = () => {
                 {cart.length <= 0
                   ? 0
                   : cart
-                      .reduce((a, b) => a + b.price * b.quantity, 0)
+                      .reduce((a, b) => a + b?.product?.price * b?.quantity, 0)
                       .toLocaleString("vi-VN", {
                         style: "currency",
                         currency: "VND",

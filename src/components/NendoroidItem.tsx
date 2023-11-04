@@ -2,19 +2,31 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { AiOutlineHeart, AiOutlineShoppingCart } from "react-icons/ai";
+
+import PriceTag from "./PriceTag";
 
 import { Product } from "@/types/user";
-import PriceTag from "./PriceTag";
-import { AiOutlineHeart, AiOutlineShoppingCart } from "react-icons/ai";
+import { addToCart, useAppDispatch } from "@/lib/redux";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 interface NendoroidItemProps {
   data: Product[] | null;
 }
 const NendoroidItem: React.FC<NendoroidItemProps> = ({ data }) => {
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+
+  const CLickAddToCart = async (data: any) => {
+    await dispatch(addToCart(data));
+  };
+
+  useEffect(() => router.refresh(), [dispatch]);
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 max-md:grid-cols-3 gap-4 mt-4 ml-6 h-full">
-      {data?.map((item) => (
+    <div className="grid grid-cols-1 md:grid-cols-5 max-md:grid-cols-1 sm:grid-cols-3 gap-4 mt-4 ml-6 max-md:ml-auto h-full">
+      {data?.map((item, index) => (
         <div
-          key={item.product_id}
+          key={index}
           className="group relative m-5 w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md grid col-span-1"
         >
           <Link
@@ -37,7 +49,7 @@ const NendoroidItem: React.FC<NendoroidItemProps> = ({ data }) => {
 
           <div className="mt-4 px-5 pb-5">
             <Link href="#">
-              <h5 className="text-xl tracking-tight text-slate-900">
+              <h5 className="w-[150px] text-xl tracking-tight text-slate-900 truncate">
                 {item.name}
               </h5>
             </Link>
@@ -53,13 +65,13 @@ const NendoroidItem: React.FC<NendoroidItemProps> = ({ data }) => {
                 </span> */}
               </p>
             </div>
-            <Link
-              href="#"
+            <button
+              onClick={() => CLickAddToCart(item)}
               className="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300"
             >
               <AiOutlineShoppingCart className="mr-2 w-6 h-6" />
               Add to cart
-            </Link>
+            </button>
           </div>
         </div>
       ))}

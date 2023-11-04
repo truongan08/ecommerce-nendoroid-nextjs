@@ -3,6 +3,8 @@ import { ProductDetailOutput, CustomError, ProductDetailCallTypes, ProductDetail
 
 const { actions } = productDetailSlice
 
+//call many reducer on 1 action
+
 export const getProductDetail = (product_id: ProductIdType) => 
 	async (
 		dispatch:any,
