@@ -3,6 +3,7 @@ import PageContent from "./components/PageContent";
 import CategoryGrid from "@/components/CategoryGrid";
 import getSeller from "@/lib/redux/action/getSeller";
 
+
 const HomePage = () => {
   return (
     <>

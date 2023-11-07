@@ -17,6 +17,7 @@ function CategoryGrid() {
               className="object-cover border-1 hover:border-2 brightness-50 hover:saturate-200 shadow-inner hover:shadow-2xl rounded-2xl"
               alt=""
               quality={70}
+              sizes="(max-width: 768px) 100vw, 33vw"
             />
             <span className="absolute text-2xl text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
               Anime & Manga
@@ -34,6 +35,7 @@ function CategoryGrid() {
               src="/images/mascot.png"
               className="object-cover border-1 hover:border-2 brightness-50 hover:saturate-200 shadow-inner hover:shadow-2xl rounded-2xl"
               quality={70}
+              sizes="(max-width: 768px) 100vw, 33vw"
               alt=""
             />
             <span className="absolute text-2xl text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
@@ -52,6 +54,7 @@ function CategoryGrid() {
               src="/images/vocaloid.png"
               className="object-cover object-top border-1 hover:border-2 brightness-50 hover:saturate-200 shadow-inner hover:shadow-2xl rounded-2xl"
               quality={70}
+              sizes="(max-width: 768px) 100vw, 33vw"
               alt=""
             />
             <span className="absolute text-2xl text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
@@ -70,6 +73,7 @@ function CategoryGrid() {
               src="/images/disney.png"
               className="object-cover border-1 hover:border-2 brightness-50 hover:saturate-200 shadow-inner hover:shadow-2xl rounded-2xl"
               quality={70}
+              sizes="(max-width: 768px) 100vw, 33vw"
               alt=""
             />
             <span className="absolute text-2xl text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
@@ -88,6 +92,7 @@ function CategoryGrid() {
               src="/images/movies_&_TV.png"
               className="object-cover border-1 hover:border-2 brightness-50 hover:saturate-200 shadow-inner hover:shadow-2xl rounded-2xl"
               quality={70}
+              sizes="(max-width: 768px) 100vw, 33vw"
               alt=""
             />
             <span className="absolute text-2xl text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
@@ -106,6 +111,7 @@ function CategoryGrid() {
               src="/images/video_games.png"
               className="object-cover border-1 hover:border-2 brightness-50 hover:saturate-200 shadow-inner hover:shadow-2xl rounded-2xl"
               quality={70}
+              sizes="(max-width: 768px) 100vw, 33vw"
               alt=""
             />
             <span className="absolute text-2xl text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">

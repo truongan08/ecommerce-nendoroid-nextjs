@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@formspree/react": "^2.5.1",
+    "@nextui-org/react": "^2.2.5",
     "@reduxjs/toolkit": "^1.9.7",
     "@stripe/stripe-js": "^2.1.10",
     "@supabase/auth-helpers-nextjs": "^0.8.1",
@@ -23,6 +24,7 @@
     "clsx": "^2.0.0",
     "eslint": "8.49.0",
     "eslint-config-next": "13.5.2",
+    "framer-motion": "^10.16.4",
     "nanoid": "^5.0.2",
     "next": "13.5.2",
     "next-absolute-url": "^1.2.2",

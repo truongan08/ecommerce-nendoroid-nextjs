@@ -1,11 +1,9 @@
-import { useAppSelector } from "../.."
-import { selectProductInState } from '..';
 import { cartSlice } from "./cartSlice"
 import {  cart, cartItem, Product } from "@/types/user"
 
-const { actions } = cartSlice
+const { actions } = cartSlice;
 
-//call many reducer on 1 action
+//call many reducers on an action
 
 export const addToCart = (product: Product, quantity?: number) => async(dispatch: any)=> {
 	dispatch(actions.addToCart({ product, quantity }))

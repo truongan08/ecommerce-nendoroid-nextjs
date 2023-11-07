@@ -34,7 +34,6 @@ const Cart = () => {
   };
 
   const CLickDeleteCart = async (data: any) => {
-    console.log(cart);
     await dispatch(deleteCartItem(data));
   };
 

@@ -6,6 +6,8 @@ import { NextRequest } from "next/server";
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
   const supabase = createMiddlewareClient({req, res});
+  const requestHeaders = new Headers(req.headers);
+  requestHeaders.set("x-pathname", req.nextUrl.pathname);
   
   await supabase.auth.getSession();
   // if (req.nextUrl.pathname.startsWith("/product")) {
@@ -20,5 +22,9 @@ export async function middleware(req: NextRequest) {
 
   await supabase.auth.getSession()
   
-  return res;
+  return NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  });
 }
