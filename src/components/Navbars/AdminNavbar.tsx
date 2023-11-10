@@ -1,9 +1,17 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 
 import UserDropdown from "@/components/Dropdowns/UserDropdown";
 
+import { Breadcrumbs, BreadcrumbItem } from "@nextui-org/breadcrumbs";
+import { usePathname } from "next/navigation";
+
 export default function Navbar() {
+  const pathname = usePathname();
+  const linkPaths = pathname.split("/");
+
   return (
     <>
       {/* Navbar */}
@@ -11,22 +19,27 @@ export default function Navbar() {
         <div className="w-full mx-autp items-center flex justify-between md:flex-nowrap flex-wrap md:px-10 px-4">
           {/* Brand */}
           <Link
-            className="text-white text-sm uppercase hidden lg:inline-block font-semibold"
+            className="flex flex-col flex-wrap gap-4 text-white text-sm uppercase lg:inline-block font-semibold"
             href="#pablo"
-            // onClick={(e) => e.preventDefault()}
           >
-            Dashboard
+            <Breadcrumbs color="foreground" variant="solid" underline="hover">
+              {linkPaths.map((item, index) => (
+                <BreadcrumbItem key={index} href={`/${item}`}>
+                  {item}
+                </BreadcrumbItem>
+              ))}
+            </Breadcrumbs>
           </Link>
           {/* Form */}
           <form className="md:flex hidden flex-row flex-wrap items-center lg:ml-auto mr-3">
             <div className="relative flex w-full flex-wrap items-stretch">
-              <span className="z-10 h-full leading-snug font-normal absolute text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-3">
+              <span className="z-10 h-full leading-snug font-normal absolute text-center text-blueGray-300 bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-3">
                 <i className="fas fa-search"></i>
               </span>
               <input
                 type="text"
                 placeholder="Search here..."
-                className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring w-full pl-10"
+                className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring w-full pl-10"
               />
             </div>
           </form>

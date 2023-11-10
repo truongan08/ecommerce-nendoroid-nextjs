@@ -1,13 +1,11 @@
+"use client";
+
 import React from "react";
 import { usePathname } from "next/navigation";
 
-// reactstrap components
-// import { Spinner } from "reactstrap";
-
-// core components
-
 export default function PageChange() {
   const pathname = usePathname();
+
   return (
     <div>
       <div
@@ -22,7 +20,9 @@ export default function PageChange() {
           <i className="fas fa-circle-notch animate-spin text-white mx-auto text-6xl"></i>
         </div>
         <h4 className="text-lg font-medium text-white">
-          Loading page contents for: {pathname}
+          Loading page contents for:{pathname}
+          {/* {linkPath.map((path, i) => (breadcrumb: path, href: "/" + linkPath.slice(0, i + 1).join("/") ))}
+           */}
         </h4>
       </div>
     </div>

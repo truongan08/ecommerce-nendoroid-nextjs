@@ -1,46 +1,50 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import { AiOutlineEllipsis } from "react-icons/ai";
-import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/popover";
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+} from "@nextui-org/dropdown";
 
 const TableDropdown = () => {
+  const items = [
+    {
+      key: "new",
+      label: "Add",
+    },
+    {
+      key: "edit",
+      label: "Edit",
+    },
+    {
+      key: "delete",
+      label: "Delete",
+    },
+  ];
   return (
-    <Popover placement="bottom-end" showArrow={true}>
-      <PopoverTrigger>
+    <Dropdown backdrop="blur" showArrow>
+      <DropdownTrigger>
         <div className="text-blueGray-500 py-1 px-3">
-          <AiOutlineEllipsis />
+          <AiOutlineEllipsis className="h-4 w-4 rotate-90" />
         </div>
-      </PopoverTrigger>
+      </DropdownTrigger>
 
-      <PopoverContent>
-        <div className="text-base z-50 float-left py-2 list-none text-left min-w-48">
-          <Link
-            href="#pablo"
-            className={
-              "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-            }
+      <DropdownMenu aria-label="Dynamic Actions" items={items}>
+        {(item) => (
+          <DropdownItem
+            key={item.key}
+            color={item.key === "delete" ? "danger" : "default"}
+            className={item.key === "delete" ? "text-danger" : ""}
           >
-            Action
-          </Link>
-          <Link
-            href="#pablo"
-            className={
-              "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-            }
-          >
-            Another action
-          </Link>
-          <Link
-            href="#pablo"
-            className={
-              "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-            }
-          >
-            Something else here
-          </Link>
-        </div>
-      </PopoverContent>
-    </Popover>
+            {item.label}
+          </DropdownItem>
+        )}
+      </DropdownMenu>
+    </Dropdown>
   );
 };
 

@@ -1,62 +1,50 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
-import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/popover";
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+} from "@nextui-org/dropdown";
 
 import { AiOutlineBell } from "react-icons/ai";
 
 const NotificationDropdown = () => {
+  const items = [
+    {
+      key: "new",
+      label: "Add",
+    },
+    {
+      key: "edit",
+      label: "Edit",
+    },
+    {
+      key: "delete",
+      label: "Delete",
+    },
+  ];
   return (
-    <Popover placement="bottom-end" showArrow={true}>
-      <PopoverTrigger>
+    <Dropdown showArrow={true} offset={10} backdrop="opaque">
+      <DropdownTrigger>
         <div className="text-blueGray-500 block py-1 px-3">
           <AiOutlineBell />
         </div>
-      </PopoverTrigger>
+      </DropdownTrigger>
 
-      <PopoverContent>
-        <div className="text-base float-left py-2 list-none text-left min-w-48">
-          <Link
-            href="#pablo"
-            className={
-              "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-            }
-            onClick={(e) => e.preventDefault()}
+      <DropdownMenu aria-label="Dynamic Actions" items={items}>
+        {(item) => (
+          <DropdownItem
+            key={item.key}
+            color={item.key === "delete" ? "danger" : "default"}
+            className={item.key === "delete" ? "text-danger" : ""}
           >
-            Action
-          </Link>
-          <Link
-            href="#pablo"
-            className={
-              "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-            }
-            onClick={(e) => e.preventDefault()}
-          >
-            Another action
-          </Link>
-          <Link
-            href="#pablo"
-            className={
-              "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-            }
-            onClick={(e) => e.preventDefault()}
-          >
-            Something else here
-          </Link>
-          <div className="h-0 my-2 border border-solid border-blueGray-100" />
-          <Link
-            href="#pablo"
-            className={
-              "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-            }
-            onClick={(e) => e.preventDefault()}
-          >
-            Seprated link
-          </Link>
-        </div>
-      </PopoverContent>
-    </Popover>
+            {item.label}
+          </DropdownItem>
+        )}
+      </DropdownMenu>
+    </Dropdown>
   );
 };
 
