@@ -1,5 +1,5 @@
 import { authSlice } from "./authSlice"
-import { AuthOutput, SignInDto, SignUpDto, Session, CustomError, AuthCallTypes } from "@/types/user"
+import { AuthOutput, SignInDto, SignUpDto, Session, CustomError, AuthCallTypes, User } from "@/types/user"
 
 const { actions } = authSlice
 
@@ -28,7 +28,7 @@ export const signUp =
 	) => {
 		dispatch(actions.startCall({ callType: AuthCallTypes.SIGN_UP }))
 
-		const signUpRo: { error: CustomError | null } = await authOutput.signUp(
+		const signUpRo: { user: User | null, session: Session | null, error: CustomError | null } = await authOutput.signUp(
 			signUpDto
 		)
 

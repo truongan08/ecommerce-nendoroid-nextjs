@@ -33,12 +33,14 @@ const TableDropdown = () => {
         </div>
       </DropdownTrigger>
 
-      <DropdownMenu aria-label="Dynamic Actions" items={items}>
+      <DropdownMenu aria-label="Actions" items={items}>
         {(item) => (
           <DropdownItem
+            as={Link}
             key={item.key}
             color={item.key === "delete" ? "danger" : "default"}
             className={item.key === "delete" ? "text-danger" : ""}
+            href={`/${item.key}`}
           >
             {item.label}
           </DropdownItem>

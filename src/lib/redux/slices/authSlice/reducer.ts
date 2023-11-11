@@ -1,4 +1,4 @@
-import { AuthCallTypes, CustomError, RequestStatus, AuthState, Session } from '@/types/user';
+import { AuthCallTypes, CustomError, RequestStatus, AuthState, Session, User } from '@/types/user';
 import { PayloadAction } from "@reduxjs/toolkit";
 export const authReducers = {
     startCall:(
@@ -15,10 +15,12 @@ export const authReducers = {
         state.signInError = payload.error
         state.signInStatus = payload.error ? RequestStatus.FAILED : RequestStatus.COMPLETED
     },
+
     signUp: (
         state: AuthState,
-        {payload}:PayloadAction<{ error: CustomError | null}>
+        {payload}:PayloadAction<{user: User | null, session: Session | null, error: CustomError | null}>
     ) => {
+        state.session= payload.session
         state.signUpError = payload.error
         state.signUpStatus = payload.error ? RequestStatus.FAILED : RequestStatus.COMPLETED
     },

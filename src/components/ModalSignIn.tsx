@@ -49,7 +49,12 @@ const SignIn: React.FC<SignInProps> = ({
     await dispatch(signIn({ email, password }));
 
     event.target.reset();
+
+    if (signInStatus === RequestStatus.FAILED) {
+      toast(signInError?.message);
+    }
   };
+
   const handleReset = () => {
     clickModalLogin;
   };
@@ -58,9 +63,6 @@ const SignIn: React.FC<SignInProps> = ({
     if (isLoggedInUser) {
       router.refresh();
       handleReset;
-    }
-    if (signInStatus === RequestStatus.FAILED) {
-      toast(signInError?.message);
     }
   }, [isLoggedInUser, router, signInStatus]);
 
@@ -182,7 +184,7 @@ const SignIn: React.FC<SignInProps> = ({
               </button>
             </div>
           </form>
-          {signInStatus === RequestStatus.FAILED && <ToastContainer />}
+          <ToastContainer newestOnTop={true} />
         </div>
       </div>
     </div>

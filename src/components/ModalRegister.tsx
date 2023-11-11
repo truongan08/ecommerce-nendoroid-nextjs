@@ -11,6 +11,7 @@ import {
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { CustomError, RequestStatus } from "@/types/user";
 import { useRouter } from "next/navigation";
+import { toast, ToastContainer } from "react-toastify";
 import Loading from "./Loading";
 interface RegisterProps {
   modalRegister: boolean;
@@ -40,14 +41,24 @@ const Register: React.FC<RegisterProps> = ({
     const password: string = formEntries.password as string;
 
     await dispatch(signUp({ email, password }));
+    router.refresh();
+
+    event.target.reset();
+
+    if (signUpStatus === RequestStatus.FAILED) {
+      toast(signUpError?.message);
+    }
+  };
+
+  const handleReset = () => {
+    clickModalRegister;
+    toast("A confirmation email will be sent to verify your account");
   };
 
   useEffect(() => {
     if (isLoggedInUser) {
       router.refresh();
-      if (signUpStatus === RequestStatus.COMPLETED) {
-        clickModalRegister();
-      }
+      handleReset;
     }
   }, [isLoggedInUser, router, signUpStatus]);
 
@@ -154,11 +165,7 @@ const Register: React.FC<RegisterProps> = ({
               </button>
             </div>
           </form>
-          {signUpStatus === RequestStatus.FAILED && (
-            <div className="mb-3 p-2 text-center bg-red-100 text-red-600 rounded">
-              {signUpError?.message}
-            </div>
-          )}
+          <ToastContainer hideProgressBar closeOnClick />
         </div>
       </div>
     </div>

@@ -48,7 +48,6 @@ const Nav = () => {
       const timeout = await setTimeout(() => {
         setModalRegister(!modalRegister);
       }, 1000);
-      console.log("login");
       return () => clearInterval(timeout);
     }
   };

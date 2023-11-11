@@ -9,6 +9,7 @@ import {
   DropdownItem,
 } from "@nextui-org/dropdown";
 import { Avatar } from "@nextui-org/avatar";
+import supabaseAdmin from "@/utils/SupabaseAdmin";
 
 const UserDropdown = () => {
   const items = [
@@ -23,8 +24,14 @@ const UserDropdown = () => {
     {
       key: "logout",
       label: "Logout",
+      onClick: "handleLogout",
     },
   ];
+
+  const handleLogout = async () => {
+    await supabaseAdmin.auth.signOut();
+  };
+
   return (
     <Dropdown
       placement="bottom-end"

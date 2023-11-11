@@ -1,6 +1,7 @@
 import React from "react";
 import TableDropdown from "@/components/Dropdowns/TableDropdown";
 import Image from "next/image";
+import { Avatar, AvatarGroup } from "@nextui-org/avatar";
 
 import { DtaTable } from "@/types/admin";
 import {
@@ -80,22 +81,11 @@ const CardTable: React.FC<CardTableProps> = ({ color, data }) => {
                     {item.description}
                   </td>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                    <div className="flex">
-                      {item.image_url.slice(0, 3).map((itemImg, indexImg) => (
-                        <Image
-                          key={indexImg}
-                          src={itemImg}
-                          alt="..."
-                          quality={50}
-                          className={
-                            "w-10 h-10 rounded-full border-2 border-blueGray-50 shadow " +
-                            (indexImg !== "0" ? "-ml-4" : "")
-                          }
-                          height={10}
-                          width={10}
-                        />
+                    <AvatarGroup max={2} className="float-left" radius="sm">
+                      {item.image_url.map((itemImg, indexImg) => (
+                        <Avatar key={indexImg} src={itemImg} radius="sm" />
                       ))}
-                    </div>
+                    </AvatarGroup>
                   </td>
 
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">

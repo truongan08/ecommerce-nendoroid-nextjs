@@ -6,7 +6,6 @@ const checkOut = async ({ data }) => {
     let priceId = data.priceId;
     session = await stripe.checkout.sessions.create({
       billing_address_collection: "required",
-      customer,
       customer_update: {
         address: "auto",
       },

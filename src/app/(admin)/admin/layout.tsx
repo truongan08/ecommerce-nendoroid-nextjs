@@ -1,24 +1,41 @@
-import React from "react";
+"use client";
 
-// components
+import React, { useEffect, useState } from "react";
 
 import AdminNavbar from "@/components/Navbars/AdminNavbar";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import HeaderStats from "@/components/Headers/HeaderStats";
 import FooterAdmin from "@/components/Footers/FooterAdmin";
-import { AdminProvider } from "@/provider/admin-provider";
+import { NextUIProvider } from "@nextui-org/system";
+import supabaseAdmin from "@/utils/SupabaseAdmin";
 
 export default function Admin({ children }: { children: React.ReactNode }) {
-  const isLoggedInAdmin = true;
+  const [claimAdmin, setClaimAdmin] = useState(false);
+
+  useEffect(() => {
+    const checkAdmin = async () => {
+      try {
+        const { data } = await supabaseAdmin.rpc("is_claims_admin", {});
+        if (!data) {
+          await supabaseAdmin.auth.signOut();
+        }
+        setClaimAdmin(data);
+      } catch (error) {
+        throw error;
+      }
+    };
+
+    checkAdmin();
+  }, []);
+
   return (
-    <>
-      <AdminProvider>
-        {isLoggedInAdmin ? (
+    <div className="h-screen w-screen">
+      <NextUIProvider>
+        {claimAdmin ? (
           <>
             <Sidebar />
             <div className="relative md:ml-64 bg-blueGray-100">
               <AdminNavbar />
-              {/* Header */}
               <HeaderStats />
               <div className="px-4 md:px-10 mx-auto w-full -m-24">
                 {children}
@@ -27,11 +44,9 @@ export default function Admin({ children }: { children: React.ReactNode }) {
             </div>
           </>
         ) : (
-          <div className="mt-16 sm:mx-auto sm:w-full mb-28 bg-white py-1 px-4 sm:px-10 mb-26">
-            {children}
-          </div>
+          <div>{children}</div>
         )}
-      </AdminProvider>
-    </>
+      </NextUIProvider>
+    </div>
   );
 }

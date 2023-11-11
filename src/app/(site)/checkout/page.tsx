@@ -4,7 +4,7 @@ import { useState, FormEvent, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import { provinces } from "vietnam-provinces";
-import { getStripe } from "@/utils/Stripe-client";
+import { getStripe } from "@/utils/StripeLoad";
 import { StripeElement } from "@stripe/stripe-js";
 import Stripe from "stripe";
 

@@ -37,12 +37,12 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
       router.refresh();
       return;
     }
+
     if (cart) {
       dispatch(setCartFromLocalCartData(cart));
-      dispatch(setSessionFromLocalSessionData(localSessionData));
-    } else {
-      dispatch(setSessionFromLocalSessionData(localSessionData));
     }
+
+    dispatch(setSessionFromLocalSessionData(localSessionData));
     setIsLoading(true);
   };
 
@@ -50,7 +50,7 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
     <div className="max-h-screen max-w-screen">
       {!isLoading ? (
         <div
-          className="min-h-screen min-w-screen bg-fixed bg-auto bg-no-repeat bg-center"
+          className="min-h-screen min-w-screen bg-fixed bg-auto bg-no-repeat bg-center left-0"
           style={{ backgroundImage: `url(/images/figre.gif)` }}
         ></div>
       ) : (
