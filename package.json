@@ -1,52 +1,22 @@
 {
-  "name": "ecommerce-nendodroid-nextjs",
-  "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "@formspree/react": "^2.5.1",
-    "@nextui-org/react": "^2.2.5",
-    "@reduxjs/toolkit": "^1.9.7",
-    "@stripe/stripe-js": "^2.1.10",
-    "@supabase/auth-helpers-nextjs": "^0.8.1",
-    "@supabase/auth-ui-react": "^0.4.6",
-    "@supabase/auth-ui-shared": "^0.1.8",
-    "@supabase/supabase-js": "^2.38.4",
-    "@types/node": "20.6.3",
-    "@types/react": "18.2.22",
-    "@types/react-dom": "18.2.7",
-    "@types/react-redux": "^7.1.28",
-    "autoprefixer": "10.4.16",
-    "base64-arraybuffer": "^1.0.2",
-    "clsx": "^2.0.0",
-    "eslint": "8.49.0",
-    "eslint-config-next": "13.5.2",
-    "framer-motion": "^10.16.4",
-    "nanoid": "^5.0.2",
-    "next": "13.5.2",
-    "next-absolute-url": "^1.2.2",
-    "next-i18next": "^14.0.3",
-    "postcss": "8.4.30",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "react-icons": "^4.11.0",
-    "react-redux": "^8.1.3",
-    "react-toastify": "^9.1.3",
-    "redux-logger": "^3.0.6",
-    "stripe": "^14.2.0",
-    "tailwind-merge": "^1.14.0",
-    "tailwindcss": "3.3.3",
-    "use-debounce": "^9.0.4",
-    "vietnam-provinces": "^0.0.4"
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "clean": "turbo clean",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
-    "@types/redux-logger": "^3.0.11",
-    "supabase": "^1.99.5",
-    "typescript": "^5.2.2"
-  }
+    "eslint": "^8.48.0",
+    "prettier": "^3.0.3",
+    "prettier-plugin-tailwindcss": "^0.5.3",
+    "tsconfig": "*",
+    "turbo": "latest"
+  },
+  "packageManager": "npm@9.6.7",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
 }
