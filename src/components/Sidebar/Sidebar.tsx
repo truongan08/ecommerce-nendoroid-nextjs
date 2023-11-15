@@ -104,7 +104,7 @@ const Sidebar = () => {
               <li className="items-center">
                 <Link href="/admin">
                   <Link
-                    href="/admin"
+                    href="/admin/dashboard"
                     className={
                       "text-xs uppercase py-3 font-bold block " +
                       (pathname.indexOf("/admin", 1) !== -1

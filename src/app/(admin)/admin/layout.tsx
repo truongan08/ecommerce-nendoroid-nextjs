@@ -11,22 +11,16 @@ import supabaseAdmin from "@/utils/SupabaseAdmin";
 
 export default function Admin({ children }: { children: React.ReactNode }) {
   const [claimAdmin, setClaimAdmin] = useState(false);
-
   useEffect(() => {
-    const checkAdmin = async () => {
-      try {
-        const { data } = await supabaseAdmin.rpc("is_claims_admin", {});
-        if (!data) {
-          await supabaseAdmin.auth.signOut();
-        }
-        setClaimAdmin(data);
-      } catch (error) {
-        throw error;
+    supabaseAdmin.auth.onAuthStateChange((event, session) => {
+      if (
+        event == "SIGNED_IN" &&
+        session?.user.app_metadata.claims_admin == true
+      ) {
+        setClaimAdmin(true);
       }
-    };
-
-    checkAdmin();
-  }, []);
+    });
+  });
 
   return (
     <div className="h-screen w-screen">
@@ -34,14 +28,14 @@ export default function Admin({ children }: { children: React.ReactNode }) {
         {claimAdmin ? (
           <>
             <Sidebar />
-            <div className="relative md:ml-64 bg-blueGray-100">
+            <main className="relative md:ml-64 bg-blueGray-100">
               <AdminNavbar />
               <HeaderStats />
               <div className="px-4 md:px-10 mx-auto w-full -m-24">
                 {children}
                 <FooterAdmin />
               </div>
-            </div>
+            </main>
           </>
         ) : (
           <div>{children}</div>

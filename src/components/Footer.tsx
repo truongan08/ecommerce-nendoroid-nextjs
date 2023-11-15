@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const Footer = ({}) => {
   return (
-    <div className="w-full text-center border-t bg-black text-white p-4 pin-b text-lg">
+    <footer className="w-full text-center border-t bg-black text-white p-4 pin-b text-lg">
       <ul className="grid grid-cols-4 gap-4">
         <li className="col-span-1 ">
           <span className="z-0">About Us</span>
@@ -54,7 +54,7 @@ const Footer = ({}) => {
           </p>
         </span>
       </Link>
-    </div>
+    </footer>
   );
 };
 export default Footer;

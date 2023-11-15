@@ -1,20 +1,31 @@
-import { productDetailSlice } from "./productDetailSlice"
-import { ProductDetailOutput, CustomError, ProductDetailCallTypes, ProductDetail, ProductIdType } from "@/types/user"
+import { productDetailSlice } from "./productDetailSlice";
+import {
+  ProductDetailOutput,
+  CustomError,
+  ProductDetailCallTypes,
+  ProductDetail,
+  ProductIdType,
+} from "@/types/user";
 
-const { actions } = productDetailSlice
+const { actions } = productDetailSlice;
 
 //call many reducer on 1 action
 
-export const getProductDetail = (product_id: ProductIdType) => 
-	async (
-		dispatch:any,
-		_:any,
-		{ productDetailOutput }: { productDetailOutput: ProductDetailOutput }
-	) => {
-		dispatch(actions.startCall({callType: ProductDetailCallTypes.GET_DETAIL}))
+export const getProductDetail =
+  (product_id: ProductIdType) =>
+  async (
+    dispatch: any,
+    _: any,
+    { productDetailOutput }: { productDetailOutput: ProductDetailOutput }
+  ) => {
+    dispatch(
+      actions.startCall({ callType: ProductDetailCallTypes.GET_DETAIL })
+    );
 
-		const ProductDetailRo: { productDetail: ProductDetail | null; error:CustomError | null } = 
-			await productDetailOutput.getProductDetail(product_id)
+    const ProductDetailRo: {
+      productDetail: ProductDetail | null;
+      error: CustomError | null;
+    } = await productDetailOutput.getProductDetail(product_id);
 
-		dispatch(actions.getProductDetail(ProductDetailRo))
-}
+    dispatch(actions.getProductDetail(ProductDetailRo));
+  };

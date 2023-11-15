@@ -58,7 +58,7 @@ const Nav = () => {
 
   return (
     <>
-      <div className="w-full shadow top-0 left-0 right-0 fixed z-50">
+      <nav className="w-full shadow top-0 left-0 right-0 fixed z-50">
         <div className="md:flex items-center justify-between bg-white py-4 md:px-10 px-7">
           <div className="text-2xl flex items-center cursor-pointer font-bold text-blue-800">
             <Link href={"/"} className="w-full">
@@ -175,7 +175,7 @@ const Nav = () => {
             )}
           </div>
         </div>
-      </div>
+      </nav>
     </>
   );
 };

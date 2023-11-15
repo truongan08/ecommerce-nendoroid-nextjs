@@ -5,6 +5,7 @@ import {
   StatusProduct,
   Product,
   TypeProduct,
+  Keyword,
 } from "@/types/user";
 import getPagination from "./getPagination";
 
@@ -32,7 +33,7 @@ export class ProductSupabase implements ProductOutput {
   }
 
   async getProductPagination({ query: { page = 1 } }): Promise<{
-    product: Product[] ;
+    product: Product[];
     count: number | null;
     error: CustomError | null;
   }> {
@@ -44,8 +45,21 @@ export class ProductSupabase implements ProductOutput {
     } = await supabase
       .from("product")
       .select("*", { count: "exact" })
-      .order("product_id", { ascending: true })
+      .order("product_id", { ascending: false })
       .range(from, to);
     return Promise.resolve({ product, count, page: +page, error });
+  }
+
+  async getProductSearch({
+    keyword,
+  }: Keyword): Promise<{ product: Product[]; error: CustomError | null }> {
+    const { data: product, error } = await supabase
+      .from("product")
+      .select("*")
+      .textSearch("name", keyword, {
+        config: "english",
+        type: "plain",
+      });
+    return Promise.resolve({ product, error });
   }
 }

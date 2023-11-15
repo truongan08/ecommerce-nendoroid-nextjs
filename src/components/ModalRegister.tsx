@@ -48,6 +48,9 @@ const Register: React.FC<RegisterProps> = ({
     if (signUpStatus === RequestStatus.FAILED) {
       toast(signUpError?.message);
     }
+    if (signUpStatus === RequestStatus.COMPLETED) {
+      router.push("/comfirm");
+    }
   };
 
   const handleReset = () => {
@@ -60,7 +63,7 @@ const Register: React.FC<RegisterProps> = ({
       router.refresh();
       handleReset;
     }
-  }, [isLoggedInUser, router, signUpStatus]);
+  }, [isLoggedInUser, router]);
 
   return (
     <div

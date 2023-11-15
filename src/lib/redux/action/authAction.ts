@@ -23,10 +23,7 @@ export class AuthSupabase implements AuthOutput {
     return Promise.resolve({ session, error });
   }
 
-  async signUp({
-    email,
-    password,
-  }: SignUpDto): Promise<{
+  async signUp({ email, password }: SignUpDto): Promise<{
     user: User | null;
     session: Session | null;
     error: CustomError | null;
@@ -37,9 +34,6 @@ export class AuthSupabase implements AuthOutput {
     } = await supabase.auth.signUp({
       email: email,
       password: password,
-      options: {
-        emailRedirectTo: `${location.origin}/auth/callback`,
-      },
     });
     return Promise.resolve({ user, session, error });
   }
@@ -62,5 +56,4 @@ export class AuthSupabase implements AuthOutput {
     });
     return Promise.resolve({ session, error });
   }
-
 }

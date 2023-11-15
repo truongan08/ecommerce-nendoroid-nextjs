@@ -17,14 +17,9 @@ export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en" className="light">
       <body className={myFont.className}>
-        <Providers>
-          <main
-            id="skip"
-            className="min-h-[calc(100dvh-4rem)] md:min-h-[calc(100dvh-5rem)]"
-          >
-            {children}
-          </main>
-        </Providers>
+        <div className="flex flex-col min-h-screen">
+          <Providers>{children}</Providers>
+        </div>
       </body>
     </html>
   );

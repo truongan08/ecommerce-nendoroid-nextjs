@@ -26,12 +26,13 @@ export interface ProductOutput {
     count: number | null;
     error: CustomError | null;
   }>;
+  getProductSearch(
+    keyword: Keyword
+  ): Promise<{ product: Product[]; error: CustomError | null }>;
 }
 
 export interface ProductDetailOutput {
-  getProductDetail(
-    product_id: ProductIdType
-  ): Promise<{
+  getProductDetail(product_id: ProductIdType): Promise<{
     productDetail: ProductDetail | null;
     error: CustomError | null;
   }>;
@@ -74,6 +75,8 @@ export interface ProductState {
   getProductByCategoryError: CustomError | null;
   getProductPaginationStatus: ProductRequestStatus;
   getProductPaginationError: CustomError | null;
+  getProductSearchStatus: ProductRequestStatus;
+  getProductSearchError: CustomError | null;
 }
 
 export interface ProductDetailState {
@@ -99,6 +102,7 @@ export enum ProductCallTypes {
   GET_BY_STATUS = "getProductByStatusStatus",
   GET_BY_TYPE = "getProductByCategoryStatus",
   GET_PAGINATION = "getProductPaginationStatus",
+  GET_SEARCH = "getProductSearchStatus",
 }
 
 export enum ProductDetailCallTypes {
@@ -126,7 +130,7 @@ export enum ProductDetailRequestStatus {
 
 //type
 
-export type CustomError = {
+export type CustomError  = {
   message: string;
 };
 
@@ -137,6 +141,11 @@ export type StatusProduct = {
 export type TypeProduct = {
   type: string;
 };
+
+export type Keyword = {
+  keyword: string;
+};
+
 export type ProductIdType = {
   product_id: string;
 };
@@ -237,6 +246,8 @@ export const initialStateProduct: ProductState = {
   getProductByCategoryError: null,
   getProductPaginationStatus: ProductRequestStatus.IDLE,
   getProductPaginationError: null,
+  getProductSearchStatus: ProductRequestStatus.IDLE,
+  getProductSearchError: null,
 };
 
 export const initialStateProductDetail: ProductDetailState = {

@@ -19,11 +19,11 @@ const SearchBar = () => {
     <div className="">
       <div className="flex items-center bg-gray-100 rounded-full p-2 mt-2">
         <button>
-          <BiSearch size={20} className="opacity-50" />
+          <BiSearch size={20} className="opacity-50 ml-2" />
         </button>
         <input
           type="text"
-          className="outline-none bg-transparent ml-2 caret-blue-500 placeholder:font-light placeholder:text-gray-600 text-[15px]"
+          className="outline-0 border-none bg-gray-100 ml-2 placeholder:font-light placeholder:text-gray-600 text-[15px] w-full"
           placeholder="Search"
           autoComplete="false"
           value={searchText}

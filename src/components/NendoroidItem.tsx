@@ -21,7 +21,7 @@ const NendoroidItem: React.FC<NendoroidItemProps> = ({ data }) => {
     await dispatch(addToCart(data));
   };
 
-  useEffect(() => router.refresh(), [dispatch]);
+  useEffect(() => router.refresh(), [router, dispatch]);
   return (
     <div className="grid grid-cols-1 md:grid-cols-5 max-md:grid-cols-1 sm:grid-cols-3 gap-4 mt-4 ml-6 max-md:ml-auto h-full">
       {data?.map((item, index) => (
@@ -34,7 +34,7 @@ const NendoroidItem: React.FC<NendoroidItemProps> = ({ data }) => {
             href={`/detail/${item.product_id}`}
           >
             <Image
-              className="absolute top-0 right-0 h-full w-full object-cover"
+              className="absolute top-0 right-0 h-auto w-full object-cover"
               width={294}
               height={240}
               src={item.image_url[0]}

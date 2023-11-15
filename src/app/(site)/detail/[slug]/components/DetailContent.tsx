@@ -45,6 +45,9 @@ const DetailContent: React.FC<DetailContentProps> = ({ product_id }) => {
 
   const isLoggedInSession: boolean = useAppSelector(selectIsLoggedInSession);
 
+  const assignArray = Object.assign({ ...productDetail?.product_detail });
+  const product_detail = { ...assignArray[0] };
+
   const CLickAddToCart = async (data: any) => {
     await dispatch(addToCart(data));
   };
@@ -155,8 +158,10 @@ const DetailContent: React.FC<DetailContentProps> = ({ product_id }) => {
                               <p className="mb-2 text-sm font-medium text-gray-500 ">
                                 SKU
                               </p>
-                              <h2 className="text-base font-semibold text-gray-700 ">
-                                {productDetail?.product_detail[0].sku}
+                              <h2 className="text-base font-semibold text-gray-700">
+                                {product_detail?.sku
+                                  ? product_detail?.sku
+                                  : "None"}
                               </h2>
                             </div>
                           </div>
@@ -170,8 +175,10 @@ const DetailContent: React.FC<DetailContentProps> = ({ product_id }) => {
                               <p className="mb-2 text-sm font-medium text-gray-500 ">
                                 Franchise
                               </p>
-                              <h2 className="text-base font-semibold text-gray-700 ">
-                                {productDetail?.product_detail[0].franchise}
+                              <h2 className="text-base font-semibold text-gray-700">
+                                {product_detail?.franchise
+                                  ? product_detail?.franchise
+                                  : "None"}
                               </h2>
                             </div>
                           </div>
@@ -185,10 +192,10 @@ const DetailContent: React.FC<DetailContentProps> = ({ product_id }) => {
                               <p className="mb-2 text-sm font-medium text-gray-500 ">
                                 Sets
                               </p>
-                              <h2 className="text-base font-semibold text-gray-700 ">
-                                {productDetail?.product_detail[0].sets === null
-                                  ? "None"
-                                  : productDetail?.product_detail[0].sets}
+                              <h2 className="text-base font-semibold text-gray-700">
+                                {product_detail?.set
+                                  ? product_detail?.set
+                                  : "None"}
                               </h2>
                             </div>
                           </div>
@@ -202,10 +209,10 @@ const DetailContent: React.FC<DetailContentProps> = ({ product_id }) => {
                               <p className="mb-2 text-sm font-medium text-gray-500 ">
                                 Year
                               </p>
-                              <h2 className="text-base font-semibold text-gray-700 ">
-                                {productDetail?.product_detail[0].year === null
-                                  ? "None"
-                                  : productDetail?.product_detail[0].year}
+                              <h2 className="text-base font-semibold text-gray-700">
+                                {product_detail?.year
+                                  ? product_detail?.year
+                                  : "None"}
                               </h2>
                             </div>
                           </div>

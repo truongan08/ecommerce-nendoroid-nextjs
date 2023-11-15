@@ -1,22 +1,26 @@
-import React from "react";
-import CardPageVisits from "@/components/Cards/CardPageVisits";
-import CardSocialTraffic from "@/components/Cards/CardSocialTraffic";
+"use client";
 
-// layout for page
+import React, { Suspense } from "react";
+import supabaseAdmin from "@/utils/SupabaseAdmin";
+import { useRouter } from "next/navigation";
+
+import AuthSupabase from "@/components/Auth";
 
 const AdminPage = () => {
+  const router = useRouter();
+
+  supabaseAdmin.auth.onAuthStateChange((event) => {
+    if (event == "SIGNED_IN") {
+      router.push("/admin/dashboard");
+    }
+  });
+
   return (
-    <>
-      <div className="flex flex-wrap mt-4">
-        <div className="w-full xl:w-8/12 mb-12 xl:mb-0 px-4">
-          <CardPageVisits />
-        </div>
-        <div className="w-full xl:w-4/12 px-4">
-          <CardSocialTraffic />
-        </div>
-      </div>
-    </>
+    <div className="h-screen items-center mx-[30%]">
+      <Suspense fallback={<p>Loading auth...</p>}>
+        <AuthSupabase />
+      </Suspense>
+    </div>
   );
 };
-
 export default AdminPage;

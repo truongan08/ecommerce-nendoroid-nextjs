@@ -11,7 +11,12 @@ export default async function Layout({
     <>
       <SessionProvider>
         <Nav />
-        {children}
+        <main
+          id="skip"
+          className="min-h-[calc(100dvh-4rem)] md:min-h-[calc(100dvh-5rem)]"
+        >
+          {children}
+        </main>
         <Footer />
       </SessionProvider>
     </>
