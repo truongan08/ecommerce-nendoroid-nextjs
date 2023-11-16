@@ -102,98 +102,90 @@ const Sidebar = () => {
 
             <ul className="md:flex-col md:min-w-full flex flex-col list-none">
               <li className="items-center">
-                <Link href="/">
-                  <Link
-                    href="/dashboard"
+                <Link
+                  href="/dashboard"
+                  className={
+                    "text-xs uppercase py-3 font-bold block " +
+                    (pathname.indexOf("/dashboard") !== -1
+                      ? "text-lightBlue-500 hover:text-lightBlue-600"
+                      : "text-blueGray-700 hover:text-blueGray-500")
+                  }
+                >
+                  <AiOutlineDashboard
                     className={
-                      "text-xs uppercase py-3 font-bold block " +
-                      (pathname.indexOf("/", 1) !== -1
-                        ? "text-lightBlue-500 hover:text-lightBlue-600"
-                        : "text-blueGray-700 hover:text-blueGray-500")
+                      "mr-2 text-sm inline h-5 w-5 " +
+                      (pathname.indexOf("/dashboard") !== -1
+                        ? "opacity-75"
+                        : "text-blueGray-300")
                     }
-                  >
-                    <AiOutlineDashboard
-                      className={
-                        "mr-2 text-sm inline h-5 w-5 " +
-                        (pathname.indexOf("/", 1) !== -1
-                          ? "opacity-75"
-                          : "text-blueGray-300")
-                      }
-                    ></AiOutlineDashboard>
-                    Dashboard
-                  </Link>
+                  ></AiOutlineDashboard>
+                  Dashboard
                 </Link>
               </li>
 
               <li className="items-center">
-                <Link href="/products">
-                  <Link
-                    href="/products"
+                <Link
+                  href="/products"
+                  className={
+                    "text-xs uppercase py-3 font-bold block " +
+                    (pathname.indexOf("/products") !== -1
+                      ? "text-lightBlue-500 hover:text-lightBlue-600"
+                      : "text-blueGray-700 hover:text-blueGray-500")
+                  }
+                >
+                  <AiOutlineSkin
                     className={
-                      "text-xs uppercase py-3 font-bold block " +
+                      "mr-2 text-sm inline h-5 w-5 " +
                       (pathname.indexOf("/products") !== -1
-                        ? "text-lightBlue-500 hover:text-lightBlue-600"
-                        : "text-blueGray-700 hover:text-blueGray-500")
+                        ? "opacity-75"
+                        : "text-blueGray-300")
                     }
-                  >
-                    <AiOutlineSkin
-                      className={
-                        "mr-2 text-sm inline h-5 w-5 " +
-                        (pathname.indexOf("/products") !== -1
-                          ? "opacity-75"
-                          : "text-blueGray-300")
-                      }
-                    ></AiOutlineSkin>
-                    Products
-                  </Link>
+                  ></AiOutlineSkin>
+                  Products
                 </Link>
               </li>
 
               <li className="items-center">
-                <Link href="/users">
-                  <Link
-                    href="/users"
+                <Link
+                  href="/users"
+                  className={
+                    "text-xs uppercase py-3 font-bold block " +
+                    (pathname.indexOf("/users") !== -1
+                      ? "text-lightBlue-500 hover:text-lightBlue-600"
+                      : "text-blueGray-700 hover:text-blueGray-500")
+                  }
+                >
+                  <AiOutlineUser
                     className={
-                      "text-xs uppercase py-3 font-bold block " +
+                      "mr-2 text-sm inline h-5 w-5 " +
                       (pathname.indexOf("/users") !== -1
-                        ? "text-lightBlue-500 hover:text-lightBlue-600"
-                        : "text-blueGray-700 hover:text-blueGray-500")
+                        ? "opacity-75"
+                        : "text-blueGray-300")
                     }
-                  >
-                    <AiOutlineUser
-                      className={
-                        "mr-2 text-sm inline h-5 w-5 " +
-                        (pathname.indexOf("/users") !== -1
-                          ? "opacity-75"
-                          : "text-blueGray-300")
-                      }
-                    ></AiOutlineUser>
-                    Users
-                  </Link>
+                  ></AiOutlineUser>
+                  Users
                 </Link>
               </li>
 
               <li className="items-center">
-                <Link href="/orders">
-                  <Link
-                    href="/orders"
+                <Link
+                  href="/orders"
+                  className={
+                    "text-xs uppercase py-3 font-bold block " +
+                    (pathname.indexOf("/orders") !== -1
+                      ? "text-lightBlue-500 hover:text-lightBlue-600"
+                      : "text-blueGray-700 hover:text-blueGray-500")
+                  }
+                >
+                  <AiOutlineShopping
                     className={
-                      "text-xs uppercase py-3 font-bold block " +
+                      "mr-2 text-sm inline h-5 w-5 " +
                       (pathname.indexOf("/orders") !== -1
-                        ? "text-lightBlue-500 hover:text-lightBlue-600"
-                        : "text-blueGray-700 hover:text-blueGray-500")
+                        ? "opacity-75"
+                        : "text-blueGray-300")
                     }
-                  >
-                    <AiOutlineShopping
-                      className={
-                        "mr-2 text-sm inline h-5 w-5 " +
-                        (pathname.indexOf("/orders") !== -1
-                          ? "opacity-75"
-                          : "text-blueGray-300")
-                      }
-                    ></AiOutlineShopping>
-                    Orders
-                  </Link>
+                  ></AiOutlineShopping>
+                  Orders
                 </Link>
               </li>
             </ul>

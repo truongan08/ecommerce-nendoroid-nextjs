@@ -1,17 +1,21 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
+
 import {
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
-} from "@nextui-org/dropdown";
-import { Avatar } from "@nextui-org/avatar";
-import supabaseAdmin from "@/utils/SupabaseAdmin";
+} from "ui/components";
+import { Avatar } from "ui/components";
+
+import supabase from "@/utils/SupabaseAdmin";
+
+import { useRouter } from "next/navigation";
 
 const UserDropdown = () => {
+  const router = useRouter();
   const items = [
     {
       key: "profile",
@@ -24,29 +28,35 @@ const UserDropdown = () => {
     {
       key: "logout",
       label: "Logout",
-      onClick: "handleLogout",
     },
   ];
 
-  const handleLogout = async () => {
-    await supabaseAdmin.auth.signOut();
+  const handleLogout = async (items: React.Key) => {
+    if (items === "logout") {
+      await supabase.auth.signOut();
+      router.push("/");
+    }
   };
 
   return (
     <Dropdown
       placement="bottom-end"
       showArrow={true}
-      offset={10}
       backdrop="opaque"
+      className="bg-white"
     >
       <DropdownTrigger>
         <div className="text-blueGray-500 block">
           <div className="items-center flex">
-            <Avatar src="/img/team-1-800x800.jpg" size="lg" />
+            <Avatar src="/img/team-1-800x800.jpg" />
           </div>
         </div>
       </DropdownTrigger>
-      <DropdownMenu aria-label="Dynamic Actions" items={items}>
+      <DropdownMenu
+        aria-label="Dynamic Actions"
+        items={items}
+        onAction={(key) => handleLogout(key)}
+      >
         {(item) => (
           <DropdownItem
             key={item.key}

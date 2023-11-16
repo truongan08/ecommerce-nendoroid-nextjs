@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import { PropsWithChildren } from "react";
 import localFont from "next/font/local";
-
+import "ui/styles/globals.scss";
 import "./globals.css";
+
+import { AppUIProvider } from "ui/providers";
+
 const myFont = localFont({ src: "../assets/fonts/fontawesome-webfont.woff2" });
 
 export const metadata: Metadata = {
-  title: "Wigure",
+  title: "Admin Wigure",
   description: "Nendoroid for you",
   creator: "truongan",
 };
@@ -15,7 +18,9 @@ export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en" className="light">
       <body className={myFont.className}>
-        <div className="flex flex-col min-h-screen">{children}</div>
+        <AppUIProvider>
+          <div className="flex flex-col min-h-screen">{children}</div>
+        </AppUIProvider>
       </body>
     </html>
   );

@@ -1,10 +1,9 @@
-// tailwind config is required for editor support
+import { Config } from "tailwindcss";
+import nextUIConfig from "ui/tailwind.config";
 
-import type { Config } from "tailwindcss";
-import sharedConfig from "tailwind-config/tailwind.config.ts";
-
-const config: Pick<Config, "presets"> = {
-  presets: [sharedConfig],
+/** @type {import('tailwindcss').Config} */
+const config: Partial<Config> = {
+	presets: [nextUIConfig as Config],
 };
 
 export default config;

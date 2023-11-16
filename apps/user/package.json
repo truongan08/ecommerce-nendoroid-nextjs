@@ -38,6 +38,7 @@
       "ui": "*"
     },
     "devDependencies": {
+      "@next/eslint-plugin-next": "^13.4.19",
       "@types/redux-logger": "^3.0.11",
       "@types/node": "20.6.3",
       "@types/react": "18.2.22",
@@ -45,6 +46,7 @@
       "supabase": "^1.99.5",
       "typescript": "^5.2.2",
       "postcss": "8.4.30",
+      "sass": "1.68.0",
       "autoprefixer": "10.4.16",
       "tsconfig": "*",
       "tailwind-config": "*",

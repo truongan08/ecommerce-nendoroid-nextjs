@@ -1,14 +1,9 @@
 import React from "react";
 import TableDropdown from "@/components/Dropdowns/TableDropdown";
-import Image from "next/image";
-import { Avatar, AvatarGroup } from "@nextui-org/avatar";
+import { Avatar, AvatarGroup } from "ui/components";
 
 import { DtaTable } from "@/types/admin";
-import {
-  Pagination,
-  PaginationItem,
-  PaginationCursor,
-} from "@nextui-org/pagination";
+import { Pagination, PaginationItem, PaginationCursor } from "ui/components";
 
 interface CardTableProps {
   color?: string;
@@ -107,7 +102,7 @@ const CardTable: React.FC<CardTableProps> = ({ color, data }) => {
         </div>
       </div>
       <div className="float-right">
-        <Pagination showControls total={10} initialPage={1} />
+        <Pagination isCompact showControls total={10} initialPage={1} />
       </div>
     </>
   );

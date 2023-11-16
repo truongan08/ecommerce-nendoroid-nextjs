@@ -6,13 +6,12 @@ import AdminNavbar from "@/components/Navbars/AdminNavbar";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import HeaderStats from "@/components/Headers/HeaderStats";
 import FooterAdmin from "@/components/Footers/FooterAdmin";
-import { NextUIProvider } from "@nextui-org/system";
-import supabaseAdmin from "@/utils/SupabaseAdmin";
+import supabase from "@/utils/SupabaseAdmin";
 
 export default function Admin({ children }: { children: React.ReactNode }) {
   const [claimAdmin, setClaimAdmin] = useState(false);
   useEffect(() => {
-    supabaseAdmin.auth.onAuthStateChange((event, session) => {
+    supabase.auth.onAuthStateChange((event, session) => {
       if (
         event == "SIGNED_IN" &&
         session?.user.app_metadata.claims_admin == true
@@ -22,25 +21,21 @@ export default function Admin({ children }: { children: React.ReactNode }) {
     });
   });
 
+  if (!claimAdmin) {
+    return <div>{children}</div>;
+  }
+
   return (
     <div className="h-screen w-screen">
-      <NextUIProvider>
-        {claimAdmin ? (
-          <>
-            <Sidebar />
-            <main className="relative md:ml-64 bg-blueGray-100">
-              <AdminNavbar />
-              <HeaderStats />
-              <div className="px-4 md:px-10 mx-auto w-full -m-24">
-                {children}
-                <FooterAdmin />
-              </div>
-            </main>
-          </>
-        ) : (
-          <div>{children}</div>
-        )}
-      </NextUIProvider>
+      <Sidebar />
+      <main className="relative md:ml-64 bg-blueGray-100">
+        <AdminNavbar />
+        <HeaderStats />
+        <div className="px-4 md:px-10 mx-auto w-full -m-24">
+          {children}
+          <FooterAdmin />
+        </div>
+      </main>
     </div>
   );
 }

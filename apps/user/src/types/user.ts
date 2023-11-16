@@ -2,7 +2,7 @@
 
 import { AuthSupabase } from "@/lib/redux/action/authAction";
 import { ProductSupabase } from "@/lib/redux/action/productAction";
-import { ProductDetailSupabase } from "../lib/redux/action/productDetailAction";
+import { ProductDetailSupabase } from "@/lib/redux/action/productDetailAction";
 import { CartSupabase } from "@/lib/redux/action/cartAction";
 
 export interface cart {

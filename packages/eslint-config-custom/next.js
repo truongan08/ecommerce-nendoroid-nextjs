@@ -1,45 +1,27 @@
-const { resolve } = require("node:path");
-
-const project = resolve(process.cwd(), "tsconfig.json");
-
-/*
- * This is a custom ESLint configuration for use with
- * Next.js apps.
- *
- * This config extends the Vercel Engineering Style Guide.
- * For more information, see https://github.com/vercel/style-guide
- *
- */
-
 module.exports = {
-  extends: [
-    "@vercel/style-guide/eslint/node",
-    "@vercel/style-guide/eslint/typescript",
-    "@vercel/style-guide/eslint/browser",
-    "@vercel/style-guide/eslint/react",
-    "@vercel/style-guide/eslint/next",
-    "eslint-config-turbo",
-  ].map(require.resolve),
-  parserOptions: {
-    project,
-  },
-  globals: {
-    React: true,
-    JSX: true,
-  },
+  extends: ["next", "next/core-web-vitals", "prettier"],
+  plugins: ["@typescript-eslint"],
   settings: {
-    "import/resolver": {
-      typescript: {
-        project,
-      },
-      node: {
-        extensions: [".mjs", ".js", ".jsx", ".ts", ".tsx"],
-      },
+    next: {
+      rootDir: ["apps/*/", "packages/*/"],
     },
   },
-  ignorePatterns: ["node_modules/", "dist/"],
-  // add rules configurations here
   rules: {
-    "import/no-default-export": "off",
+    "@next/next/no-img-element": 0,
+    "@next/next/no-html-link-for-pages": [2, "."],
+    "@typescript-eslint/no-explicit-any": 0,
+    "@typescript-eslint/no-explicit-any": 0,
+    "@typescript-eslint/no-unused-vars": [
+      2,
+      {
+        argsIgnorePattern: "^_",
+      },
+    ],
+    "no-console": [
+      2,
+      {
+        allow: ["warn", "error"],
+      },
+    ],
   },
 };

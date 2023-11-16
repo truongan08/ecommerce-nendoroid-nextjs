@@ -8,7 +8,7 @@ import {
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
-} from "@nextui-org/dropdown";
+} from "ui/components";
 
 const TableDropdown = () => {
   const items = [
