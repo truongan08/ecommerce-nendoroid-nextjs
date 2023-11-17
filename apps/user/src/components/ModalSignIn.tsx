@@ -6,7 +6,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import Loading from "./Loading";
+import Loading from "./Loading/Loading";
 import {
   selectIsLoggedInUser,
   selectSignInError,

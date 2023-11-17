@@ -12,7 +12,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { CustomError, RequestStatus } from "@/types/user";
 import { useRouter } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
-import Loading from "./Loading";
+import Loading from "@/components/Loading/Loading";
 interface RegisterProps {
   modalRegister: boolean;
   clickModalRegister: () => void;

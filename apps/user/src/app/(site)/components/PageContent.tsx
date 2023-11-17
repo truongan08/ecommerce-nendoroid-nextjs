@@ -11,7 +11,7 @@ import {
 } from "@/lib/redux";
 import { CustomError, Product, ProductRequestStatus } from "@/types/user";
 
-import Loading from "@/components/Loading";
+import Loading from "@/components/Loading/Loading";
 import NendoroidItem from "@/components/NendoroidItem";
 
 const PageContent = () => {

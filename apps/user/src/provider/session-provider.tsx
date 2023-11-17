@@ -12,6 +12,7 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "@/lib/redux";
+import Loading from "@/components/Loading/PageLoading";
 
 type SessionProviderProps = {
   children: ReactNode;
@@ -48,14 +49,7 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
 
   return (
     <div className="max-h-screen max-w-screen">
-      {!isLoading ? (
-        <div
-          className="min-h-screen min-w-screen bg-fixed bg-auto bg-no-repeat bg-center left-0"
-          style={{ backgroundImage: `url(/images/figre.gif)` }}
-        ></div>
-      ) : (
-        children
-      )}
+      {!isLoading ? <Loading /> : children}
     </div>
   );
 };
