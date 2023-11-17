@@ -17,7 +17,8 @@
     "@supabase/supabase-js": "^2.38.4",
     "@supabase/auth-ui-react": "^0.4.6",
     "@supabase/auth-ui-shared": "^0.1.8",
-    "use-debounce": "^9.0.4"
+    "use-debounce": "^9.0.4",
+    "react-icons": "^4.12.0"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^13.4.19",
@@ -27,7 +28,6 @@
     "autoprefixer": "^10.4.13",
     "eslint-config-custom": "*",
     "postcss": "^8.4.20",
-    "react-icons": "^4.12.0",
 		"sass": "1.68.0",
     "tailwind-config": "*",
     "tailwindcss": "^3.2.4",
