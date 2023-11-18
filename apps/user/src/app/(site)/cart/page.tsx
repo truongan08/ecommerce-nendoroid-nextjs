@@ -1,5 +1,6 @@
 "use client";
 
+import PriceTag from "@/components/PriceTag";
 import {
   selectIsLoggedInSession,
   useAppDispatch,
@@ -9,13 +10,13 @@ import {
   addToCart,
   deleteCartItem,
 } from "@/lib/redux";
-import { cart, cartItem } from "@/types/user";
+import { cartItem } from "@/types/user";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useMemo } from "react";
 
 import { AiOutlineDelete } from "react-icons/ai";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Cart = () => {
@@ -36,6 +37,10 @@ const Cart = () => {
   const CLickDeleteCart = async (data: any) => {
     await dispatch(deleteCartItem(data));
   };
+
+  const totalCartItems = useMemo(() => {
+    return cart.length;
+  }, [cart]);
 
   return (
     <div className="max-md:mt-[130px] grid grid-cols-1 lg:grid-cols-3 mt-16">
@@ -111,12 +116,11 @@ const Cart = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <span className="text-sm font-medium text-gray-700 mr-4">
-                          {item?.product?.price?.toLocaleString("vi-VN", {
-                            style: "currency",
-                            currency: "VND",
-                          })}
-                        </span>
+                        <PriceTag
+                          price={item?.product?.price}
+                          className="text-sm font-medium text-gray-700 mr-4"
+                        />
+
                         {/* {!isSmallScreen && (
                           <span className="hidden lg:inline-block text-gray-400">
                             đơn vị tính

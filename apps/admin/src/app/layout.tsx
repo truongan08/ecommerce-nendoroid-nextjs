@@ -3,8 +3,8 @@ import { PropsWithChildren } from "react";
 import localFont from "next/font/local";
 import "ui/styles/globals.scss";
 import "./globals.css";
-
-import { AppUIProvider } from "ui/providers";
+import "@/styles/styles.css";
+import { Providers } from "@/providers/AppProviers";
 
 const myFont = localFont({ src: "../assets/fonts/fontawesome-webfont.woff2" });
 
@@ -18,9 +18,9 @@ export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en" className="light">
       <body className={myFont.className}>
-        <AppUIProvider>
-          <div className="flex flex-col min-h-screen">{children}</div>
-        </AppUIProvider>
+        <Providers>
+          <>{children}</>
+        </Providers>
       </body>
     </html>
   );

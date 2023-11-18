@@ -1,5 +1,5 @@
 function formatPrice(price: number) {
-  return (price * 1000).toLocaleString("vi-VN", {
+  return Number(price).toLocaleString("it-IT", {
     style: "currency",
     currency: "VND",
   });

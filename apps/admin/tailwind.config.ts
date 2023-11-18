@@ -1,10 +1,12 @@
-import { Config } from "tailwindcss";
-import nextUIConfig from "ui/tailwind.config";
+// tailwind config is required for editor support
+import type { Config } from "tailwindcss";
+import sharedConfig from "tailwind-config/tailwind.config.ts";
+import { nextui } from "@nextui-org/theme";
 
-/** @type {import('tailwindcss').Config} */
-
-const config: Partial<Config> = {
-  presets: [nextUIConfig as Config],
+const config: Pick<Config, "darkMode" | "plugins" | "presets"> = {
+  darkMode: "class",
+  presets: [sharedConfig],
+  plugins: [nextui()],
 };
 
 export default config;

@@ -5,11 +5,6 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export async function POST(request: NextRequest) {
-  if (request.method !== "POST") {
-    console.log("Only POST requests allowed");
-    return;
-  }
-
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get("redirect_to");
 

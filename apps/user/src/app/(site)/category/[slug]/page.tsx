@@ -3,7 +3,7 @@ import CategoryContent from "./components/CategoryContent";
 const ProductCategory = async ({ params }: { params: { slug: string } }) => {
   const slug = decodeURIComponent(params.slug);
   return (
-    <div className="w-full mx-auto p-6">
+    <div className="w-full mx-auto p-6 mt-12">
       <CategoryContent type={slug} />
     </div>
   );

@@ -54,16 +54,10 @@ const NendoroidItem: React.FC<NendoroidItemProps> = ({ data }) => {
               </h5>
             </Link>
             <div className="mt-2 mb-5 flex items-center justify-between">
-              <p>
-                <PriceTag
-                  price={item.price}
-                  className="text-3xl font-bold text-slate-900"
-                />
-
-                {/* <span className="text-sm text-slate-900 line-through">
-                  $699
-                </span> */}
-              </p>
+              <PriceTag
+                price={item.price}
+                className="text-xl font-bold text-slate-900"
+              />
             </div>
             <button
               onClick={() => CLickAddToCart(item)}

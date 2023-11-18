@@ -1,396 +1,317 @@
 "use client";
 
-import { useState, FormEvent, useEffect, useRef } from "react";
+import { useState, FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import { provinces } from "vietnam-provinces";
 import { getStripe } from "@/utils/StripeLoad";
-import { StripeElement } from "@stripe/stripe-js";
-import Stripe from "stripe";
+import {
+  selectLoggedInUser,
+  selectCartInState,
+  selectIsLoggedInSession,
+  useAppDispatch,
+  useAppSelector,
+} from "@/lib/redux";
+import Image from "next/image";
+import Link from "next/link";
+import { FaArrowRight } from "react-icons/fa";
+import { User, cartItem } from "@/types/user";
+import PriceTag from "@/components/PriceTag";
 
 const Checkout = () => {
-  const router = useRouter();
   const [loading, setloading] = useState(false);
   const [selectedOption, setSelectedOption] = useState("existing-information");
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    const response = await fetch("/api/checkout", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ priceId: "price_1O64MsC45JnkZGbwuokMsSvt" }),
-    });
-    const data = await response.json();
-    window.location.assign(data);
+  const dispacth = useAppDispatch();
+  const router = useRouter();
+
+  const cart: cartItem[] = useAppSelector(selectCartInState);
+
+  const isLoggedInSession: boolean = useAppSelector(selectIsLoggedInSession);
+  const getUserInSession: User = useAppSelector(selectLoggedInUser)!;
+
+  const handleSubmit = async (cart: cartItem[], user: User) => {
+    try {
+      const stripe = await getStripe();
+      const checkoutSession = await fetch("/api/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ cart, user }),
+      });
+      const data = await checkoutSession.json();
+
+      const result = await stripe!.redirectToCheckout({
+        sessionId: data.id,
+      });
+
+      if (result.error) {
+        alert(result.error.message);
+      }
+    } catch (error) {
+      alert(error);
+    }
   };
 
-  // const stripeInit = async () => {
-  //   const stripe = await getStripe();
-
-  //   const response = await fetch("/api/checkout", {
-  //     method: "POST",
-  //     body: JSON.stringify({ amount: "2" }),
-  //   });
-
-  //   const result = await response.json();
-  //   console.log(stripe, "day la stripe");
-  //   console.log(result);
-
-  // clientSecret.current = result.client_secret;
-
-  // elements.current = stripe.current?.elements();
-  // var style = {
-  //   base: { fontSize: "18px" },
-  //   invalid: {
-  //     fontFamily: "Arial, sans-serif",
-  //     color: "#EE4B2B",
-  //     iconColor: "#EE4B2B",
-  //   },
-  // };
-  // card.current = elements.current?.create("card", {
-  //   hidePostalCode: true,
-  //   style: style,
-  // });
-
-  // card.current.mount("#card-element");
-  // card.current.on("change", function (event) {
-  //   document.querySelector("button").disabled = event.empty;
-  //   document.querySelector("#card-error").textContent = event.error
-  // //    ? event.error.message
-  //     : "";
-  // });
-  // setloading(false);
-  // };
-
-  // const handleSubmit = async (e: any) => {
-  //   e.preventDefault();
-  //   const formData = new FormData(e.target);
-  //   const formEntries = Object.fromEntries(formData);
-
-  //   const fullname: string = formEntries.fullname as string;
-  //   const country_id: string = formEntries.country_id as string;
-  //   const telephone: string = formEntries.telephone as string;
-  //   const city: string = formEntries.city as string;
-  //   const street: string = formEntries.street as string;
-  //   const email: string = formEntries.email as string;
-  //   const postcode: string = formEntries.postcode as string;
-
-  //   try {
-  //     if (selectedOption === "existing-information") {
-  //       setloading(false);
-  //       const data = {
-  //         fullname: "truong an",
-  //         countryId: "704",
-  //         street: "Phu Tan",
-  //         city: "Ca Mau",
-  //         telephone: "0912345678",
-  //         postcode: "970000",
-  //         email: "truonganfi@gmail.com",
-  //       };
-
-  // const res = await dispatch(Checkout({ method: payment }));
-  // const check = unwrapResult(res);
-  //       toast("Payment success");
-  //       router.push("/");
-
-  // return check;
-  //     }
-
-  //     if (selectedOption === "new-information") {
-  //       setloading(false);
-  //       const data = {
-  //         fullname: fullname,
-  //         countryId: country_id,
-  //         street: street,
-  //         city: city,
-  //         telephone: telephone,
-  //         postcode: postcode,
-  //         email: email,
-  //       };
-  //       // await dispatch(CartAddress(data));
-  //       // const res = await dispatch(Checkout({ method: payment }));
-  //       // const check = unwrapResult(res);
-  //       toast("Thanh Toán Thành Công");
-  //       router.push("/");
-  //       // return check;
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // let result = await stripe.current?.confirmCardPayment(
-  //   clientSecret.current,
-  //   {
-  //     payment_method: { card: card.current },
-  //   }
-  // );
-  // if (result.error) {
-  //   console.log(error);
-  // } else {
-  //   setloading(true);
-
-  //   try {
-  //     let response = await fetch("/api/orders/create", {
-  //       method: "POST",
-  //       body: JSON.stringify({
-  //         stripe_id: result.paymentIntent.id,
-  //         name: addressDetails.name,
-  //         address: addressDetails.address,
-  //         zipcode: addressDetails.zipcode,
-  //         city: addressDetails.city,
-  //         country: addressDetails.country,
-  //         products: cart.getCart(),
-  //         total: cart.cartTotal(),
-  //       }),
-  //     });
-
-  //     if (response.status == 200) {
-  //       toast.success("Order Complete!", { autoClose: 3000 });
-  //       return router.push("/");
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     toast.error("Something went wrong?", { autoClose: 3000 });
-  //   }
-
-  //   setloading(false);
-  // }
-  // };
-
   useEffect(() => {
-    // setloading(true);
-    // setTimeout(() => stripeInit(), 300);
+    if (!isLoggedInSession) {
+      router.push("/");
+    }
   }, []);
 
   return (
-    // <div className="mt-14">
-    //   <h1 className="my-5 text-3xl font-bold text-center sm:w-screen">
-    //     Address
-    //   </h1>
-    //   <ToastContainer />
-    //   <div>
-    //     <label className="flex items-center justify-center w-screen mb-2 ">
-    //       <input
-    //         type="radio"
-    //         value="existing-information"
-    //         checked={selectedOption === "existing-information"}
-    //         className="ml-2 mr-2"
-    //         onClick={() => setSelectedOption("existing-information")}
-    //       />
-    //       Exist information
-    //     </label>
-    //     <label className="flex items-center justify-center w-screen mb-2">
-    //       <input
-    //         type="radio"
-    //         value="new-information"
-    //         checked={selectedOption === "new-information"}
-    //         className="mr-2 "
-    //         onClick={() => setSelectedOption("new-information")}
-    //       />
-    //       New address
-    //     </label>
+    <div className="mt-24 mb-16">
+      <div className="flex flex-col items-center border-b bg-white py-4 sm:flex-row sm:px-10 lg:px-20 xl:px-32 ">
+        <p className="text-2xl font-bold text-gray-800">
+          Your order already complete!
+        </p>
+        <div className="mt-4 py-2 text-xs sm:mt-0 sm:ml-auto sm:text-base">
+          <div className="relative">
+            <ul className="relative flex w-full items-center justify-between space-x-2 sm:space-x-4">
+              <li className="flex items-center space-x-3 text-left sm:space-x-4">
+                <Link
+                  className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-200 text-xs font-semibold text-emerald-700 ring ring-emerald-200 ring-offset-2"
+                  href="/product"
+                >
+                  ✓
+                </Link>
+                <span className="font-semibold text-gray-900">Shop</span>
+              </li>
 
-    //     {selectedOption === "existing-information" && (
-    //       <div className="max-w-2xl mx-auto">
-    <form
-      onSubmit={handleSubmit}
-      className="pb-1 pl-12 pr-12 pt-8 shadow-2xl border-2 rounded-3xl mt-16"
-    >
-      <div className="block mb-8">
-        <h1 className="font-bold mb-2">Method payment</h1>
-        <label className="block ml-2">
-          <input
-            type="radio"
-            name="payment-method"
-            value="delivery"
-            checked={true}
-          />
-          <span className="ml-2">Payment on delivery</span>
-        </label>
-        <label className="block ml-2">
-          <input type="radio" name="payment-method" value="stripe" />
-          <span className="ml-2">Stripe</span>
-        </label>
+              <FaArrowRight />
+
+              <li className="flex items-center space-x-3 text-left sm:space-x-4">
+                <Link
+                  className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-600 text-xs font-semibold text-white ring ring-gray-600 ring-offset-2"
+                  href="/checkout"
+                >
+                  2
+                </Link>
+                <span className="font-semibold text-gray-900">Checkout</span>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
-      <div className="mx-auto flex justify-center">
-        <button
-          className="w-1/2  px-4 py-2 mb-8 mr-4 font-bold  text-white bg-gray-700 rounded hover:bg-gray-900 focus:outline-none focus:shadow-outline"
-          type="submit"
-          onClick={() => router.back()}
-        >
-          Cancel
-        </button>
+      <div className="grid sm:px-10 lg:grid-cols-2 lg:px-20 xl:px-32">
+        <div className="px-4 pt-8">
+          <p className="text-xl font-medium">Order Summary</p>
+          <p className="text-gray-400">
+            Check your items. And select a suitable shipping method.
+          </p>
+          <div className="mt-8 space-y-3 rounded-lg border bg-white px-2 py-4 sm:px-6">
+            {cart.slice(0, 2).map((item, index) => {
+              return (
+                <div key={index} className="flex flex-row rounded-lg bg-white">
+                  <Image
+                    className="m-2 h-24 w-28 rounded-md border object-cover object-center"
+                    src={item?.product?.image_url?.slice(0).toString()}
+                    alt={item?.product?.name}
+                    height={96}
+                    width={112}
+                  />
+                  <div className="flex w-full flex-col px-4 py-4">
+                    <span className="font-semibold">{item?.product?.name}</span>
+                    <span className="float-right text-gray-400">
+                      x{item?.quantity}
+                    </span>
+                    <PriceTag
+                      price={item?.product?.price}
+                      className="text-lg font-bold"
+                    />
+                  </div>
+                </div>
+              );
+            })}
+            {cart.length > 2 && (
+              <div className="flex flex-col rounded-lg bg-white sm:flex-row border">
+                <div className="flex w-full flex-col px-4 py-4 text-center">
+                  <Link href="/cart" className="text-lg font-bold">
+                    More
+                  </Link>
+                </div>
+              </div>
+            )}
+          </div>
 
-        <button
-          // disabled={loading ? true : false}
-          type="submit"
-          className="w-1/2  px-4 py-2 mb-8 font-bold cursor-pointer text-white bg-gray-700 rounded hover:bg-blue-900 focus:outline-none focus:shadow-outline"
-        >
-          Check out
-        </button>
+          <p className="mt-8 text-lg font-medium">Payment Methods</p>
+          <form className="mt-5 grid gap-6">
+            <div className="relative">
+              <input
+                className="peer hidden"
+                id="radio_1"
+                type="radio"
+                name="radio"
+                checked
+              />
+              <span className="peer-checked:border-gray-700 absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white"></span>
+              <label
+                className="peer-checked:border-2 peer-checked:border-gray-700 peer-checked:bg-gray-50 flex cursor-pointer select-none rounded-lg border border-gray-300 p-4"
+                htmlFor="radio_1"
+              >
+                <Image
+                  className="w-14 object-contain"
+                  src="/images/cod.png"
+                  alt=""
+                  width={56}
+                  height={42}
+                />
+                <div className="ml-5">
+                  <span className="mt-2 font-semibold">COD</span>
+                  <p className="text-slate-500 text-sm leading-6">
+                    Cash on Delivery
+                  </p>
+                </div>
+              </label>
+            </div>
+            <div className="relative">
+              <input
+                className="peer hidden"
+                id="radio_2"
+                type="radio"
+                name="radio"
+                checked
+              />
+              <span className="peer-checked:border-gray-700 absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white"></span>
+              <label
+                className="peer-checked:border-2 peer-checked:border-gray-700 peer-checked:bg-gray-50 flex cursor-pointer select-none rounded-lg border border-gray-300 p-4"
+                htmlFor="radio_2"
+              >
+                <Image
+                  className="w-14 object-contain"
+                  src="/images/cc_stripe.png"
+                  alt=""
+                  width={56}
+                  height={42}
+                />
+                <div className="ml-5">
+                  <span className="mt-2 font-semibold">Stripe</span>
+                  <p className="text-slate-500 text-sm leading-6">
+                    Online Payment
+                  </p>
+                </div>
+              </label>
+            </div>
+          </form>
+        </div>
+
+        <div className="mt-10 bg-gray-50 px-4 pt-8 lg:mt-0">
+          <p className="text-xl font-medium">Payment Details</p>
+          <p className="text-gray-400">
+            Complete your order by providing your payment details.
+          </p>
+          <div className="">
+            <label
+              htmlFor="email"
+              className="mt-4 mb-2 block text-sm font-medium"
+            >
+              Email
+            </label>
+            <div className="relative">
+              <input
+                type="text"
+                id="email"
+                name="email"
+                className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                placeholder="your.email@gmail.com"
+              />
+            </div>
+            <label
+              htmlFor="card-holder"
+              className="mt-4 mb-2 block text-sm font-medium"
+            >
+              Card Holder
+            </label>
+            <div className="relative">
+              <input
+                type="text"
+                id="card-holder"
+                name="card-holder"
+                className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm uppercase shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                placeholder="Your full name here"
+              />
+            </div>
+            <label
+              htmlFor="card-no"
+              className="mt-4 mb-2 block text-sm font-medium"
+            >
+              Card Details
+            </label>
+            <div className="flex">
+              <div className="relative w-7/12 flex-shrink-0">
+                <input
+                  type="text"
+                  id="card-no"
+                  name="card-no"
+                  className="w-full rounded-md border border-gray-200 px-2 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                  placeholder="xxxx-xxxx-xxxx-xxxx"
+                />
+              </div>
+              <input
+                type="text"
+                name="credit-expiry"
+                className="w-full rounded-md border border-gray-200 px-2 py-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                placeholder="MM/YY"
+              />
+              <input
+                type="text"
+                name="credit-cvc"
+                className="w-1/6 flex-shrink-0 rounded-md border border-gray-200 px-2 py-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                placeholder="CVC"
+              />
+            </div>
+            <label
+              htmlFor="billing-address"
+              className="mt-4 mb-2 block text-sm font-medium"
+            >
+              Billing Address
+            </label>
+            <div className="flex flex-col sm:flex-row">
+              <div className="relative flex-shrink-0 sm:w-7/12">
+                <input
+                  type="text"
+                  id="billing-address"
+                  name="billing-address"
+                  className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                  placeholder="Street Address"
+                />
+              </div>
+              <select
+                name="billing-state"
+                className="w-full rounded-md border border-gray-200 px-4 py-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+              >
+                <option value="State">State</option>
+              </select>
+              <input
+                type="text"
+                name="billing-zip"
+                className="flex-shrink-0 rounded-md border border-gray-200 px-4 py-3 text-sm shadow-sm outline-none sm:w-1/6 focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                placeholder="ZIP"
+              />
+            </div>
+
+            <div className="mt-6 flex items-center justify-between">
+              <p className="text-sm font-medium text-gray-900">Total</p>
+              <p className="text-2xl font-semibold text-gray-900">
+                {cart
+                  .reduce((a, b) => a + b?.product?.price * b?.quantity, 0)
+                  .toLocaleString("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                  })}
+              </p>
+            </div>
+          </div>
+          <button
+            className="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white"
+            onClick={() => handleSubmit(cart, getUserInSession)}
+          >
+            Place Order
+          </button>
+        </div>
       </div>
-    </form>
-    //       </div>
-    //     )}
-
-    //     {selectedOption === "new-information" && (
-    //       <div className="max-w-2xl mx-auto">
-    //         <form
-    //           onSubmit={handleSubmit}
-    //           className="pb-1 pl-12 pr-12 pt-8 mb-8 shadow-2xl border-2 rounded-3xl"
-    //         >
-    //           <label
-    //             className="block mb-2 font-bold text-gray-700"
-    //             htmlFor="fullname"
-    //           >
-    //             Fullname:
-    //           </label>
-    //           <input
-    //             className="w-full px-3 py-2 mb-5 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-    //             id="lastname"
-    //             type="text"
-    //             placeholder="Enter your fullname"
-    //             required
-    //             title="Please add your name"
-    //           />
-
-    //           <label
-    //             className=" block mb-2 font-bold text-gray-700"
-    //             htmlFor="street"
-    //           >
-    //             Street:
-    //           </label>
-    //           <input
-    //             className="w-full block px-3 py-2 mb-5 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-    //             id="street"
-    //             type="text"
-    //             placeholder="Enter your street"
-    //             required
-    //             pattern="[0-9A-Za-z\s\-\,\./]+"
-    //           />
-
-    //           <label
-    //             className="block mb-2 font-bold text-gray-700"
-    //             htmlFor="city"
-    //           >
-    //             City:
-    //           </label>
-    //           <select
-    //             className=" w-full px-3 py-2 mb-5 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-    //             id="city"
-    //             required
-    //           >
-    //             <option value=""> City </option>
-    //             {provinces
-    //               .sort((a, b) => a.name.localeCompare(b.name))
-    //               .map((province) => (
-    //                 <option key={province.code} value={province.name}>
-    //                   {province.name}
-    //                 </option>
-    //               ))}
-    //           </select>
-
-    //           <label
-    //             className="block mb-2 font-bold text-gray-700"
-    //             htmlFor="country_id"
-    //           >
-    //             Country:
-    //           </label>
-    //           <select
-    //             className="w-full px-3 py-2 mb-5 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-    //             id="country_id"
-    //             required
-    //           >
-    //             <option value=""> Select country </option>
-    //             <option value="704"> Vietnam </option>
-    //           </select>
-
-    //           <label
-    //             className="block mb-2 font-bold text-gray-700"
-    //             htmlFor="telephone"
-    //           >
-    //             Telephone:
-    //           </label>
-    //           <input
-    //             className="w-full px-3 py-2 mb-5 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-    //             id="telephone"
-    //             type="tel"
-    //             placeholder="Enter your telephone"
-    //             name="phone"
-    //             pattern="0\d{1,3}[\-\s]?\d{8,}"
-    //             required
-    //             title="Telephone"
-    //           />
-
-    //           <label
-    //             className="block mb-2 font-bold text-gray-700"
-    //             htmlFor="email"
-    //           >
-    //             Email:
-    //           </label>
-    //           <input
-    //             className="w-full px-3 py-2 mb-5 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-    //             id="email"
-    //             type="email"
-    //             placeholder="Enter your email address"
-    //             required
-    //           />
-
-    //           <label
-    //             className="block mb-2 font-bold text-gray-700"
-    //             htmlFor="postcode"
-    //           >
-    //             Postcode:
-    //           </label>
-    //           <input
-    //             className="w-full px-3 py-2 mb-5 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-    //             id="postcode"
-    //             type="text"
-    //             placeholder="Enter your number postcode"
-    //             pattern="^[0-9a-zA-Z]{5,}$"
-    //             required
-    //             title="Postcode"
-    //           />
-
-    //           <div className="block mb-8">
-    //             <h1 className="font-bold mb-2">Method payment</h1>
-    //             <label className="block ml-2">
-    //               <input
-    //                 type="radio"
-    //                 name="payment-method"
-    //                 value="delivery"
-    //                 checked={true}
-    //               />
-    //               <span className="ml-2">Payment on delivery</span>
-    //             </label>
-    //             <label className="block ml-2">
-    //               <input type="radio" name="payment-method" value="stripe" />
-    //               <span className="ml-2">Stripe</span>
-    //             </label>
-    //           </div>
-
-    //           <div className="mx-auto flex justify-center">
-    //             <button
-    //               className="w-1/2  px-4 py-2 mb-8 mr-4 font-bold text-white bg-gray-700 rounded hover:bg-gray-900 focus:outline-none focus:shadow-outline"
-    //               type="reset"
-    //               onClick={() => router.back()}
-    //             >
-    //               Cancal
-    //             </button>
-
-    //             <button
-    //               disabled={loading ? true : false}
-    //               className="w-1/2  px-4 py-2 mb-8 font-bold cursor-pointer text-white bg-blue-700 rounded hover:bg-blue-900 focus:outline-none focus:shadow-outline"
-    //             >
-    //               Check out
-    //             </button>
-    //           </div>
-    //         </form>
-    //       </div>
-    //     )}
-    //   </div>
-    // </div>
+    </div>
   );
 };
 

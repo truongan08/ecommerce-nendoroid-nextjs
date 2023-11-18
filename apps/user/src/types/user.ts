@@ -53,8 +53,14 @@ export interface AuthOutput {
 }
 
 export interface CartOutput {
-  fetchCart(): Promise<{ cart: cart | null; error: CustomError | null }>;
-  getCart(): Promise<{ cart: cart | null; error: CustomError | null }>;
+  get_cart_id(): Promise<{ cart_id: number | null; error: CustomError | null }>;
+  fetchCart(
+    cart_id: number,
+    cart: cartItem[]
+  ): Promise<{ cart: cartItem[]; error: CustomError | null }>;
+  getCart(
+    cart_id: number
+  ): Promise<{ cart: cartItem[]; error: CustomError | null }>;
 }
 
 export interface AuthState {

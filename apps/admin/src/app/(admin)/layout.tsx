@@ -4,12 +4,14 @@ import React, { useEffect, useState } from "react";
 
 import AdminNavbar from "@/components/Navbars/AdminNavbar";
 import Sidebar from "@/components/Sidebar/Sidebar";
-import HeaderStats from "@/components/Headers/HeaderStats";
 import FooterAdmin from "@/components/Footers/FooterAdmin";
 import supabase from "@/utils/SupabaseAdmin";
+import { useRouter } from "next/navigation";
 
 export default function Admin({ children }: { children: React.ReactNode }) {
   const [claimAdmin, setClaimAdmin] = useState(false);
+  const router = useRouter();
+
   useEffect(() => {
     supabase.auth.onAuthStateChange((event, session) => {
       if (
@@ -19,18 +21,22 @@ export default function Admin({ children }: { children: React.ReactNode }) {
         setClaimAdmin(true);
       }
     });
-  });
+  }, [children]);
 
   if (!claimAdmin) {
+    router.push("/");
     return <div>{children}</div>;
   }
 
   return (
-    <div className="h-screen w-screen">
+    <div className="h-screen w-screen flex flex-col min-h-screen">
       <Sidebar />
       <main className="relative md:ml-64 bg-blueGray-100">
-        <AdminNavbar />
-        <HeaderStats />
+        <div className="relative bg-blueGray-800 md:pt-32 pb-16 pt-12">
+          <div className="px-4 md:px-10 mx-auto w-full">
+            <AdminNavbar />
+          </div>
+        </div>
         <div className="px-4 md:px-10 mx-auto w-full -m-24">
           {children}
           <FooterAdmin />

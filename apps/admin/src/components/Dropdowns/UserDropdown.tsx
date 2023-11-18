@@ -39,12 +39,7 @@ const UserDropdown = () => {
   };
 
   return (
-    <Dropdown
-      placement="bottom-end"
-      showArrow={true}
-      backdrop="opaque"
-      className="bg-white"
-    >
+    <Dropdown placement="bottom-end" showArrow={true} backdrop="opaque">
       <DropdownTrigger>
         <div className="text-blueGray-500 block">
           <div className="items-center flex">
