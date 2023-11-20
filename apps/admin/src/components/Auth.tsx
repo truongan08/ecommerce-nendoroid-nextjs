@@ -1,8 +1,30 @@
+"use client";
+
 import supabase from "@/utils/SupabaseAdmin";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const AuthSupabase = () => {
+  const router = useRouter();
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (
+      event == "SIGNED_IN" &&
+      session?.user.app_metadata.claims_admin == true
+    ) {
+      router.push("/dashboard");
+    }
+  });
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      if (data.session?.user.app_metadata.claims_admin == true) {
+        router.push("/dashboard");
+      }
+    };
+    checkSession();
+  }, []);
   return (
     <div className="max-w-screen">
       <Auth

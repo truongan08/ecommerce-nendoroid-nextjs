@@ -23,7 +23,7 @@ export class AuthSupabase implements AuthOutput {
     return Promise.resolve({ session, error });
   }
 
-  async signUp({ email, password }: SignUpDto): Promise<{
+  async signUp({ fullname, email, password }: SignUpDto): Promise<{
     user: User | null;
     session: Session | null;
     error: CustomError | null;
@@ -34,6 +34,13 @@ export class AuthSupabase implements AuthOutput {
     } = await supabase.auth.signUp({
       email: email,
       password: password,
+      options: {
+        data: {
+          full_name: fullname,
+          avatar_url: "/images/avatar.url",
+        },
+        emailRedirectTo: "localhost:3000",
+      },
     });
     return Promise.resolve({ user, session, error });
   }

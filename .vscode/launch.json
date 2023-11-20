@@ -1,6 +1,7 @@
 {
     "version": "0.2.0",
     "configurations": [
+
       {
         "name": "Next.js: debug server-side",
         "type": "node-terminal",
@@ -16,6 +17,17 @@
         "userDataDir": false,
         "runtimeExecutable": "C:/Users/truongan/scoop/apps/brave/current/brave.exe"
       },
+      {
+        "name": "Attach",
+        "port": 9229,
+        "request": "attach",
+        "webRoot": "${workspaceFolder}", // mine had another subfolder here
+        "cwd": "${workspaceFolder}",     // and here
+        "skipFiles": [
+            "<node_internals>/**"
+        ],
+        "type": "pwa-node"
+    },
       {
         "name": "Next.js: debug full stack",
         "type": "node-terminal",

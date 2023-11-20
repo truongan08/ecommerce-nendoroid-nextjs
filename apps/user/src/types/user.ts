@@ -162,6 +162,7 @@ export type SignInDto = {
 };
 
 export type SignUpDto = {
+  fullname: string;
   email: string;
   password: string;
 };
