@@ -2,8 +2,7 @@ import { stripe } from "@/utils/Stripe";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  const endpointSecret =
-    "whsec_73d35b5abb0b3781855c3e81572c22bf1231f93006dd736343949169cff35f3d";
+  const endpointSecret = "";
   const sig = req.headers.get("stripe-signature");
 
   const body = await req.json();
