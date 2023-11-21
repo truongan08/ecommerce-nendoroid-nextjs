@@ -55,7 +55,7 @@ export interface AuthOutput {
 export interface CartOutput {
   get_cart_id(): Promise<{ cart_id: number | null; error: CustomError | null }>;
   fetchCart(
-    cart_id: number,
+    cart_id: number | null,
     cart: cartItem[]
   ): Promise<{ cart: cartItem[]; error: CustomError | null }>;
   getCart(
@@ -93,7 +93,8 @@ export interface ProductDetailState {
 
 export interface CartState {
   cartItems: cartItem[];
-  total: number;
+  cartStatus: RequestCartStatus;
+  cartError: CustomError | null;
 }
 
 // enum
@@ -116,6 +117,13 @@ export enum ProductDetailCallTypes {
 }
 
 export enum RequestStatus {
+  IDLE = "IDLE",
+  LOADING = "LOADING",
+  COMPLETED = "COMPLETED",
+  FAILED = "FAILED",
+}
+
+export enum RequestCartStatus {
   IDLE = "IDLE",
   LOADING = "LOADING",
   COMPLETED = "COMPLETED",
@@ -173,12 +181,14 @@ export type User = {
 };
 
 export type Session = {
+  provider_token?: string | null;
+  provider_refresh_token?: string | null;
   access_token: string;
-  token_type: string;
-  expires_in: number;
   refresh_token: string;
-  user: User;
+  expires_in: number;
   expires_at?: number;
+  token_type: string;
+  user: User;
 };
 
 export type Product = {
@@ -265,5 +275,6 @@ export const initialStateProductDetail: ProductDetailState = {
 
 export const initialStateCart: CartState = {
   cartItems: [],
-  total: 0,
+  cartStatus: RequestCartStatus.IDLE,
+  cartError: null,
 };

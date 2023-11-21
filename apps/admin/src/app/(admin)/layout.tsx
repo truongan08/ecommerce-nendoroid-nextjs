@@ -12,19 +12,32 @@ export default function Admin({ children }: { children: React.ReactNode }) {
   const [claimAdmin, setClaimAdmin] = useState(false);
   const router = useRouter();
 
-  useEffect(() => {
-    supabase.auth.onAuthStateChange((event, session) => {
-      if (
-        event == "SIGNED_IN" &&
-        session?.user.app_metadata.claims_admin == true
-      ) {
-        setClaimAdmin(true);
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (event == "SIGNED_IN") {
+      if (session) {
+        if (session?.user.app_metadata.claims_admin == true) {
+          setClaimAdmin(true);
+        } else {
+          supabase.auth.signOut();
+          console.log(session);
+        }
       }
-    });
-  }, [children]);
+    }
+  });
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      if (data) {
+        if (data.session?.user.app_metadata.claims_admin === true) {
+          router.push("/dashboard");
+        }
+      }
+    };
+    checkSession();
+  }, [router]);
 
   if (!claimAdmin) {
-    router.push("/");
     return <div>{children}</div>;
   }
 

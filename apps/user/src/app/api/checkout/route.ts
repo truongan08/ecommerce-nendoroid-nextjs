@@ -34,8 +34,8 @@ export async function POST(req: NextRequest) {
     payment_method_types: ["card"],
     mode: "payment",
     line_items: checkoutItems,
-    success_url: `${req.nextUrl.origin}/`,
-    cancel_url: `${req.nextUrl.origin}/`,
+    success_url: `${req.nextUrl.origin}`,
+    cancel_url: `${req.nextUrl.origin}`,
   });
 
   return NextResponse.json({

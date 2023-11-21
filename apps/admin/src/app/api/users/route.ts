@@ -1,50 +1,41 @@
 import supabase from "@/utils/SupabaseAdmin";
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (req.method !== "POST") {
-    return res.status(405).end();
-  }
+export async function POST(request: NextRequest) {
+  //   const {
+  //     data: { session },
+  //   } = await supabase.auth.getSession();
+  //   if (!session) {
+  //     return res.status(401);
+  //   }
 
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  if (!session) {
-    return res.status(401);
-  }
+  //   const { email, password, full_name } = JSON.parse(req.body);
+  //   console.log(email, password, full_name);
 
-  // Check if user is an admin //... your code here
+  //   if (!email || !password) {
+  //     return res.status(400).json("Missing email or password");
+  //   }
 
-  const { email, password, full_name } = JSON.parse(req.body);
-  console.log(email, password, full_name);
+  //   const { data, error } = await supabase.auth.admin.createUser({
+  //     email,
+  //     password,
+  //     email_confirm: true,
+  //   });
 
-  if (!email || !password) {
-    return res.status(400).json("Missing email or password");
-  }
+  //   if (error) {
+  //     console.log("#1 ", error);
+  //     return res.status(400).json(error.message);
+  //   }
 
-  const { data, error } = await supabase.auth.admin.createUser({
-    email,
-    password,
-    email_confirm: true,
-  });
+  //   const { error: errorPost } = await supabase
+  //     .from("users")
+  //     .upsert({ id: data.user.id });
 
-  if (error) {
-    console.log("#1 ", error);
-    return res.status(400).json(error.message);
-  }
+  //   if (errorPost) {
+  //     console.log("#2 ", errorPost);
 
-  const { error: errorPost } = await supabase
-    .from("users")
-    .upsert({ id: data.user.id });
+  //     return res.status(500).json(errorPost.message);
+  //   }
 
-  if (errorPost) {
-    console.log("#2 ", errorPost);
-
-    return res.status(500).json(errorPost.message);
-  }
-
-  return res.status(200).json(data);
+  return NextResponse.json({ message: "user" });
 }

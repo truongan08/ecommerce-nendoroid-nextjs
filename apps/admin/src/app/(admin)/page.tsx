@@ -3,7 +3,7 @@ import AuthSupabase from "@/components/Auth";
 
 const AdminPage = () => {
   return (
-    <div className="h-screen items-center">
+    <div className="h-screen">
       <AuthSupabase />
     </div>
   );

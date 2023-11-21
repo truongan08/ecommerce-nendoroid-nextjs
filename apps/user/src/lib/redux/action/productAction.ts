@@ -3,7 +3,6 @@ import {
   ProductOutput,
   CustomError,
   StatusProduct,
-  Product,
   TypeProduct,
   Keyword,
 } from "@/types/user";
@@ -11,7 +10,7 @@ import getPagination from "./getPagination";
 
 export class ProductSupabase implements ProductOutput {
   async getProductByStatus({ status }: StatusProduct): Promise<{
-    product: Product[];
+    product: any;
     error: CustomError | null;
   }> {
     const { data: product, error } = await supabase
@@ -22,7 +21,7 @@ export class ProductSupabase implements ProductOutput {
   }
 
   async getProductByCategory({ type }: TypeProduct): Promise<{
-    product: Product[];
+    product: any;
     error: CustomError | null;
   }> {
     const { data: product, error } = await supabase
@@ -33,8 +32,8 @@ export class ProductSupabase implements ProductOutput {
   }
 
   async getProductPagination({ query: { page = 1 } }): Promise<{
-    product: Product[];
-    count: number | null;
+    product: any;
+    count: any | null;
     error: CustomError | null;
   }> {
     const { from, to } = getPagination(page, 10);
@@ -52,7 +51,7 @@ export class ProductSupabase implements ProductOutput {
 
   async getProductSearch({
     keyword,
-  }: Keyword): Promise<{ product: Product[]; error: CustomError | null }> {
+  }: Keyword): Promise<{ product: any; error: CustomError | null }> {
     const { data: product, error } = await supabase
       .from("product")
       .select("*")

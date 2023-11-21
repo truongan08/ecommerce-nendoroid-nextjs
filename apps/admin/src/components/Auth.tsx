@@ -21,12 +21,14 @@ const AuthSupabase = () => {
       const { data } = await supabase.auth.getSession();
       if (data.session?.user.app_metadata.claims_admin == true) {
         router.push("/dashboard");
+      } else if (data.session?.user.app_metadata.claims_admin == false) {
+        supabase.auth.signOut();
       }
     };
     checkSession();
-  }, []);
+  });
   return (
-    <div className="max-w-screen">
+    <div className="max-w-sm mx-auto">
       <Auth
         view="sign_in"
         supabaseClient={supabase}

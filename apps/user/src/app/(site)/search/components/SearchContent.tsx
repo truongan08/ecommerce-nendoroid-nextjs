@@ -33,7 +33,7 @@ const SearchContent: React.FC<SearchContentProps> = ({ keyword }) => {
       await dispatch(getProductSearch({ keyword }));
     }
     fetchData(keyword);
-  }, [keyword]);
+  }, [keyword, dispatch]);
 
   if (nendoroids?.length === 0) {
     return (

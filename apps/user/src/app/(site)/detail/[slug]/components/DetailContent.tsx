@@ -57,7 +57,7 @@ const DetailContent: React.FC<DetailContentProps> = ({ product_id }) => {
       await dispatch(getProductDetail({ product_id }));
     }
     fetchData(product_id);
-  }, [product_id]);
+  }, [dispatch, product_id]);
 
   if (getProductDetailStatus === ProductDetailRequestStatus.FAILED) {
     return (

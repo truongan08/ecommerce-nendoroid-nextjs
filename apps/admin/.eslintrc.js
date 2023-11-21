@@ -1,7 +1,7 @@
 const { join } = require("node:path");
 
 module.exports = {
-  extends: require("eslint-config-custom/next"),
+  extends: "next/core-web-vitals",
   parserOptions: {
     project: join(__dirname, "tsconfig.json"),
   },

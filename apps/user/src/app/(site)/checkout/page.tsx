@@ -58,7 +58,7 @@ const Checkout = () => {
     if (!isLoggedInSession) {
       router.push("/");
     }
-  }, []);
+  }, [isLoggedInSession, router]);
 
   return (
     <div className="mt-24 mb-16">

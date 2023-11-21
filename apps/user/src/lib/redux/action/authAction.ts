@@ -3,14 +3,14 @@ import {
   AuthOutput,
   SignInDto,
   SignUpDto,
-  Session,
   CustomError,
+  Session,
   User,
 } from "@/types/user";
 
 export class AuthSupabase implements AuthOutput {
   async signIn({ email, password }: SignInDto): Promise<{
-    session: Session | null;
+    session: any | null;
     error: CustomError | null;
   }> {
     const {
@@ -24,8 +24,8 @@ export class AuthSupabase implements AuthOutput {
   }
 
   async signUp({ fullname, email, password }: SignUpDto): Promise<{
-    user: User | null;
-    session: Session | null;
+    user: any | null;
+    session: any | null;
     error: CustomError | null;
   }> {
     const {
@@ -37,7 +37,8 @@ export class AuthSupabase implements AuthOutput {
       options: {
         data: {
           full_name: fullname,
-          avatar_url: "/images/avatar.url",
+          avatar_url:
+            "https://gonkolbxsaadkmuxbrak.supabase.co/storage/v1/object/sign/avatars/avatar.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJhdmF0YXJzL2F2YXRhci5wbmciLCJpYXQiOjE3MDA0Nzg5MTQsImV4cCI6MTczMjAxNDkxNH0.9H02QY_2tAClcTjKzt3leslmccrh2s9wSbM6_01cWI0&t=2023-11-20T11%3A15%3A16.141Z",
         },
         emailRedirectTo: "localhost:3000",
       },

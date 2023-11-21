@@ -4,6 +4,7 @@ import { ReactNode, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Session, cart, cartItem } from "@/types/user";
 import {
+  selectCartInState,
   selectIsLoggedInSession,
   selectLocalCartData,
   selectLocalSessionData,
@@ -21,17 +22,20 @@ type SessionProviderProps = {
 export const SessionProvider = ({ children }: SessionProviderProps) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const isLoggedInSession: boolean = useAppSelector(selectIsLoggedInSession);
+  const cartInState: cartItem[] = useAppSelector(selectCartInState);
+
   const [isLoading, setIsLoading] = useState(false);
 
-  const isLoggedInSession: boolean = useAppSelector(selectIsLoggedInSession);
-
   useEffect(() => {
-    if (!isLoggedInSession) getLoggedInUserDataOrNone();
-  }, []);
+    if (!isLoggedInSession) {
+      getLoggedInUserDataOrNone();
+    }
+  }, [cartInState]);
 
   const getLoggedInUserDataOrNone = () => {
     const localSessionData: Session | null = selectLocalSessionData();
-    const cart: cartItem[] | null = selectLocalCartData();
+    const cartLocal: cartItem[] = selectLocalCartData();
 
     if (!localSessionData) {
       setIsLoading(true);
@@ -39,8 +43,12 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
       return;
     }
 
-    if (cart) {
-      dispatch(setCartFromLocalCartData(cart));
+    if (!cartInState) {
+      dispatch(setCartFromLocalCartData(cartLocal));
+    }
+
+    if (cartLocal !== cartInState) {
+      localStorage.setItem("cart", JSON.stringify(cartInState));
     }
 
     dispatch(setSessionFromLocalSessionData(localSessionData));

@@ -1,6 +1,6 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
-import { Product } from "../../types";
+import { Product } from "@/types/user";
 
 const getNenPagination = async (
   from: number,

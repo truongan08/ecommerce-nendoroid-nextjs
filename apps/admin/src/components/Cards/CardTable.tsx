@@ -77,8 +77,8 @@ const CardTable: React.FC<CardTableProps> = ({ color, data }) => {
                   </td>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                     <AvatarGroup max={2} className="float-left" radius="sm">
-                      {item.image_url.map((itemImg, indexImg) => (
-                        <Avatar key={indexImg} src={itemImg} radius="sm" />
+                      {item.image_url.map((item, index) => (
+                        <Avatar key={index} src={item} radius="sm" />
                       ))}
                     </AvatarGroup>
                   </td>
