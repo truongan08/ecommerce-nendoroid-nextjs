@@ -15,13 +15,23 @@ export const cartReducers = {
   ) => {
     const { product, quantity = 1 } = payload;
     const cartItemIndex = state.cartItems?.findIndex(
-      (item) => item.product?.product_id === product.product_id
+      (item) => item.product_id === product.product_id
     );
 
     if (cartItemIndex !== -1) {
       state.cartItems[cartItemIndex].quantity += quantity;
     } else {
-      state.cartItems.push({ product, quantity });
+      state.cartItems.push({
+        product_id: product.product_id,
+        category_id: product.category_id,
+        name: product.name,
+        description: product.description,
+        image_url: product.image_url,
+        price: product.price,
+        status: product.status,
+        stock: product.stock,
+        quantity,
+      });
     }
   },
 
@@ -31,7 +41,7 @@ export const cartReducers = {
   ) => {
     const { product } = payload;
     const cartItem = state.cartItems?.find(
-      (item) => item.product.product_id === product.product_id
+      (item) => item.product_id === product.product_id
     );
 
     if (cartItem && cartItem.quantity >= 2) {
@@ -41,7 +51,7 @@ export const cartReducers = {
     }
   },
 
-  fecthCart: (
+  fetchCart: (
     state: CartState,
     { payload }: PayloadAction<{ cart: cartItem[]; error: CustomError | null }>
   ) => {
@@ -58,7 +68,7 @@ export const cartReducers = {
   ) => {
     const { product } = payload;
     const cartItem = state.cartItems?.find(
-      (item) => item.product.product_id === product.product_id
+      (item) => item.product_id === product.product_id
     );
 
     if (cartItem) {

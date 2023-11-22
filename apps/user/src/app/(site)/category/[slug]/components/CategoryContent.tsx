@@ -36,7 +36,7 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ type }) => {
       await dispatch(getProductByCategory({ type }));
     }
     fetchData(type);
-  });
+  }, []);
 
   if (nendoroids?.length === 0) {
     return (

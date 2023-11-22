@@ -106,18 +106,18 @@ const Checkout = () => {
                 <div key={index} className="flex flex-row rounded-lg bg-white">
                   <Image
                     className="m-2 h-24 w-28 rounded-md border object-cover object-center"
-                    src={item?.product?.image_url?.slice(0).toString()}
-                    alt={item?.product?.name}
+                    src={item?.image_url?.slice(0).toString()}
+                    alt={item?.name}
                     height={96}
                     width={112}
                   />
                   <div className="flex w-full flex-col px-4 py-4">
-                    <span className="font-semibold">{item?.product?.name}</span>
+                    <span className="font-semibold">{item?.name}</span>
                     <span className="float-right text-gray-400">
                       x{item?.quantity}
                     </span>
                     <PriceTag
-                      price={item?.product?.price}
+                      price={item?.price}
                       className="text-lg font-bold"
                     />
                   </div>
@@ -295,7 +295,7 @@ const Checkout = () => {
               <p className="text-sm font-medium text-gray-900">Total</p>
               <p className="text-2xl font-semibold text-gray-900">
                 {cart
-                  .reduce((a, b) => a + b?.product?.price * b?.quantity, 0)
+                  .reduce((a, b) => a + b?.price * b?.quantity, 0)
                   .toLocaleString("vi-VN", {
                     style: "currency",
                     currency: "VND",

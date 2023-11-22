@@ -53,9 +53,8 @@ export interface AuthOutput {
 }
 
 export interface CartOutput {
-  get_cart_id(): Promise<{ cart_id: number | null; error: CustomError | null }>;
   fetchCart(
-    cart_id: number | null,
+    id: any | null,
     cart: cartItem[]
   ): Promise<{ cart: cartItem[]; error: CustomError | null }>;
   getCart(
@@ -224,7 +223,14 @@ export type Productdetail = {
 };
 
 export type cartItem = {
-  product: Product;
+  product_id: string;
+  category_id: string;
+  name: string;
+  description: string;
+  image_url: string[];
+  price: number;
+  status: string;
+  stock: number;
   quantity: number;
 };
 

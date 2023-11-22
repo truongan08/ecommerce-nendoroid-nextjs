@@ -2,40 +2,50 @@ import { CartOutput, CustomError, cartItem } from "@/types/user";
 import supabase from "@/utils/SupabaseUser";
 
 export class CartSupabase implements CartOutput {
-  async get_cart_id(): Promise<{
-    cart_id: any | null;
-    error: CustomError | null;
-  }> {
-    const { data: cart_id, error } = await supabase
-      .from("cart")
-      .select("cart_id")
-      .eq(
-        "customer_id",
-        JSON.parse(
-          localStorage.getItem(
-            `sb-${process.env.NEXT_PUBLIC_SUPABASE_REFRENCE_ID}-auth-token`
-          )!
-        ).user.id
-      )
-      .single();
-    return Promise.resolve({ cart_id, error });
-  }
-
   async fetchCart(
-    cart_id: any,
+    id: any,
     cartDto: cartItem[]
   ): Promise<{
     cart: any | null;
     error: CustomError | null;
   }> {
-    const { data: cartData } = await supabase.rpc("insert_cart", {
-      cartSet: cartDto,
-    });
-
-    const { data: cart, error } = await supabase
+    const { data: cart_id, error: cartIdError } = await supabase
       .from("cart")
-      .select(`*,cartItem:product(*),quantity:cart_product(quantity)`)
-      .eq("cart_id", "1");
+      .select("cart_id")
+      .eq("customer_id", id)
+      .single();
+
+    console.log(cart_id);
+
+    const cartUpsert = cartDto.map(({ product_id, quantity }) => ({
+      cart_id: 1,
+      product_id: product_id,
+      quantity: quantity,
+    }));
+
+    await supabase.from("cart_product").upsert(cartUpsert);
+
+    const { data: cartData, error } = await supabase
+      .from("cart")
+      .select(`*,cartItem:product(*,quantity:cart_product(quantity))`)
+      .eq("cart_id", 1);
+
+    const cartItem: any = cartData?.map((item: any) => ({
+      cartItem: item.cartItem.map((innerItem: any) => ({
+        product_id: innerItem.product_id,
+        category_id: innerItem.category_id,
+        name: innerItem.name,
+        description: innerItem.description,
+        image_url: innerItem.image_url,
+        price: innerItem.price,
+        status: innerItem.status,
+        stock: innerItem.stock,
+        quantity: innerItem.quantity[0].quantity,
+      })),
+    }));
+
+    const cart = cartItem?.cartItem || [];
+
     return Promise.resolve({ cart, error });
   }
 
@@ -43,15 +53,24 @@ export class CartSupabase implements CartOutput {
     cart: any | null;
     error: CustomError | null;
   }> {
-    const { data: cart, error } = await supabase
+    const { data: cartData, error } = await supabase
       .from("cart")
-      .select(
-        `*,
-          product (
-           *
-          )`
-      )
+      .select(`*,cartItem:product(*,quantity:cart_product(quantity))`)
       .eq("cart_id", cart_id);
+
+    const cart = cartData?.map((item: any) => ({
+      cartItem: item.cartItem.map((innerItem: any) => ({
+        product_id: innerItem.product_id,
+        category_id: innerItem.category_id,
+        name: innerItem.name,
+        description: innerItem.description,
+        image_url: innerItem.image_url,
+        price: innerItem.price,
+        status: innerItem.status,
+        stock: innerItem.stock,
+        quantity: innerItem.quantity[0].quantity,
+      })),
+    }));
     return Promise.resolve({ cart, error });
   }
 }

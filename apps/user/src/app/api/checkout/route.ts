@@ -16,14 +16,14 @@ export async function POST(req: NextRequest) {
   const checkoutItems = cart.map((cart: cartItem) => ({
     price_data: {
       currency: "vnd",
-      unit_amount: cart.product.price,
+      unit_amount: cart.price,
       product_data: {
-        name: cart.product.name,
-        images: cart.product.image_url,
+        name: cart.name,
+        images: cart.image_url,
         metadata: {
-          id: cart.product.product_id,
-          title: cart.product.name,
-          price: cart.product.price,
+          id: cart.product_id,
+          title: cart.name,
+          price: cart.price,
         },
       },
     },

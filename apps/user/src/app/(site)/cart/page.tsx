@@ -9,8 +9,10 @@ import {
   removeFromCart,
   addToCart,
   deleteCartItem,
+  fetchCart,
+  selectLoggedInUser,
 } from "@/lib/redux";
-import { cartItem } from "@/types/user";
+import { User, cartItem } from "@/types/user";
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo } from "react";
@@ -25,6 +27,7 @@ const Cart = () => {
   const cart: cartItem[] = useAppSelector(selectCartInState);
 
   const isLoggedInSession: boolean = useAppSelector(selectIsLoggedInSession);
+  const getLoggedInUser: User = useAppSelector(selectLoggedInUser)!;
 
   const CLickAddToCart = async (data: any) => {
     await dispatch(addToCart(data));
@@ -36,6 +39,10 @@ const Cart = () => {
 
   const CLickDeleteCart = async (data: any) => {
     await dispatch(deleteCartItem(data));
+  };
+
+  const CLickFetchCart = async (id: any, data: any) => {
+    await dispatch(fetchCart(id, data));
   };
 
   const totalCartItems = useMemo(() => {
@@ -51,6 +58,9 @@ const Cart = () => {
 
         <div className="bg-white rounded-lg p-4 shadow-2xl border-2">
           <table className="min-w-full divide-y divide-gray-200">
+            <button onClick={() => CLickFetchCart(getLoggedInUser.id, cart)}>
+              Fetchcart
+            </button>
             <thead>
               <tr className="border-b ">
                 <th className="hidden lg:table-cell px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
@@ -97,12 +107,10 @@ const Cart = () => {
                     <tr key={index}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div className="flex items-center">
-                          {item.product && (
+                          {item && (
                             <Image
-                              src={item?.product?.image_url
-                                ?.slice(0)
-                                .toString()}
-                              alt={item?.product?.name}
+                              src={item?.image_url?.slice(0).toString()}
+                              alt={item?.name}
                               width={60}
                               height={40}
                               quality={70}
@@ -110,14 +118,12 @@ const Cart = () => {
                             />
                           )}
 
-                          <span className="font-bold">
-                            {item?.product?.name}
-                          </span>
+                          <span className="font-bold">{item?.name}</span>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <PriceTag
-                          price={item?.product?.price}
+                          price={item?.price}
                           className="text-sm font-medium text-gray-700 mr-4"
                         />
 
@@ -131,7 +137,7 @@ const Cart = () => {
                         <div className="flex items-center justify-between px-2 py-1 bg-gray-200 rounded w-[70px]">
                           <button
                             className="text-sm font-medium text-gray-700 focus:outline-none "
-                            onClick={() => CLickRemoveFromCart(item.product)}
+                            onClick={() => CLickRemoveFromCart(item)}
                           >
                             -
                           </button>
@@ -140,7 +146,7 @@ const Cart = () => {
                           </span>
                           <button
                             className="text-sm font-medium text-gray-700 focus:outline-none"
-                            onClick={() => CLickAddToCart(item.product)}
+                            onClick={() => CLickAddToCart(item)}
                           >
                             +
                           </button>
@@ -148,12 +154,13 @@ const Cart = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <span className="text-sm font-medium text-gray-700 mr-4">
-                          {(
-                            item?.product?.price * item?.quantity
-                          ).toLocaleString("vi-VN", {
-                            style: "currency",
-                            currency: "VND",
-                          })}
+                          {(item?.price * item?.quantity).toLocaleString(
+                            "vi-VN",
+                            {
+                              style: "currency",
+                              currency: "VND",
+                            }
+                          )}
                         </span>
                         {/* {!isSmallScreen && (
                           <span className="hidden lg:inline-block text-gray-400">
@@ -163,7 +170,7 @@ const Cart = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-md font-medium">
                         <button
-                          onClick={() => CLickDeleteCart(item.product)}
+                          onClick={() => CLickDeleteCart(item)}
                           className="cursor-pointer "
                         >
                           <AiOutlineDelete className="text-red-700" />
@@ -212,7 +219,7 @@ const Cart = () => {
                 {cart.length <= 0
                   ? 0
                   : cart
-                      .reduce((a, b) => a + b?.product?.price * b?.quantity, 0)
+                      .reduce((a, b) => a + b?.price * b?.quantity, 0)
                       .toLocaleString("vi-VN", {
                         style: "currency",
                         currency: "VND",

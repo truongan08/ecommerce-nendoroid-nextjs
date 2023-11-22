@@ -11,14 +11,13 @@ export const addToCart =
   };
 
 export const fetchCart =
-  (cart: cartItem[]) =>
+  (id: any, cart: cartItem[]) =>
   async (dispatch: any, _: any, { cartOutput }: { cartOutput: CartOutput }) => {
-    const { cart_id } = await cartOutput.get_cart_id();
     const fetchcartRo: {
       cart: cartItem[];
       error: CustomError | null;
-    } = await cartOutput.fetchCart(cart_id, cart);
-    dispatch(actions.fecthCart(fetchcartRo));
+    } = await cartOutput.fetchCart(id, cart);
+    dispatch(actions.fetchCart(fetchcartRo));
   };
 
 export const removeFromCart = (product: Product) => async (dispatch: any) => {
