@@ -102,7 +102,7 @@ const SideBar: React.FC<SideBarProps> = ({
                   Cart
                 </span>
                 <span className="px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-green-500 bg-green-50 rounded-full">
-                  {cart.length}
+                  {cart?.length}
                 </span>
               </Link>
             </li>

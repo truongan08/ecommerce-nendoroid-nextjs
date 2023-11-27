@@ -11,13 +11,23 @@ export const addToCart =
   };
 
 export const fetchCart =
-  (id: any, cart: cartItem[]) =>
+  (cart: cartItem[]) =>
   async (dispatch: any, _: any, { cartOutput }: { cartOutput: CartOutput }) => {
     const fetchcartRo: {
       cart: cartItem[];
       error: CustomError | null;
-    } = await cartOutput.fetchCart(id, cart);
+    } = await cartOutput.fetchCart(cart);
     dispatch(actions.fetchCart(fetchcartRo));
+  };
+
+export const getCart =
+  () =>
+  async (dispatch: any, _: any, { cartOutput }: { cartOutput: CartOutput }) => {
+    const getcartRo: {
+      cart: cartItem[];
+      error: CustomError | null;
+    } = await cartOutput.getCart();
+    dispatch(actions.fetchCart(getcartRo));
   };
 
 export const removeFromCart = (product: Product) => async (dispatch: any) => {

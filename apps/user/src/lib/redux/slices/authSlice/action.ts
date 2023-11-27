@@ -30,7 +30,6 @@ export const signUp =
     dispatch(actions.startCall({ callType: AuthCallTypes.SIGN_UP }));
 
     const signUpRo: {
-      user: User | null;
       session: Session | null;
       error: CustomError | null;
     } = await authOutput.signUp(signUpDto);

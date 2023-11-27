@@ -44,7 +44,6 @@ export interface AuthOutput {
   ): Promise<{ session: Session | null; error: CustomError | null }>;
 
   signUp(signUpDto: SignUpDto): Promise<{
-    user: User | null;
     session: Session | null;
     error: CustomError | null;
   }>;
@@ -54,16 +53,12 @@ export interface AuthOutput {
 
 export interface CartOutput {
   fetchCart(
-    id: any | null,
     cart: cartItem[]
   ): Promise<{ cart: cartItem[]; error: CustomError | null }>;
-  getCart(
-    cart_id: number
-  ): Promise<{ cart: cartItem[]; error: CustomError | null }>;
+  getCart(): Promise<{ cart: cartItem[]; error: CustomError | null }>;
 }
 
 export interface AuthState {
-  user: User | null;
   session: Session | null;
   signInStatus: RequestStatus;
   signInError: CustomError | null;
@@ -251,7 +246,6 @@ export const appOutputs: AppOutputs = {
 };
 
 export const initialStateAuth: AuthState = {
-  user: null,
   session: null,
   signInStatus: RequestStatus.IDLE,
   signInError: null,

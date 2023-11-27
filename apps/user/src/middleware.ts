@@ -16,5 +16,5 @@ export async function middleware(req: NextRequest) {
   //   return NextResponse.rewrite(new URL("/", req.url));
   // }
 
-  await supabase.auth.getSession();
+  return res;
 }

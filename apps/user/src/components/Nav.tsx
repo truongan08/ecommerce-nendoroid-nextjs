@@ -59,26 +59,12 @@ const Nav = () => {
   return (
     <>
       <nav className="w-full shadow top-0 left-0 right-0 fixed z-50">
-        <div className="md:flex items-center justify-between bg-white py-4 md:px-10 px-7">
-          <div className="text-2xl flex items-center cursor-pointer font-bold text-blue-800">
-            <Link href={"/"} className="w-full">
-              <Image
-                src="/images/wigure.jpg"
-                alt=""
-                width={65}
-                height={65}
-                style={{ objectFit: "contain", maxWidth: "65px" }}
-              />
-            </Link>
-          </div>
-
-          <SearchBar />
-
+        <div className="md:flex items-center justify-between bg-white py-4 max-sm:px-0 px-7">
           <div
             onClick={() => {
               setOpen(!open);
             }}
-            className="absolute right-8 top-7 md:hidden cursor-pointer"
+            className="absolute left-8 top-7 md:hidden cursor-pointer"
           >
             {open ? (
               <AiOutlineClose className="text-3xl" />
@@ -86,6 +72,20 @@ const Nav = () => {
               <AiOutlineMenu className="text-3xl" />
             )}
           </div>
+          <div className="text-2xl flex  max-sm:items-center justify-center cursor-pointer font-bold text-blue-800 ">
+            <Link href={"/"}>
+              <Image
+                src="/images/wigure.jpg"
+                alt=""
+                width={60}
+                height={60}
+                style={{ objectFit: "contain", maxWidth: "60px" }}
+              />
+            </Link>
+          </div>
+
+          <SearchBar />
+
           <ul
             className={`md:flex md:items-center md:pb-0 absolute md:static bg-white md:z-auto left-0 w-full z-[-1] md:w-auto md:pl-0 pl-9 transition-all duration-300 ${
               open
@@ -103,34 +103,13 @@ const Nav = () => {
                 </Link>
               </li>
             ))}
-            {/* {open &&  */}
-            <li
-              className={`md:ml-8 text-sm md:my-0 my-7 ml-2 ${
-                open ? "" : "hidden"
-              }`}
-            >
-              {isLoggedInUser ? (
-                <Image
-                  onClick={() => setOpenSidebar(!openSidebar)}
-                  src="/images/avatar.png"
-                  width={40}
-                  height={40}
-                  alt="avatar"
-                  className="rounded-full relative md:hidden cursor-pointer"
-                  style={{ objectFit: "contain", maxWidth: "40px" }}
-                />
-              ) : (
-                <div>
-                  <Button
-                    text={"Sign In"}
-                    onClickProps={() => onCLickModalLogin()}
-                  ></Button>
-                </div>
-              )}
-            </li>
           </ul>
 
           <div>
+            <SideBar
+              openSidebar={openSidebar}
+              onCLickOpenSidebar={() => onCLickOpenSidebar()}
+            />
             {isLoggedInUser ? (
               <>
                 <Image
@@ -139,19 +118,13 @@ const Nav = () => {
                   width={40}
                   height={40}
                   alt="avatar"
-                  className="rounded-full relative max-md:hidden cursor-pointer"
+                  className="rounded-full max-md:right-8 max-md:absolute max-md:top-7 cursor-pointer"
                   style={{ objectFit: "contain", maxWidth: "40px" }}
-                />
-
-                <SideBar
-                  openSidebar={openSidebar}
-                  onCLickOpenSidebar={() => onCLickOpenSidebar()}
                 />
               </>
             ) : (
-              <>
+              <div className="max-md:right-8 max-md:absolute max-md:top-0 cursor-pointer">
                 <Button
-                  className={"max-md:hidden"}
                   text={"Sign In"}
                   onClickProps={() => onCLickModalLogin()}
                 ></Button>
@@ -171,7 +144,7 @@ const Nav = () => {
                     onCLickSwitchModal(e);
                   }}
                 />
-              </>
+              </div>
             )}
           </div>
         </div>

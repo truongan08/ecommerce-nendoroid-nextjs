@@ -2,7 +2,6 @@ import {
   CartState,
   Product,
   cartItem,
-  cart,
   CustomError,
   RequestCartStatus,
 } from "@/types/user";
@@ -33,6 +32,7 @@ export const cartReducers = {
         quantity,
       });
     }
+    localStorage.setItem("cart", JSON.stringify(state.cartItems));
   },
 
   removeFromCart: (
@@ -49,6 +49,7 @@ export const cartReducers = {
     } else {
       state.cartItems = state.cartItems.filter((item) => item !== cartItem);
     }
+    localStorage.setItem("cart", JSON.stringify(state.cartItems));
   },
 
   fetchCart: (
@@ -74,12 +75,13 @@ export const cartReducers = {
     if (cartItem) {
       state.cartItems = state.cartItems.filter((item) => item !== cartItem);
     }
+    localStorage.setItem("cart", JSON.stringify(state.cartItems));
   },
 
   setCartWithData: (
     state: CartState,
     { payload }: PayloadAction<{ cart: any }>
   ) => {
-    state.cartItems.push(payload.cart);
+    state.cartItems = payload.cart;
   },
 };

@@ -31,16 +31,32 @@ export async function POST(req: NextRequest) {
   }));
 
   const session = await stripe.checkout.sessions.create({
-    payment_method_types: ["card"],
+    ui_mode: "embedded",
+    // payment_method_types: ["card"],
     mode: "payment",
     line_items: checkoutItems,
-    success_url: `${req.nextUrl.origin}`,
-    cancel_url: `${req.nextUrl.origin}`,
+    // success_url: `${req.nextUrl.origin}`,
+    // cancel_url: `${req.nextUrl.origin}`,
+    return_url: `${req.nextUrl.origin}/return?session_id={CHECKOUT_SESSION_ID}`,
   });
 
   return NextResponse.json({
     success: true,
     status: 200,
-    id: session.id,
+    clientSecret: session.client_secret,
+  });
+}
+
+export async function GET(req: NextRequest) {
+  const searchParams: any = req.nextUrl.searchParams;
+
+  const session: any = await stripe.checkout.sessions.retrieve(
+    searchParams.session_id
+  );
+
+  return NextResponse.json({
+    success: true,
+    status: 200,
+    customer_email: session.customer_email,
   });
 }

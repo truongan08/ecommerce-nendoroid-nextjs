@@ -4,9 +4,9 @@ import { NextResponse } from "next/server";
 
 import type { NextRequest } from "next/server";
 
-export async function POST(request: NextRequest) {
+export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
-  const code = requestUrl.searchParams.get("redirect_to");
+  const code = requestUrl.searchParams.get("code");
 
   if (code) {
     const cookieStore = cookies();

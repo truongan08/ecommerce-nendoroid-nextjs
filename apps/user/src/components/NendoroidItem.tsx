@@ -10,6 +10,7 @@ import { Product } from "@/types/user";
 import { addToCart, useAppDispatch } from "@/lib/redux";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { ToastContainer, toast } from "react-toastify";
 interface NendoroidItemProps {
   data: Product[] | null;
 }
@@ -19,6 +20,7 @@ const NendoroidItem: React.FC<NendoroidItemProps> = ({ data }) => {
 
   const CLickAddToCart = async (data: any) => {
     await dispatch(addToCart(data));
+    toast("Add to cart complete");
   };
 
   useEffect(() => router.refresh(), [router, dispatch]);
@@ -66,6 +68,7 @@ const NendoroidItem: React.FC<NendoroidItemProps> = ({ data }) => {
               <AiOutlineShoppingCart className="mr-2 w-6 h-6" />
               Add to cart
             </button>
+            <ToastContainer />
           </div>
         </div>
       ))}

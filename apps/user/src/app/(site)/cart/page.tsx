@@ -9,16 +9,14 @@ import {
   removeFromCart,
   addToCart,
   deleteCartItem,
-  fetchCart,
-  selectLoggedInUser,
 } from "@/lib/redux";
 import { User, cartItem } from "@/types/user";
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 
 import { AiOutlineDelete } from "react-icons/ai";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Cart = () => {
@@ -27,7 +25,6 @@ const Cart = () => {
   const cart: cartItem[] = useAppSelector(selectCartInState);
 
   const isLoggedInSession: boolean = useAppSelector(selectIsLoggedInSession);
-  const getLoggedInUser: User = useAppSelector(selectLoggedInUser)!;
 
   const CLickAddToCart = async (data: any) => {
     await dispatch(addToCart(data));
@@ -39,15 +36,12 @@ const Cart = () => {
 
   const CLickDeleteCart = async (data: any) => {
     await dispatch(deleteCartItem(data));
+    toast("Delete product complete");
   };
 
-  const CLickFetchCart = async (id: any, data: any) => {
-    await dispatch(fetchCart(id, data));
-  };
-
-  const totalCartItems = useMemo(() => {
-    return cart.length;
-  }, [cart]);
+  // const totalCartItems = useMemo(() => {
+  //   return cart.length;
+  // }, [cart]);
 
   return (
     <div className="max-md:mt-[130px] grid grid-cols-1 lg:grid-cols-3 mt-16">
@@ -55,12 +49,10 @@ const Cart = () => {
         <div className="text-lg font-bold mt-6 mb-4 lg:mt-11 lg:mb-10 lg:ml-2">
           <h2>Your cart</h2>
         </div>
+        <ToastContainer />
 
         <div className="bg-white rounded-lg p-4 shadow-2xl border-2">
           <table className="min-w-full divide-y divide-gray-200">
-            <button onClick={() => CLickFetchCart(getLoggedInUser.id, cart)}>
-              Fetchcart
-            </button>
             <thead>
               <tr className="border-b ">
                 <th className="hidden lg:table-cell px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">

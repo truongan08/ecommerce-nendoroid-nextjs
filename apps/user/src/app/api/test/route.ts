@@ -1,7 +1,12 @@
-import supabase from "@/utils/SupabaseAdmin";
+import supabase from "@/utils/SupabaseUser";
+import { loadStripe } from "@stripe/stripe-js";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
+  const cookieStore = cookies();
+  const supabasee = createServerComponentClient({ cookies: () => cookieStore });
   // const cart = await request.json();
   // const cartDto = cart.cart.map(({ product_id, quantity }) => ({
   //   cart_id: 1,
@@ -31,19 +36,21 @@ export async function POST(request: NextRequest) {
   //     quantity: innerItem.quantity[0].quantity,
   //   })),
   // }));
-  // const { data: cartData, error } = await supabase
-  //   .from("cart")
-  //   .select(`cart_id`);
-  const { data, error } = await supabase.auth.admin.createUser({
-    email: "an2021875@email.com",
-    password: "password",
-    user_metadata: { fullname: "Yoda" },
-  });
+  // const { data, error } = await supabase.auth.signUp({
+  //   email: "truonganfi@gmail.com",
+  //   password: "test111",
+  // });
+  //   const { data: cart_id, error: cartIdError } = await supabase
+  //     .from("cart")
+  //     .select("cart_id")
+  //     .single();
+  const stripes = loadStripe(
+    "pk_test_51O5lSZC45JnkZGbw1s5zx43mcU4baS05RYzlUNOllC4lvp0bm0hrmukwvyKslhpOiumOvCptADKfY2TQ1i3D8uND0068z33Vwp"
+  );
 
   return NextResponse.json({
     success: true,
     status: 200,
-    data: data,
-    error: error,
+    data: stripes,
   });
 }

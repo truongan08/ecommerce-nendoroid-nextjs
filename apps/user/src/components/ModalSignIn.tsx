@@ -49,10 +49,6 @@ const SignIn: React.FC<SignInProps> = ({
     await dispatch(signIn({ email, password }));
 
     event.target.reset();
-
-    if (signInStatus === RequestStatus.FAILED) {
-      toast(signInError?.message);
-    }
   };
 
   const handleReset = () => {
@@ -78,7 +74,7 @@ const SignIn: React.FC<SignInProps> = ({
             Login
           </h2>
         </div>
-        <div className="">
+        <div>
           <form
             id="formSignin"
             className="space-y-6"
@@ -86,7 +82,7 @@ const SignIn: React.FC<SignInProps> = ({
             onReset={handleReset}
           >
             <input type="hidden" name="remember" value="true" />
-            <div className="rounded-md py-6 shadow-sm -space-y-px-10">
+            <div className="rounded-md -space-y-px-10">
               <div className="form-outline mb-4">
                 <label
                   htmlFor="email-signin"
@@ -140,7 +136,7 @@ const SignIn: React.FC<SignInProps> = ({
               </div>
             </div>
 
-            <div className="flex items-center justify-between ">
+            <div className="flex items-center justify-end">
               <div className="text-sm">
                 <Link
                   href={"#"}
@@ -162,7 +158,7 @@ const SignIn: React.FC<SignInProps> = ({
               </div> */}
             </div>
 
-            <div className="py-6 w-full flex justify-center space-x-36">
+            <div className="w-full flex justify-center space-x-40">
               <button
                 type="reset"
                 onClick={() => clickModalLogin()}
@@ -183,8 +179,14 @@ const SignIn: React.FC<SignInProps> = ({
                 {signInStatus === RequestStatus.LOADING ? <Loading /> : "Login"}
               </button>
             </div>
+            <div className="text-red-500 text-center pb-10">
+              {signInStatus === RequestStatus.FAILED ? (
+                <p>{signInError?.message}</p>
+              ) : (
+                <p></p>
+              )}
+            </div>
           </form>
-          <ToastContainer newestOnTop={true} />
         </div>
       </div>
     </div>

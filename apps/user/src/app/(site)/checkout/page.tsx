@@ -17,10 +17,16 @@ import Link from "next/link";
 import { FaArrowRight } from "react-icons/fa";
 import { User, cartItem } from "@/types/user";
 import PriceTag from "@/components/PriceTag";
+import {
+  EmbeddedCheckoutProvider,
+  EmbeddedCheckout,
+} from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 
 const Checkout = () => {
   const [loading, setloading] = useState(false);
   const [selectedOption, setSelectedOption] = useState("existing-information");
+  const [clientSecret, setClientSecret] = useState("");
 
   const dispacth = useAppDispatch();
   const router = useRouter();
@@ -29,29 +35,21 @@ const Checkout = () => {
 
   const isLoggedInSession: boolean = useAppSelector(selectIsLoggedInSession);
   const getUserInSession: User = useAppSelector(selectLoggedInUser)!;
+  const stripePromise = getStripe();
 
   const handleSubmit = async (cart: cartItem[], user: User) => {
-    try {
-      const stripe = await getStripe();
-      const checkoutSession = await fetch("/api/checkout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ cart, user }),
-      });
-      const data = await checkoutSession.json();
-
-      const result = await stripe!.redirectToCheckout({
-        sessionId: data.id,
-      });
-
-      if (result.error) {
-        alert(result.error.message);
-      }
-    } catch (error) {
-      alert(error);
+    if (clientSecret !== "") {
+      return;
     }
+    const checkoutSession = await fetch("/api/checkout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ cart, user }),
+    });
+    const data = await checkoutSession.json();
+    setClientSecret(data.clientSecret);
   };
 
   useEffect(() => {
@@ -59,6 +57,10 @@ const Checkout = () => {
       router.push("/");
     }
   }, [isLoggedInSession, router]);
+
+  useEffect(() => {
+    router.refresh();
+  }, [clientSecret, router]);
 
   return (
     <div className="mt-24 mb-16">
@@ -144,6 +146,7 @@ const Checkout = () => {
                 type="radio"
                 name="radio"
                 checked
+                value={"cod"}
               />
               <span className="peer-checked:border-gray-700 absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white"></span>
               <label
@@ -171,7 +174,8 @@ const Checkout = () => {
                 id="radio_2"
                 type="radio"
                 name="radio"
-                checked
+                value={"stripe"}
+                onChange={() => handleSubmit(cart, getUserInSession)}
               />
               <span className="peer-checked:border-gray-700 absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white"></span>
               <label
@@ -196,119 +200,102 @@ const Checkout = () => {
           </form>
         </div>
 
-        <div className="mt-10 bg-gray-50 px-4 pt-8 lg:mt-0">
-          <p className="text-xl font-medium">Payment Details</p>
-          <p className="text-gray-400">
-            Complete your order by providing your payment details.
-          </p>
-          <div className="">
-            <label
-              htmlFor="email"
-              className="mt-4 mb-2 block text-sm font-medium"
+        <div className="mt-10 bg-gray-50 px-4 pt-8 lg:mt-0" id="checkout">
+          {clientSecret && (
+            <EmbeddedCheckoutProvider
+              stripe={stripePromise}
+              options={{ clientSecret }}
             >
-              Email
-            </label>
-            <div className="relative">
-              <input
-                type="text"
-                id="email"
-                name="email"
-                className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-                placeholder="your.email@gmail.com"
-              />
-            </div>
-            <label
-              htmlFor="card-holder"
-              className="mt-4 mb-2 block text-sm font-medium"
-            >
-              Card Holder
-            </label>
-            <div className="relative">
-              <input
-                type="text"
-                id="card-holder"
-                name="card-holder"
-                className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm uppercase shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-                placeholder="Your full name here"
-              />
-            </div>
-            <label
-              htmlFor="card-no"
-              className="mt-4 mb-2 block text-sm font-medium"
-            >
-              Card Details
-            </label>
-            <div className="flex">
-              <div className="relative w-7/12 flex-shrink-0">
-                <input
-                  type="text"
-                  id="card-no"
-                  name="card-no"
-                  className="w-full rounded-md border border-gray-200 px-2 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-                  placeholder="xxxx-xxxx-xxxx-xxxx"
-                />
-              </div>
-              <input
-                type="text"
-                name="credit-expiry"
-                className="w-full rounded-md border border-gray-200 px-2 py-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-                placeholder="MM/YY"
-              />
-              <input
-                type="text"
-                name="credit-cvc"
-                className="w-1/6 flex-shrink-0 rounded-md border border-gray-200 px-2 py-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-                placeholder="CVC"
-              />
-            </div>
-            <label
-              htmlFor="billing-address"
-              className="mt-4 mb-2 block text-sm font-medium"
-            >
-              Billing Address
-            </label>
-            <div className="flex flex-col sm:flex-row">
-              <div className="relative flex-shrink-0 sm:w-7/12">
-                <input
-                  type="text"
-                  id="billing-address"
-                  name="billing-address"
-                  className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-                  placeholder="Street Address"
-                />
-              </div>
-              <select
-                name="billing-state"
-                className="w-full rounded-md border border-gray-200 px-4 py-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-              >
-                <option value="State">State</option>
-              </select>
-              <input
-                type="text"
-                name="billing-zip"
-                className="flex-shrink-0 rounded-md border border-gray-200 px-4 py-3 text-sm shadow-sm outline-none sm:w-1/6 focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-                placeholder="ZIP"
-              />
-            </div>
-
-            <div className="mt-6 flex items-center justify-between">
-              <p className="text-sm font-medium text-gray-900">Total</p>
-              <p className="text-2xl font-semibold text-gray-900">
-                {cart
-                  .reduce((a, b) => a + b?.price * b?.quantity, 0)
-                  .toLocaleString("vi-VN", {
-                    style: "currency",
-                    currency: "VND",
-                  })}
+              <EmbeddedCheckout />
+            </EmbeddedCheckoutProvider>
+          )}
+          {true && (
+            <div>
+              <p className="text-xl font-medium">Payment Details</p>
+              <p className="text-gray-400">
+                Complete your order by providing your payment details.
               </p>
+              <div className="">
+                <label
+                  htmlFor="fullname"
+                  className="mt-4 mb-2 block text-sm font-medium"
+                >
+                  Full name
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    id="fullname"
+                    name="fullname"
+                    className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                    placeholder="Your name"
+                  />
+                </div>
+                <label
+                  htmlFor="number"
+                  className="mt-4 mb-2 block text-sm font-medium"
+                >
+                  Number
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    id="number"
+                    name="number"
+                    className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                    placeholder="0123456789"
+                  />
+                </div>
+                <label
+                  htmlFor="billing-address"
+                  className="mt-4 mb-2 block text-sm font-medium"
+                >
+                  Billing Address
+                </label>
+                <div className="flex flex-col sm:flex-row">
+                  <div className="relative flex-shrink-0 sm:w-7/12">
+                    <input
+                      type="text"
+                      id="billing-address"
+                      name="billing-address"
+                      className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                      placeholder="Street Address"
+                    />
+                  </div>
+                  <select
+                    name="billing-state"
+                    className="w-full rounded-md border border-gray-200 px-4 py-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                  >
+                    <option value="State">State</option>
+                  </select>
+                  <input
+                    type="text"
+                    name="billing-zip"
+                    className="flex-shrink-0 rounded-md border border-gray-200 px-4 py-3 text-sm shadow-sm outline-none sm:w-1/6 focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                    placeholder="ZIP"
+                  />
+                </div>
+
+                <div className="mt-6 flex items-center justify-between">
+                  <p className="text-sm font-medium text-gray-900">Total</p>
+                  <p className="text-2xl font-semibold text-gray-900">
+                    {cart
+                      .reduce((a, b) => a + b?.price * b?.quantity, 0)
+                      .toLocaleString("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                      })}
+                  </p>
+                </div>
+              </div>
+              <button
+                className="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white"
+                onClick={() => handleSubmit(cart, getUserInSession)}
+              >
+                Place Order
+              </button>
             </div>
-          </div>
-          <button
-            className="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white"
-            onClick={() => handleSubmit(cart, getUserInSession)}
-          >
-            Place Order
-          </button>
+          )}
         </div>
       </div>
     </div>

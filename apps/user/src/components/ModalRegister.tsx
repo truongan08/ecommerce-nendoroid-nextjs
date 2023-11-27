@@ -46,9 +46,6 @@ const Register: React.FC<RegisterProps> = ({
 
     event.target.reset();
 
-    if (signUpStatus === RequestStatus.FAILED) {
-      toast(signUpError?.message);
-    }
     if (signUpStatus === RequestStatus.COMPLETED) {
       router.push("/comfirm");
     }
@@ -189,7 +186,13 @@ const Register: React.FC<RegisterProps> = ({
               </button>
             </div>
           </form>
-          <ToastContainer hideProgressBar closeOnClick />
+          <div className="text-red-500 text-center">
+            {signUpStatus === RequestStatus.FAILED ? (
+              <p>{signUpError?.message}</p>
+            ) : (
+              <p></p>
+            )}
+          </div>
         </div>
       </div>
     </div>
