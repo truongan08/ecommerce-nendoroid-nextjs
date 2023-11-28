@@ -14,7 +14,8 @@
     "prettier-plugin-tailwindcss": "^0.5.3",
     "tsconfig": "*",
     "turbo": "latest",
-    "webpack": "^5.89.0"
+    "webpack": "^5.89.0",
+    "@nextui-org/react": "^2.2.9"
   },
   "packageManager": "npm@9.6.7",
   "workspaces": [
@@ -22,7 +23,6 @@
     "packages/*"
   ],
   "dependencies": {
-    "@nextui-org/react": "^2.2.9",
     "sass": "^1.69.5"
   }
 }
