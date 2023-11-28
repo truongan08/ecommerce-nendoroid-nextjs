@@ -1,14 +1,16 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import AdminNavbar from "@/components/Navbars/AdminNavbar";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import FooterAdmin from "@/components/Footers/FooterAdmin";
 import supabase from "@/utils/SupabaseAdmin";
+import { useRouter } from "next/navigation";
 
 export default function Admin({ children }: { children: React.ReactNode }) {
   const [claimAdmin, setClaimAdmin] = useState(false);
+  const router = useRouter();
 
   supabase.auth.onAuthStateChange((event, session) => {
     if (event == "SIGNED_IN") {
