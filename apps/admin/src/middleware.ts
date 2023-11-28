@@ -1,9 +1,8 @@
-import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
 import { NextResponse, NextRequest } from "next/server";
+import supabase from "./utils/SupabaseAdmin";
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
-  const supabase = createMiddlewareClient({ req, res });
 
   const {
     data: { user },
@@ -14,7 +13,6 @@ export async function middleware(req: NextRequest) {
       if (session) {
         if (session?.user.app_metadata.claims_admin == false) {
           supabase.auth.signOut();
-          alert("not admin, pls login again");
         }
       }
     }
@@ -26,11 +24,6 @@ export async function middleware(req: NextRequest) {
     req.nextUrl.pathname === "/"
   ) {
     return NextResponse.redirect(new URL("/dashboard", req.url));
-  }
-
-  // if user is not signed in and the current path is not / redirect the user to /
-  if (!user && req.nextUrl.pathname !== "/") {
-    return NextResponse.redirect(new URL("/", req.url));
   }
 
   return res;
