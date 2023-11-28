@@ -4,8 +4,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   let data = await request.json();
-  let email = data.email;
-  let id = data.id;
+  let email = data.record.email;
+  let id = data.record.id;
 
   const customer = await stripe.customers.create({
     email: email,

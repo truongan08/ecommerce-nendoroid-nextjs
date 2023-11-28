@@ -21,7 +21,8 @@ const AuthSupabase = () => {
       const { data } = await supabase.auth.getSession();
       if (data.session?.user.app_metadata.claims_admin == true) {
         router.push("/dashboard");
-      } else if (data.session?.user.app_metadata.claims_admin == false) {
+      }
+      if (data.session?.user.app_metadata.claims_admin == false) {
         supabase.auth.signOut();
       }
     };
