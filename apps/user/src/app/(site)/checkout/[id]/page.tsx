@@ -11,19 +11,20 @@ import {
   selectIsLoggedInSession,
   useAppDispatch,
   useAppSelector,
+  selectProductDetailInState,
 } from "@/lib/redux";
 import Image from "next/image";
 import Link from "next/link";
 import { FaArrowRight } from "react-icons/fa";
-import { User, cartItem } from "@/types/user";
+import { User, cartItem, type Product, ProductDetail } from "@/types/user";
 import PriceTag from "@/components/PriceTag";
 import {
   EmbeddedCheckoutProvider,
   EmbeddedCheckout,
 } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
+import supabase from "@/utils/SupabaseUser";
 
-const Checkout = () => {
+const Checkout = ({ params }: { params: { id: string } }) => {
   const [loading, setloading] = useState(false);
   const [selectedOption, setSelectedOption] = useState("cod");
   const [clientSecret, setClientSecret] = useState("");
@@ -31,17 +32,31 @@ const Checkout = () => {
   const dispacth = useAppDispatch();
   const router = useRouter();
 
-  const cart: cartItem[] = useAppSelector(selectCartInState);
-
   const isLoggedInSession: boolean = useAppSelector(selectIsLoggedInSession);
   const getUserInSession: User = useAppSelector(selectLoggedInUser)!;
+  const getProductDetail: ProductDetail = useAppSelector(
+    selectProductDetailInState
+  )!;
+
+  useEffect(() => {
+    if (!isLoggedInSession || !getProductDetail) {
+      router.push("/");
+    }
+  }, [isLoggedInSession, router]);
+
+  const cart = {
+    ...getProductDetail,
+    quantity: 1,
+  };
   const stripePromise = getStripe();
 
-  const handleSubmit = async (cart: cartItem[], user: User) => {
+  const handleSubmit = async (product: any, user: User) => {
     setSelectedOption("stripe");
     if (clientSecret !== "") {
       return;
     }
+    const cart = [product];
+    console.log(cart);
     const checkoutSession = await fetch("/api/checkout", {
       method: "POST",
       headers: {
@@ -52,16 +67,6 @@ const Checkout = () => {
     const data = await checkoutSession.json();
     setClientSecret(data.clientSecret);
   };
-
-  useEffect(() => {
-    if (!isLoggedInSession) {
-      router.push("/");
-    }
-  }, [isLoggedInSession, router]);
-
-  useEffect(() => {
-    router.refresh();
-  }, [clientSecret, router]);
 
   return (
     <div className="mt-24 mb-16">
@@ -104,38 +109,23 @@ const Checkout = () => {
             Check your items. And select a suitable shipping method.
           </p>
           <div className="mt-8 space-y-3 rounded-lg border bg-white px-2 py-4 sm:px-6">
-            {cart.slice(0, 2).map((item, index) => {
-              return (
-                <div key={index} className="flex flex-row rounded-lg bg-white">
-                  <Image
-                    className="m-2 h-24 w-28 rounded-md border object-cover object-center"
-                    src={item?.image_url?.slice(0).toString()}
-                    alt={item?.name}
-                    height={96}
-                    width={112}
-                  />
-                  <div className="flex w-full flex-col px-4 py-4">
-                    <span className="font-semibold">{item?.name}</span>
-                    <span className="float-right text-gray-400">
-                      x{item?.quantity}
-                    </span>
-                    <PriceTag
-                      price={item?.price}
-                      className="text-lg font-bold"
-                    />
-                  </div>
-                </div>
-              );
-            })}
-            {cart.length > 2 && (
-              <div className="flex flex-col rounded-lg bg-white sm:flex-row border">
-                <div className="flex w-full flex-col px-4 py-4 text-center">
-                  <Link href="/cart" className="text-lg font-bold">
-                    More
-                  </Link>
-                </div>
+            <div className="flex flex-row rounded-lg bg-white">
+              <Image
+                className="m-2 h-24 w-28 rounded-md border object-cover object-center"
+                src={getProductDetail?.image_url?.slice(0).toString()}
+                alt={getProductDetail?.name}
+                height={96}
+                width={112}
+              />
+              <div className="flex w-full flex-col px-4 py-4">
+                <span className="font-semibold">{getProductDetail?.name}</span>
+                <span className="float-right text-gray-400">x1</span>
+                <PriceTag
+                  price={getProductDetail?.price}
+                  className="text-lg font-bold"
+                />
               </div>
-            )}
+            </div>
           </div>
 
           <p className="mt-8 text-lg font-medium">Payment Methods</p>
@@ -281,12 +271,10 @@ const Checkout = () => {
                 <div className="mt-6 flex items-center justify-between">
                   <p className="text-sm font-medium text-gray-900">Total</p>
                   <p className="text-2xl font-semibold text-gray-900">
-                    {cart
-                      .reduce((a, b) => a + b?.price * b?.quantity, 0)
-                      .toLocaleString("vi-VN", {
-                        style: "currency",
-                        currency: "VND",
-                      })}
+                    {(getProductDetail.price * 1).toLocaleString("vi-VN", {
+                      style: "currency",
+                      currency: "VND",
+                    })}
                   </p>
                 </div>
               </div>

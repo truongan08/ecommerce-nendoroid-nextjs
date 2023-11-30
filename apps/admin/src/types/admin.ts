@@ -1,7 +1,4 @@
-export type DtaTable = {
-  tableName: string;
-  data: Product[];
-};
+export type ProductTable = { data: Product[] };
 
 export type Product = {
   product_id: string;

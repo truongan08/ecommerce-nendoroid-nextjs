@@ -14,6 +14,7 @@ import { CustomError, Product, ProductRequestStatus } from "@/types/user";
 import Loading from "@/components/Loading/Loading";
 import NendoroidItem from "@/components/NendoroidItem";
 import { ProductListSkeleton } from "@/components/Skeleton/Skeleton";
+import { BiLoader } from "react-icons/bi";
 
 const PageContent = () => {
   const dispatch = useAppDispatch();
@@ -58,14 +59,17 @@ const PageContent = () => {
             Trending Nendoroid
           </div>
           {getProductByStatusStatus === ProductRequestStatus.LOADING ? (
-            <Loading />
+            <div className="flex items-center justify-center">
+              <div className="max-w-md mx-auto text-center">
+                <BiLoader size={40} className="text-blue-400 animate-spin" />
+              </div>
+            </div>
           ) : (
             <div>
               <NendoroidItem data={nendoroids} />
             </div>
           )}
         </div>
-        <div className="md:w-1/5 sm:w-1/3 lg:w-1/4 xl:w-1/5 flex mx-7">tst</div>
       </div>
     </Suspense>
   );

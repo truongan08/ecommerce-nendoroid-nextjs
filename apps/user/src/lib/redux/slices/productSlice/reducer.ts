@@ -50,4 +50,21 @@ export const productReducers = {
       : ProductRequestStatus.IDLE;
     state.getProductSearchError = payload.error;
   },
+  getProductPagination: (
+    state: ProductState,
+    {
+      payload,
+    }: PayloadAction<{
+      product: Product[];
+      count: number | null;
+      error: CustomError | null;
+    }>
+  ) => {
+    state.product = payload.product;
+    state.count = payload.count;
+    state.getProductPaginationStatus = payload.error
+      ? ProductRequestStatus.FAILED
+      : ProductRequestStatus.IDLE;
+    state.getProductPaginationError = payload.error;
+  },
 };

@@ -5,6 +5,9 @@ export const selectProductInState = ({
   product,
 }: RootState): Product[] | null => product.product;
 
+export const selectCountInState = ({ product }: RootState): number | null =>
+  product.count;
+
 export const selectGetProductByStatusStatus = ({
   product,
 }: RootState): ProductRequestStatus => product.getProductByStatusStatus;

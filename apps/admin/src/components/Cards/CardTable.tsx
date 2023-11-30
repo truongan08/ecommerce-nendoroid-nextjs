@@ -1,16 +1,52 @@
-import React from "react";
-import TableDropdown from "@/components/Dropdowns/TableDropdown";
-import { Avatar, AvatarGroup } from "ui/components";
+"use client";
 
-import { DtaTable } from "@/types/admin";
+import React, { useEffect, useState } from "react";
+import { Avatar, AvatarGroup, Button } from "ui/components";
+
+import { ProductTable } from "@/types/admin";
 import { Pagination, PaginationItem, PaginationCursor } from "ui/components";
+import { useRouter } from "next/navigation";
+import AddProduct from "@/components/Modals/Product/AddProduct";
+import EditProduct from "../Modals/Product/EditProduct";
+import supabase from "@/utils/SupabaseAdmin";
+import { MdDelete } from "react-icons/md";
 
 interface CardTableProps {
   color?: string;
-  data?: DtaTable | undefined;
+  tableName: string;
+  data?: ProductTable | undefined;
+  count: number;
+  page: number;
 }
 
-const CardTable: React.FC<CardTableProps> = ({ color, data }) => {
+const CardTable: React.FC<CardTableProps> = ({
+  color,
+  data,
+  tableName,
+  count,
+  page,
+}) => {
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+  const handleDelete = async (id: any) => {
+    const result = confirm("Are you sure, you cant back up after delelte");
+    if (result == true) {
+      const { error } = await supabase
+        .from("product")
+        .delete()
+        .eq("product_id", id);
+      if (!error) {
+        router.refresh();
+      }
+    } else {
+      return;
+    }
+  };
+  useEffect(() => {
+    if (data) {
+      setLoading(false);
+    }
+  }, []);
   const keysOfFirstObject = data ? Object.keys(data?.data[0]) : [];
   return (
     <>
@@ -29,9 +65,10 @@ const CardTable: React.FC<CardTableProps> = ({ color, data }) => {
                   (color === "light" ? "text-blueGray-700" : "text-white")
                 }
               >
-                {data?.tableName}
+                {tableName}
               </h3>
             </div>
+            <AddProduct />
           </div>
         </div>
         <div className="block w-full overflow-x-auto">
@@ -77,7 +114,7 @@ const CardTable: React.FC<CardTableProps> = ({ color, data }) => {
                   </td>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                     <AvatarGroup max={2} className="float-left" radius="sm">
-                      {item.image_url.map((item, index) => (
+                      {item?.image_url.map((item, index) => (
                         <Avatar key={index} src={item} radius="sm" />
                       ))}
                     </AvatarGroup>
@@ -92,8 +129,17 @@ const CardTable: React.FC<CardTableProps> = ({ color, data }) => {
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                     {item.stock}
                   </td>
-                  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
-                    <TableDropdown />
+                  <td className="border-t-0 align-middle border-l-0 border-r-0 text-right">
+                    <EditProduct props={item} />
+                  </td>
+                  <td className="border-t-0 align-middle border-l-0 border-r-0 text-right">
+                    <Button
+                      color="danger"
+                      onPress={() => handleDelete(item.product_id)}
+                      isIconOnly
+                    >
+                      <MdDelete />
+                    </Button>
                   </td>
                 </tr>
               ))}
@@ -101,8 +147,18 @@ const CardTable: React.FC<CardTableProps> = ({ color, data }) => {
           </table>
         </div>
       </div>
-      <div className="float-right">
-        <Pagination isCompact showControls total={10} initialPage={1} />
+      <div className="float-right ">
+        <Pagination
+          showControls
+          isCompact
+          total={count / 4}
+          isDisabled={loading}
+          disableAnimation={true}
+          onChange={(page: number) => {
+            router.push(`/products/${page}`);
+          }}
+          page={Number(page)} //! Error start in prev button when refresh page so convert it to number
+        />
       </div>
     </>
   );

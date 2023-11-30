@@ -6,7 +6,6 @@ import {
   TypeProduct,
   Keyword,
 } from "@/types/user";
-import getPagination from "./getPagination";
 
 export class ProductSupabase implements ProductOutput {
   async getProductByStatus({ status }: StatusProduct): Promise<{
@@ -31,12 +30,15 @@ export class ProductSupabase implements ProductOutput {
     return Promise.resolve({ product, error });
   }
 
-  async getProductPagination({ query: { page = 1 } }): Promise<{
+  async getProductPagination(page: number): Promise<{
     product: any;
     count: any | null;
     error: CustomError | null;
   }> {
-    const { from, to } = getPagination(page, 10);
+    const limit = 7;
+    const from = page ? page * limit : 0;
+    const to = page ? from + limit : limit;
+
     const {
       data: product,
       count,
@@ -44,9 +46,8 @@ export class ProductSupabase implements ProductOutput {
     } = await supabase
       .from("product")
       .select("*", { count: "exact" })
-      .order("product_id", { ascending: false })
       .range(from, to);
-    return Promise.resolve({ product, count, page: +page, error });
+    return Promise.resolve({ product, count, error });
   }
 
   async getProductSearch({

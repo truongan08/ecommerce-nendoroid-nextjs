@@ -1,8 +1,9 @@
 import { NextResponse, NextRequest } from "next/server";
-import supabase from "./utils/SupabaseAdmin";
+import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
+  const supabase = createMiddlewareClient({ req, res });
 
   const {
     data: { user },
@@ -18,7 +19,10 @@ export async function middleware(req: NextRequest) {
     }
   });
 
-  // if user is signed in and the current path is / redirect the user to /account
+  if (req.nextUrl.pathname.startsWith("/products")) {
+    return NextResponse.rewrite(new URL("/products/0", req.url));
+  }
+
   if (
     user?.app_metadata.claims_admin === true &&
     req.nextUrl.pathname === "/"

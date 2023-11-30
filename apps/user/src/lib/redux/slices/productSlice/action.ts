@@ -57,3 +57,20 @@ export const getProductSearch =
 
     dispatch(actions.getProductSearch(ProductSearchRo));
   };
+export const getProductPagination =
+  (page: number) =>
+  async (
+    dispatch: any,
+    _: any,
+    { productOutput }: { productOutput: ProductOutput }
+  ) => {
+    dispatch(actions.startCall({ callType: ProductCallTypes.GET_PAGINATION }));
+
+    const ProductPaginationRo: {
+      product: Product[];
+      count: number | null;
+      error: CustomError | null;
+    } = await productOutput.getProductPagination(page);
+
+    dispatch(actions.getProductPagination(ProductPaginationRo));
+  };

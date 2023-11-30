@@ -68,10 +68,10 @@ const NendoroidItem: React.FC<NendoroidItemProps> = ({ data }) => {
               <AiOutlineShoppingCart className="mr-2 w-6 h-6" />
               Add to cart
             </button>
-            <ToastContainer />
           </div>
         </div>
       ))}
+      <ToastContainer />
     </div>
   );
 };

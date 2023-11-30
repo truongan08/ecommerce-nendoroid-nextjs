@@ -13,7 +13,6 @@ import {
   AiOutlineUser,
 } from "react-icons/ai";
 
-import NotificationDropdown from "@/components/Dropdowns/NotificationDropdown";
 import UserDropdown from "@/components/Dropdowns/UserDropdown";
 
 const Sidebar = () => {
@@ -33,19 +32,15 @@ const Sidebar = () => {
             <AiOutlineBars />
           </button>
           {/* Brand */}
-          <Link href="/" legacyBehavior>
-            <a
-              href="#pablo"
-              className="md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
-            >
-              Wigure
-            </a>
+          <Link
+            href="/"
+            legacyBehavior
+            className="md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
+          >
+            Wigure
           </Link>
           {/* User */}
           <ul className="md:hidden items-center flex flex-wrap list-none">
-            <li className="inline-block relative">
-              <NotificationDropdown />
-            </li>
             <li className="inline-block relative">
               <UserDropdown />
             </li>
@@ -125,7 +120,7 @@ const Sidebar = () => {
 
               <li className="items-center">
                 <Link
-                  href="/products"
+                  href="/products/0"
                   className={
                     "text-xs uppercase py-3 font-bold block " +
                     (pathname.indexOf("/products") !== -1

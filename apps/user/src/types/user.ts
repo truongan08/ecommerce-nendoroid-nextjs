@@ -17,11 +17,7 @@ export interface ProductOutput {
   getProductByCategory(
     type: TypeProduct
   ): Promise<{ product: Product[]; error: CustomError | null }>;
-  getProductPagination({
-    query: { page },
-  }: {
-    query: { page?: number | undefined };
-  }): Promise<{
+  getProductPagination(page: number | undefined): Promise<{
     product: Product[];
     count: number | null;
     error: CustomError | null;
@@ -69,6 +65,7 @@ export interface AuthState {
 }
 export interface ProductState {
   product: Product[];
+  count: number | null;
   getProductByStatusStatus: ProductRequestStatus;
   getProductByStatusError: CustomError | null;
   getProductByCategoryStatus: ProductRequestStatus;
@@ -257,6 +254,7 @@ export const initialStateAuth: AuthState = {
 
 export const initialStateProduct: ProductState = {
   product: [],
+  count: null,
   getProductByStatusStatus: ProductRequestStatus.IDLE,
   getProductByStatusError: null,
   getProductByCategoryStatus: ProductRequestStatus.IDLE,

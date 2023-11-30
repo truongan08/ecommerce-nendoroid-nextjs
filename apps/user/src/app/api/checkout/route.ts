@@ -32,27 +32,31 @@ export async function POST(req: NextRequest) {
 
   const session = await stripe.checkout.sessions.create({
     ui_mode: "embedded",
-    // payment_method_types: ["card"],
     mode: "payment",
     line_items: checkoutItems,
-    // success_url: `${req.nextUrl.origin}`,
-    // cancel_url: `${req.nextUrl.origin}`,
     return_url: `${req.nextUrl.origin}/return?session_id={CHECKOUT_SESSION_ID}`,
   });
 
   return NextResponse.json({
     success: true,
     status: 200,
-    clientSecret: session.client_secret,
+    clientSecret: session,
   });
 }
 
 export async function GET(req: NextRequest) {
-  const searchParams: any = req.nextUrl.searchParams;
+  const url = new URL(req.url);
+  const session_id = url.searchParams.get("session_id");
 
-  const session: any = await stripe.checkout.sessions.retrieve(
-    searchParams.session_id
-  );
+  if (!session_id) {
+    return NextResponse.json({
+      fail: true,
+      status: 400,
+      message: "Dont have any session id for check",
+    });
+  }
+
+  const session: any = await stripe.checkout.sessions.retrieve(session_id);
 
   return NextResponse.json({
     success: true,

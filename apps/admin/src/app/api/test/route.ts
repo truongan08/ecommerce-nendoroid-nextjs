@@ -34,16 +34,33 @@ export async function POST(request: NextRequest) {
   // const { data: cartData, error } = await supabase
   //   .from("cart")
   //   .select(`cart_id`);
-  const { data, error } = await supabase.auth.admin.createUser({
-    email: "an2021875@email.com",
-    password: "password",
-    user_metadata: { fullname: "Yoda" },
-  });
+  // const { data, error } = await supabase.auth.admin.createUser({
+  //   email: "an2021875@email.com",
+  //   password: "password",
+  //   user_metadata: { fullname: "Yoda" },
+  // });
+  // const { count, error } = await supabase
+  //   .from("product")
+  //   .select("", { count: "exact" });
+  // console.log(count);
+  // if (error) {
+  //   return error;
+  // }
+  // if (!count) {
+  //   return console.log("ads");
+  // }
+
+  // const limit = 3;
+  // const from = 0 ? 0 * limit : 0;
+  // const to = 0 ? from + limit : limit;
+
+  // const { data, error: PaginationError } = await supabase
+  //   .from("product")
+  //   .select(`name`)
+  //   .range(from, to);
 
   return NextResponse.json({
     success: true,
     status: 200,
-    data: data,
-    error: error,
   });
 }

@@ -3,15 +3,19 @@ import { Product } from "@/types/user";
 import NendoroidItem from "@/components/NendoroidItem";
 import Link from "next/link";
 import Image from "next/image";
+import { ProductListSkeleton } from "@/components/Skeleton/Skeleton";
+import { Suspense } from "react";
 
 interface ProductContentProps {
   nendoroids: Product[];
   page: number;
+  count: number;
 }
 
 const ProductContent: React.FC<ProductContentProps> = ({
   nendoroids,
   page,
+  count,
 }) => {
   if (nendoroids.length === 0) {
     return (
@@ -34,9 +38,11 @@ const ProductContent: React.FC<ProductContentProps> = ({
   }
 
   return (
-    <div className="md:w-4/5 sm:w-full lg:w-3/4 xl:w-2/3 mx-auto">
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mt-8 ">
-        <NendoroidItem data={nendoroids} />
+    <Suspense fallback={<ProductListSkeleton />}>
+      <div className="flex">
+        <div>
+          <NendoroidItem data={nendoroids} />
+        </div>
       </div>
       <nav aria-label="Page navigation">
         <ul className="flex z-0">
@@ -53,14 +59,14 @@ const ProductContent: React.FC<ProductContentProps> = ({
           </li>
           <li>
             <Link
-              className="relative block rounded bg-transparent px-2 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-700 hover:text-white hover:"
+              className="relative block rounded bg-transparent px-2 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-700 hover:text-white"
               href={"/product/" + [page - 1]}
             >
               {page == 0 ? "" : Number(page - 1)}
             </Link>
           </li>
           <li aria-current="page">
-            <a
+            <Link
               className="relative block rounded bg-primary-100 px-2 py-1.5 text-sm font-medium text-primary-700 transition-all duration-300 "
               href="#!"
             >
@@ -68,27 +74,27 @@ const ProductContent: React.FC<ProductContentProps> = ({
               <span className="absolute -m-px h-px w-px overflow-hidden whitespace-nowrap border-0 p-0 [clip:rect(0,0,0,0)]">
                 (current)
               </span>
-            </a>
+            </Link>
           </li>
           <li>
-            <a
+            <Link
               className="relative block rounded bg-transparent px-2 py-1.5 text-sm text-neutral-600 transition-all duration-300   hover:bg-neutral-700 hover:text-white"
-              href={"/product/" + [page + 1]}
+              href={"/product/" + [page * 1 + 1]}
             >
-              {page == 5 ? "" : Number(page + 1)}
-            </a>
+              {page == count / 8 ? "" : Number(page * 1 + 1)}
+            </Link>
           </li>
           <li>
             <Link
               className="relative block rounded bg-transparent px-2 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-700 hover:text-white"
-              href={"/product/" + (page + 1)}
+              href={"/product/" + (page * 1 + 1)}
             >
               Next
             </Link>
           </li>
         </ul>
       </nav>
-    </div>
+    </Suspense>
   );
 };
 export default ProductContent;

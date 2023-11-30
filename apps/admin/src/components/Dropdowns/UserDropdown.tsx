@@ -22,19 +22,18 @@ const UserDropdown = () => {
       label: "Profile",
     },
     {
-      key: "setting",
-      label: "Setting",
-    },
-    {
       key: "logout",
       label: "Logout",
     },
   ];
 
-  const handleLogout = async (items: React.Key) => {
+  const handleKey = async (items: React.Key) => {
     if (items === "logout") {
       await supabase.auth.signOut();
-      router.push("/");
+      router.refresh();
+    }
+    if (items === "profile") {
+      router.push("/profile");
     }
   };
 
@@ -50,7 +49,7 @@ const UserDropdown = () => {
       <DropdownMenu
         aria-label="Dynamic Actions"
         items={items}
-        onAction={(key) => handleLogout(key)}
+        onAction={(key) => handleKey(key)}
       >
         {(item) => (
           <DropdownItem

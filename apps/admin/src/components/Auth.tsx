@@ -1,13 +1,14 @@
 "use client";
 
-import supabase from "@/utils/SupabaseAdmin";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 const AuthSupabase = () => {
   const router = useRouter();
+  const supabase = createClientComponentClient();
   supabase.auth.onAuthStateChange((event, session) => {
     if (
       event == "SIGNED_IN" &&
