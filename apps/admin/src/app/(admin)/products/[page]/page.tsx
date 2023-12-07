@@ -2,7 +2,7 @@ import React from "react";
 import CardTable from "./components/CardTable";
 
 const Products = async ({ params }: { params: { page: number } }) => {
-  const response = await fetch("http://localhost:3001/api/get_product", {
+  const response = await fetch("/api/get_product", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

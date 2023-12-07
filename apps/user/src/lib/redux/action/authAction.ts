@@ -39,7 +39,7 @@ export class AuthSupabase implements AuthOutput {
           state: null,
           country: null,
         },
-        emailRedirectTo: "http://localhost:3000/auth/callback",
+        emailRedirectTo: `https://wigure.vercel.app/api/auth/callback`,
       },
     });
     return Promise.resolve({ session, error });
