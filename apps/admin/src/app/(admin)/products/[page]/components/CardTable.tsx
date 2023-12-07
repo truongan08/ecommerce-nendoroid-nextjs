@@ -4,10 +4,10 @@ import React, { useEffect, useState } from "react";
 import { Avatar, AvatarGroup, Button } from "ui/components";
 
 import { ProductTable } from "@/types/admin";
-import { Pagination, PaginationItem, PaginationCursor } from "ui/components";
+import { Pagination } from "ui/components";
 import { useRouter } from "next/navigation";
 import AddProduct from "@/components/Modals/Product/AddProduct";
-import EditProduct from "../Modals/Product/EditProduct";
+import EditProduct from "@/components/Modals/Product/EditProduct";
 import supabase from "@/utils/SupabaseAdmin";
 import { MdDelete } from "react-icons/md";
 
@@ -15,7 +15,7 @@ interface CardTableProps {
   color?: string;
   tableName: string;
   data?: ProductTable | undefined;
-  count: number;
+  count?: number;
   page: number;
 }
 
@@ -29,7 +29,7 @@ const CardTable: React.FC<CardTableProps> = ({
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const handleDelete = async (id: any) => {
-    const result = confirm("Are you sure, you cant back up after delelte");
+    const result = confirm("Are you sure, you cant back up after delete");
     if (result == true) {
       const { error } = await supabase
         .from("product")
@@ -151,7 +151,7 @@ const CardTable: React.FC<CardTableProps> = ({
         <Pagination
           showControls
           isCompact
-          total={count / 4}
+          total={count ? count / 4 : 10}
           isDisabled={loading}
           disableAnimation={true}
           onChange={(page: number) => {

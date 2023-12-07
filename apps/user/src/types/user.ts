@@ -226,6 +226,23 @@ export type cartItem = {
   quantity: number;
 };
 
+export type order = {
+  order_id: string;
+  customer_id: string;
+  created_at: Date;
+  status: string;
+  total_amount: number;
+  method: string;
+  profile: any[];
+};
+
+export type orderDetail = {
+  order_detail_id: string;
+  order_id: string;
+  product: cartItem[];
+  address: any;
+};
+
 export type AppOutputs = {
   authOutput: AuthOutput;
   productOutput: ProductOutput;

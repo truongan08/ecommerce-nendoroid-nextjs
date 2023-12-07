@@ -16,8 +16,7 @@ import Link from "next/link";
 import { useEffect, useMemo } from "react";
 
 import { AiOutlineDelete } from "react-icons/ai";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 
 const Cart = () => {
   const dispatch = useAppDispatch();
@@ -36,7 +35,7 @@ const Cart = () => {
 
   const CLickDeleteCart = async (data: any) => {
     await dispatch(deleteCartItem(data));
-    toast("Delete product complete");
+    toast.success("Delete product complete");
   };
 
   // const totalCartItems = useMemo(() => {
@@ -49,7 +48,6 @@ const Cart = () => {
         <div className="text-lg font-bold mt-6 mb-4 lg:mt-11 lg:mb-10 lg:ml-2">
           <h2>Your cart</h2>
         </div>
-        <ToastContainer />
 
         <div className="bg-white rounded-lg p-4 shadow-2xl border-2">
           <table className="min-w-full divide-y divide-gray-200">
@@ -166,7 +164,6 @@ const Cart = () => {
                           className="cursor-pointer "
                         >
                           <AiOutlineDelete className="text-red-700" />
-                          <ToastContainer />
                         </button>
                       </td>
                     </tr>

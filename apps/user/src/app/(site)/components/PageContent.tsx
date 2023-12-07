@@ -11,9 +11,7 @@ import {
 } from "@/lib/redux";
 import { CustomError, Product, ProductRequestStatus } from "@/types/user";
 
-import Loading from "@/components/Loading/Loading";
 import NendoroidItem from "@/components/NendoroidItem";
-import { ProductListSkeleton } from "@/components/Skeleton/Skeleton";
 import { BiLoader } from "react-icons/bi";
 
 const PageContent = () => {
@@ -52,26 +50,24 @@ const PageContent = () => {
   }
 
   return (
-    <Suspense fallback={<ProductListSkeleton />}>
-      <div className="flex">
-        <div>
-          <div className="text-xl font-bold mx-6 antialiased">
-            Trending Nendoroid
-          </div>
-          {getProductByStatusStatus === ProductRequestStatus.LOADING ? (
-            <div className="flex items-center justify-center">
-              <div className="max-w-md mx-auto text-center">
-                <BiLoader size={40} className="text-blue-400 animate-spin" />
-              </div>
-            </div>
-          ) : (
-            <div>
-              <NendoroidItem data={nendoroids} />
-            </div>
-          )}
+    <div className="flex">
+      <div>
+        <div className="text-xl font-bold mx-6 antialiased">
+          Trending Nendoroid
         </div>
+        {getProductByStatusStatus === ProductRequestStatus.LOADING ? (
+          <div className="flex items-center justify-center">
+            <div className="max-w-md mx-auto text-center">
+              <BiLoader size={40} className="text-blue-400 animate-spin" />
+            </div>
+          </div>
+        ) : (
+          <div>
+            <NendoroidItem data={nendoroids} />
+          </div>
+        )}
       </div>
-    </Suspense>
+    </div>
   );
 };
 export default PageContent;

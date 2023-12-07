@@ -77,6 +77,10 @@ export const cartReducers = {
     }
     localStorage.setItem("cart", JSON.stringify(state.cartItems));
   },
+  clearCart: (state: CartState) => {
+    state.cartItems = [];
+    localStorage.setItem("cart", "");
+  },
 
   setCartWithData: (
     state: CartState,

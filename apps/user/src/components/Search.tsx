@@ -9,9 +9,7 @@ const SearchBar = () => {
   const router = useRouter();
   const [loop] = useDebounce(searchText, 500);
   useEffect(() => {
-    if (!loop) {
-      router.push("/");
-    } else {
+    if (loop) {
       router.push(`/search?keyword=${loop}`);
     }
   }, [router, loop]);

@@ -14,14 +14,11 @@ export default async function Admin({
   const {
     data: { session },
   } = await supabase.auth.getSession();
-
-  if (session?.user.app_metadata.claim_admin === false || !session) {
-    return <div>{children}</div>;
-  }
-
   return (
     <>
-      {session?.user.app_metadata.claim_admin === true && (
+      {session?.user.app_metadata.claim_admin === false || session === null ? (
+        <>{children}</>
+      ) : (
         <div className="h-screen w-screen flex flex-col min-h-screen">
           <Sidebar />
           <main className="relative md:ml-64 bg-blueGray-100">

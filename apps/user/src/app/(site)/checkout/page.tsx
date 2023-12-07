@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, FormEvent, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { toast, ToastContainer } from "react-toastify";
-import { provinces } from "vietnam-provinces";
+import { toast } from "react-toastify";
 import { getStripe } from "@/utils/StripeLoad";
 import {
   selectLoggedInUser,
@@ -11,6 +10,7 @@ import {
   selectIsLoggedInSession,
   useAppDispatch,
   useAppSelector,
+  clearCart,
 } from "@/lib/redux";
 import Image from "next/image";
 import Link from "next/link";
@@ -21,14 +21,17 @@ import {
   EmbeddedCheckoutProvider,
   EmbeddedCheckout,
 } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import Loading from "@/components/Loading/Loading";
 
 const Checkout = () => {
   const [loading, setloading] = useState(false);
+  const [address, setAddress] = useState<any>(null);
   const [selectedOption, setSelectedOption] = useState("cod");
   const [clientSecret, setClientSecret] = useState("");
+  const supabase = createClientComponentClient();
 
-  const dispacth = useAppDispatch();
+  const dispatch = useAppDispatch();
   const router = useRouter();
 
   const cart: cartItem[] = useAppSelector(selectCartInState);
@@ -37,7 +40,7 @@ const Checkout = () => {
   const getUserInSession: User = useAppSelector(selectLoggedInUser)!;
   const stripePromise = getStripe();
 
-  const handleSubmit = async (cart: cartItem[], user: User) => {
+  const handleSelect = async (cart: cartItem[], user: User) => {
     setSelectedOption("stripe");
     if (clientSecret !== "") {
       return;
@@ -50,14 +53,57 @@ const Checkout = () => {
       body: JSON.stringify({ cart, user }),
     });
     const data = await checkoutSession.json();
+    if (data.error !== null) {
+      throw Error(data.error);
+    }
     setClientSecret(data.clientSecret);
   };
 
+  const handleSubmit = async (
+    cart: cartItem[],
+    address: any,
+    user: User,
+    method: any,
+    e: any
+  ) => {
+    e.preventDefault();
+    setloading(true);
+
+    const response = await fetch("/api/create_order", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ cart, user, address, method }),
+    });
+
+    const data = await response.json();
+    if (!data.success || !data) {
+      toast.error("Something is wrong, please try again");
+    }
+    if (data.success) {
+      toast.success("Order success");
+      dispatch(clearCart());
+      router.push("/");
+    }
+  };
+
   useEffect(() => {
+    async function getAddress() {
+      const { data, error } = await supabase
+        .from("customer")
+        .select(`*,address(*)`)
+        .single();
+      if (error) {
+        throw Error("Fail to fetch profile");
+      }
+      setAddress(data);
+    }
+    getAddress();
     if (!isLoggedInSession) {
       router.push("/");
     }
-  }, [isLoggedInSession, router]);
+  }, [isLoggedInSession, router, supabase]);
 
   useEffect(() => {
     router.refresh();
@@ -100,9 +146,6 @@ const Checkout = () => {
       <div className="grid sm:px-10 lg:grid-cols-2 lg:px-20 xl:px-32">
         <div className="px-4 pt-8">
           <p className="text-xl font-medium">Order Summary</p>
-          <p className="text-gray-400">
-            Check your items. And select a suitable shipping method.
-          </p>
           <div className="mt-8 space-y-3 rounded-lg border bg-white px-2 py-4 sm:px-6">
             {cart.slice(0, 2).map((item, index) => {
               return (
@@ -139,14 +182,14 @@ const Checkout = () => {
           </div>
 
           <p className="mt-8 text-lg font-medium">Payment Methods</p>
-          <form className="mt-5 grid gap-6">
+          <form className="mt-5 grid gap-6" id="selectMethod">
             <div className="relative">
               <input
                 className="peer hidden"
                 id="radio_1"
                 type="radio"
                 name="radio"
-                checked
+                checked={selectedOption === "cod"}
                 value={"cod"}
                 onChange={() => setSelectedOption("cod")}
               />
@@ -176,8 +219,9 @@ const Checkout = () => {
                 id="radio_2"
                 type="radio"
                 name="radio"
+                checked={selectedOption === "stripe"}
                 value={"stripe"}
-                onChange={() => handleSubmit(cart, getUserInSession)}
+                onChange={() => handleSelect(cart, getUserInSession)}
               />
               <span className="peer-checked:border-gray-700 absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white"></span>
               <label
@@ -217,7 +261,18 @@ const Checkout = () => {
               <p className="text-gray-400">
                 Complete your order by providing your payment details.
               </p>
-              <div className="">
+              <form
+                id="cod"
+                onSubmit={(e) =>
+                  handleSubmit(
+                    cart,
+                    address,
+                    getUserInSession,
+                    selectedOption,
+                    e
+                  )
+                }
+              >
                 <label
                   htmlFor="fullname"
                   className="mt-4 mb-2 block text-sm font-medium"
@@ -231,10 +286,11 @@ const Checkout = () => {
                     name="fullname"
                     className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                     placeholder="Your name"
+                    defaultValue={address?.full_name}
                   />
                 </div>
                 <label
-                  htmlFor="number"
+                  htmlFor="phone"
                   className="mt-4 mb-2 block text-sm font-medium"
                 >
                   Number
@@ -242,10 +298,27 @@ const Checkout = () => {
                 <div className="relative">
                   <input
                     type="text"
-                    id="number"
-                    name="number"
+                    id="phone"
+                    name="phone"
                     className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                     placeholder="0123456789"
+                    defaultValue={address?.phone}
+                  />
+                </div>
+                <label
+                  htmlFor="email"
+                  className="mt-4 mb-2 block text-sm font-medium"
+                >
+                  Email
+                </label>
+                <div className="relative">
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                    placeholder="abc@example.com"
+                    defaultValue={address?.email}
                   />
                 </div>
                 <label
@@ -254,6 +327,38 @@ const Checkout = () => {
                 >
                   Billing Address
                 </label>
+                <label
+                  htmlFor="line1"
+                  className="mt-4 mb-2 block text-sm font-medium"
+                >
+                  Line 1
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    id="line1"
+                    name="line1"
+                    className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                    placeholder="Abc"
+                    defaultValue={address?.address[0].line1}
+                  />
+                </div>
+                <label
+                  htmlFor="line2"
+                  className="mt-4 mb-2 block text-sm font-medium"
+                >
+                  Line 2
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    id="line2"
+                    name="line2"
+                    className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                    placeholder="abc"
+                    defaultValue={address?.address[0].line2}
+                  />
+                </div>
                 <div className="flex flex-col sm:flex-row">
                   <div className="relative flex-shrink-0 sm:w-7/12">
                     <input
@@ -261,20 +366,24 @@ const Checkout = () => {
                       id="billing-address"
                       name="billing-address"
                       className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-                      placeholder="Street Address"
+                      placeholder="Line 1"
+                      defaultValue={address?.address[0].city}
                     />
                   </div>
                   <select
                     name="billing-state"
                     className="w-full rounded-md border border-gray-200 px-4 py-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                   >
-                    <option value="State">State</option>
+                    <option value={address?.address[0].country}>
+                      {address?.address[0].country}
+                    </option>
                   </select>
                   <input
                     type="text"
                     name="billing-zip"
                     className="flex-shrink-0 rounded-md border border-gray-200 px-4 py-3 text-sm shadow-sm outline-none sm:w-1/6 focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                     placeholder="ZIP"
+                    defaultValue={address?.address[0].postal_code}
                   />
                 </div>
 
@@ -289,13 +398,14 @@ const Checkout = () => {
                       })}
                   </p>
                 </div>
-              </div>
-              <button
-                className="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white"
-                onClick={() => handleSubmit(cart, getUserInSession)}
-              >
-                Place Order
-              </button>
+                <button
+                  className="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white"
+                  type="submit"
+                  disabled={loading}
+                >
+                  {loading ? <Loading /> : "Place Order"}
+                </button>
+              </form>
             </div>
           )}
         </div>

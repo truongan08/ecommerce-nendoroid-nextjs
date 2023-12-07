@@ -1,4 +1,3 @@
-import supabase from "@/utils/SupabaseUser";
 import {
   ProductOutput,
   CustomError,
@@ -6,7 +5,9 @@ import {
   TypeProduct,
   Keyword,
 } from "@/types/user";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
+const supabase = createClientComponentClient();
 export class ProductSupabase implements ProductOutput {
   async getProductByStatus({ status }: StatusProduct): Promise<{
     product: any;
@@ -56,10 +57,7 @@ export class ProductSupabase implements ProductOutput {
     const { data: product, error } = await supabase
       .from("product")
       .select("*")
-      .textSearch("name", keyword, {
-        config: "english",
-        type: "plain",
-      });
+      .ilike("name", keyword);
     return Promise.resolve({ product, error });
   }
 }

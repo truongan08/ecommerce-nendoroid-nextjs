@@ -5,6 +5,7 @@ import "ui/styles/globals.scss";
 import "./globals.css";
 import "@/styles/styles.css";
 import { Providers } from "@/providers/AppProviers";
+import ToastProvider from "@/providers/ToastProvider";
 
 const myFont = localFont({ src: "../assets/fonts/fontawesome-webfont.woff2" });
 
@@ -19,7 +20,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
     <html lang="en" className="light">
       <body className={myFont.className}>
         <Providers>
-          <>{children}</>
+          <ToastProvider>{children}</ToastProvider>
         </Providers>
       </body>
     </html>

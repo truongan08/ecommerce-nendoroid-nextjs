@@ -11,7 +11,7 @@ import {
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { CustomError, RequestStatus } from "@/types/user";
 import { useRouter } from "next/navigation";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import Loading from "@/components/Loading/Loading";
 interface RegisterProps {
   modalRegister: boolean;
@@ -45,23 +45,18 @@ const Register: React.FC<RegisterProps> = ({
     router.refresh();
 
     event.target.reset();
-
-    if (signUpStatus === RequestStatus.COMPLETED) {
-      router.push("/comfirm");
-    }
-  };
-
-  const handleReset = () => {
-    clickModalRegister;
-    toast("A confirmation email will be sent to verify your account");
   };
 
   useEffect(() => {
     if (isLoggedInUser) {
       router.refresh();
-      handleReset;
     }
-  }, [isLoggedInUser, router]);
+    if (signUpStatus === RequestStatus.COMPLETED) {
+      clickModalRegister;
+      router.push("/confirm");
+      toast.success("A confirmation email will be sent to verify your account");
+    }
+  }, [clickModalRegister, isLoggedInUser, router, signUpStatus]);
 
   return (
     <div

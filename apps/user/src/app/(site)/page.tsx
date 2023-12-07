@@ -1,7 +1,7 @@
 import Slider from "@/components/Slider";
 import PageContent from "./components/PageContent";
 import CategoryGrid from "@/components/CategoryGrid";
-import getSeller from "@/lib/redux/action/getSeller";
+import Chatwoot from "@/components/ChatWoot";
 
 const HomePage = () => {
   return (
@@ -9,6 +9,7 @@ const HomePage = () => {
       <Slider />
       <CategoryGrid />
       <PageContent />
+      <Chatwoot />
     </>
   );
 };

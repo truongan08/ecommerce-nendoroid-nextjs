@@ -54,7 +54,7 @@ const DetailContent: React.FC<DetailContentProps> = ({ product_id }) => {
 
   const CLickAddToCart = async (data: any) => {
     await dispatch(addToCart(data));
-    toast("Add to cart success");
+    toast.success("Add to cart success");
   };
 
   useEffect(() => {

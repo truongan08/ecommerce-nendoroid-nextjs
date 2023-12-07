@@ -9,15 +9,16 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 const AuthSupabase = () => {
   const router = useRouter();
   const supabase = createClientComponentClient();
-  supabase.auth.onAuthStateChange((event, session) => {
-    if (
-      event == "SIGNED_IN" &&
-      session?.user.app_metadata.claims_admin == true
-    ) {
-      router.push("/dashboard");
-    }
-  });
+
   useEffect(() => {
+    supabase.auth.onAuthStateChange((event, session) => {
+      if (
+        event == "SIGNED_IN" &&
+        session?.user.app_metadata.claims_admin == true
+      ) {
+        router.push("/dashboard");
+      }
+    });
     const checkSession = async () => {
       const { data } = await supabase.auth.getSession();
       if (data.session?.user.app_metadata.claims_admin == true) {

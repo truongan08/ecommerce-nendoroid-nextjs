@@ -2,7 +2,7 @@
 
 import { useState, FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { provinces } from "vietnam-provinces";
 import { getStripe } from "@/utils/StripeLoad";
 import {
@@ -22,7 +22,7 @@ import {
   EmbeddedCheckoutProvider,
   EmbeddedCheckout,
 } from "@stripe/react-stripe-js";
-import supabase from "@/utils/SupabaseUser";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 const Checkout = ({ params }: { params: { id: string } }) => {
   const [loading, setloading] = useState(false);
@@ -31,6 +31,7 @@ const Checkout = ({ params }: { params: { id: string } }) => {
 
   const dispacth = useAppDispatch();
   const router = useRouter();
+  const supabase = createClientComponentClient();
 
   const isLoggedInSession: boolean = useAppSelector(selectIsLoggedInSession);
   const getUserInSession: User = useAppSelector(selectLoggedInUser)!;
@@ -50,19 +51,18 @@ const Checkout = ({ params }: { params: { id: string } }) => {
   };
   const stripePromise = getStripe();
 
-  const handleSubmit = async (product: any, user: User) => {
+  const handleSubmit = async (product: any) => {
     setSelectedOption("stripe");
     if (clientSecret !== "") {
       return;
     }
     const cart = [product];
-    console.log(cart);
     const checkoutSession = await fetch("/api/checkout", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ cart, user }),
+      body: JSON.stringify({ cart }),
     });
     const data = await checkoutSession.json();
     setClientSecret(data.clientSecret);
@@ -167,7 +167,7 @@ const Checkout = ({ params }: { params: { id: string } }) => {
                 type="radio"
                 name="radio"
                 value={"stripe"}
-                onChange={() => handleSubmit(cart, getUserInSession)}
+                onChange={() => handleSubmit(cart)}
               />
               <span className="peer-checked:border-gray-700 absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white"></span>
               <label
@@ -280,7 +280,7 @@ const Checkout = ({ params }: { params: { id: string } }) => {
               </div>
               <button
                 className="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white"
-                onClick={() => handleSubmit(cart, getUserInSession)}
+                onClick={() => handleSubmit(cart)}
               >
                 Place Order
               </button>

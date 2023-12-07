@@ -1,17 +1,20 @@
 import { stripe } from "@/utils/Stripe";
 import { cartItem } from "@/types/user";
 import { NextRequest, NextResponse } from "next/server";
+import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
+
+export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
-  // const { email, id } = await req.json();
+  const cookieStore = cookies();
+  const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
 
-  // if (!email || !id) {
-  //   return NextResponse.json(
-  //     { error: "Missing customer email or customer id" },
-  //     { status: 405 }
-  //   );
-  // }
   const { cart }: { cart: cartItem[] } = await req.json();
+  const { data, error } = await supabase
+    .from("customer")
+    .select("stripe_customer")
+    .single();
 
   const checkoutItems = cart.map((cart: cartItem) => ({
     price_data: {
@@ -29,18 +32,33 @@ export async function POST(req: NextRequest) {
     },
     quantity: cart.quantity,
   }));
+  if (data === null) {
+    return NextResponse.json({
+      fail: true,
+      status: 400,
+      error: error,
+    });
+  }
 
   const session = await stripe.checkout.sessions.create({
     ui_mode: "embedded",
     mode: "payment",
+    customer: data.stripe_customer,
     line_items: checkoutItems,
     return_url: `${req.nextUrl.origin}/return?session_id={CHECKOUT_SESSION_ID}`,
   });
-
+  if (!session) {
+    return NextResponse.json({
+      fail: true,
+      status: 400,
+      error: error,
+    });
+  }
   return NextResponse.json({
     success: true,
     status: 200,
-    clientSecret: session,
+    clientSecret: session.client_secret,
+    error: error,
   });
 }
 
@@ -52,15 +70,18 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       fail: true,
       status: 400,
-      message: "Dont have any session id for check",
+      message: "Don't have session id for check",
     });
   }
 
-  const session: any = await stripe.checkout.sessions.retrieve(session_id);
+  const session = await stripe.checkout.sessions.retrieve(session_id);
 
-  return NextResponse.json({
-    success: true,
-    status: 200,
-    customer_email: session.customer_email,
-  });
+  return NextResponse.json(
+    {
+      success: true,
+      status: session.status,
+      customer_details: session.customer_details,
+    },
+    { status: 200 }
+  );
 }

@@ -25,6 +25,12 @@ export const authReducers = {
     state.signInStatus = payload.error
       ? RequestStatus.FAILED
       : RequestStatus.COMPLETED;
+    payload.error === null && payload.session !== null
+      ? localStorage.setItem(
+          `sb-${process.env.NEXT_PUBLIC_SUPABASE_REFRENCE_ID}-auth-token`,
+          JSON.stringify(payload.session)
+        )
+      : "";
   },
 
   signUp: (

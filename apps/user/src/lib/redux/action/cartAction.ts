@@ -1,9 +1,8 @@
 import { CartOutput, CustomError, cartItem } from "@/types/user";
-import supabase from "@/utils/SupabaseUser";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
+const supabase = createClientComponentClient();
 export class CartSupabase implements CartOutput {
-  supabase = createClientComponentClient();
   async fetchCart(cartDto: cartItem[]): Promise<{
     cart: any | null;
     error: CustomError | null;

@@ -1,27 +1,29 @@
 import React from "react";
-import CardTable from "@/components/Cards/CardTable";
-import supabase from "@/utils/SupabaseAdmin";
+import CardTable from "./components/CardTable";
 
 const Products = async ({ params }: { params: { page: number } }) => {
-  const getStaticProps = async (page: number) => {
-    const limit = 3;
-    const from = page ? page * limit : 0;
-    const to = page ? from + limit : limit;
+  const response = await fetch("http://localhost:3001/api/get_product", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ page: params.page }),
+  });
 
-    const { data, count, error } = await supabase
-      .from("product")
-      .select("*", { count: "exact" })
-      .range(from, to);
-    if (error) {
-      throw Error("Failed to fetch data");
-    }
-    return { tableName: "Product", data, count };
-  };
+  const data = await response.json();
 
-  const data: any = await getStaticProps(params.page);
-
-  if (isNaN(params.page) || params.page > data.count / 4) {
-    return <>Not found your page, pls reload</>;
+  if (
+    isNaN(params.page) ||
+    params.page > data.count / 8 ||
+    data.error !== null
+  ) {
+    return (
+      <div className="min-h-[600px] mx-auto my-0 w-auto max-w-[560px] flex items-center justify-center flex-col">
+        <h1 className="max-w-[529px] text-[38px] font-bold text-black">
+          Woops! Something went wrong!
+        </h1>
+      </div>
+    );
   }
   return (
     <>

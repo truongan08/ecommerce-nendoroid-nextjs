@@ -15,8 +15,10 @@ import {
 import { FaDongSign } from "react-icons/fa6";
 import supabase from "@/utils/SupabaseAdmin";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const AddProduct = () => {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const handleSubmit = async (event: any) => {
@@ -57,6 +59,7 @@ const AddProduct = () => {
     if (!error) {
       onOpen();
       alert("Add product success");
+      router.refresh();
     }
   };
 

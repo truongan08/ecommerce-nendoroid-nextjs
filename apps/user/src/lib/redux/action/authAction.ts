@@ -1,9 +1,8 @@
-import supabase from "@/utils/SupabaseUser";
 import { AuthOutput, SignInDto, SignUpDto, CustomError } from "@/types/user";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
+const supabase = createClientComponentClient();
 export class AuthSupabase implements AuthOutput {
-  supabase = createClientComponentClient();
   async signIn({ email, password }: SignInDto): Promise<{
     session: any | null;
     error: CustomError | null;
@@ -33,7 +32,14 @@ export class AuthSupabase implements AuthOutput {
           full_name: fullname,
           avatar_url:
             "https://gonkolbxsaadkmuxbrak.supabase.co/storage/v1/object/sign/avatars/avatar.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJhdmF0YXJzL2F2YXRhci5wbmciLCJpYXQiOjE3MDA0Nzg5MTQsImV4cCI6MTczMjAxNDkxNH0.9H02QY_2tAClcTjKzt3leslmccrh2s9wSbM6_01cWI0&t=2023-11-20T11%3A15%3A16.141Z",
+          line1: null,
+          line2: null,
+          postal_code: null,
+          city: null,
+          state: null,
+          country: null,
         },
+        emailRedirectTo: "http://localhost:3000/auth/callback",
       },
     });
     return Promise.resolve({ session, error });

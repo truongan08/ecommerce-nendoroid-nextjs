@@ -1,6 +1,5 @@
 import { nanoid } from "nanoid";
 import { decode } from "base64-arraybuffer";
-import supabase from "@/utils/SupabaseUser";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {

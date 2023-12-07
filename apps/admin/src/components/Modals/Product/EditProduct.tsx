@@ -15,12 +15,13 @@ import {
 import { FaDongSign } from "react-icons/fa6";
 import { MdModeEdit } from "react-icons/md";
 import supabase from "@/utils/SupabaseAdmin";
+import { toast } from "react-toastify";
 
-interface AddProductProps {
+interface EditProductProps {
   props: any;
 }
 
-const EditProduct: React.FC<AddProductProps> = ({ props }) => {
+const EditProduct: React.FC<EditProductProps> = ({ props }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const handleSubmit = async (event: any) => {
     event.preventDefault();
@@ -59,7 +60,7 @@ const EditProduct: React.FC<AddProductProps> = ({ props }) => {
     });
     if (!error) {
       onOpen();
-      alert("Add product success");
+      toast.error("Add product success");
     }
   };
   const category = [

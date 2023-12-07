@@ -6,6 +6,7 @@ import "./globals.css";
 const myFont = localFont({ src: "../assets/fonts/fontawesome-webfont.woff2" });
 
 import { Providers } from "@/lib/provider";
+import ToastProvider from "@/provider/ToastProvider";
 
 export const metadata: Metadata = {
   title: "Wigure",
@@ -18,7 +19,9 @@ export default function RootLayout({ children }: PropsWithChildren) {
     <html lang="en" className="light">
       <body className={myFont.className}>
         <div className="flex flex-col min-h-screen">
-          <Providers>{children}</Providers>
+          <Providers>
+            <ToastProvider>{children}</ToastProvider>
+          </Providers>
         </div>
       </body>
     </html>
