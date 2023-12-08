@@ -6,6 +6,7 @@ import {
 } from "@/lib/redux";
 import { order } from "@/types/user";
 import { Session } from "@supabase/auth-helpers-nextjs";
+import Link from "next/link";
 
 interface OrderContentProps {
   order: order[];
@@ -70,11 +71,13 @@ const OrderContent: React.FC<OrderContentProps> = ({ order, session }) => {
             {order?.map((item, index) => {
               return (
                 <tr key={index}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <div className="flex items-center">
-                      <span className="font-bold">{item?.order_id}</span>
-                    </div>
-                  </td>
+                  <Link href={`/orderDetail/${item?.order_id}`}>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <div className="flex items-center">
+                        <span className="font-bold">{item?.order_id}</span>
+                      </div>
+                    </td>
+                  </Link>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <span className="font-bold">
                       {formatDate(item?.created_at)}

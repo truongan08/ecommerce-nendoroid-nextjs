@@ -146,12 +146,12 @@ const Register: React.FC<RegisterProps> = ({
 
             <div className="flex items-center justify-between">
               <div className="text-sm">
-                <a
+                <div
                   className="font-medium text-indigo-600 hover:text-indigo-500"
                   onClick={(e) => clickSwitchModal("login")}
                 >
                   <b>You have account?</b>
-                </a>
+                </div>
               </div>
             </div>
 

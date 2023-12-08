@@ -1,26 +1,15 @@
 import React from "react";
-import PropTypes from "prop-types";
+import { FaUser, FaJediOrder } from "react-icons/fa6";
 
 interface CardStatsProps {
   statSubtitle: string;
   statTitle: string;
-  statArrow: string;
-  statPercent: string;
-  statPercentColor: string;
-  statDescripiron: string;
-  statIconName: string;
   statIconColor: string;
 }
-//statArrow.oneOf(["up", "down"])
 
 const CardStats: React.FC<CardStatsProps> = ({
   statSubtitle,
   statTitle,
-  statArrow,
-  statPercent,
-  statPercentColor,
-  statDescripiron,
-  statIconName,
   statIconColor,
 }) => {
   return (
@@ -43,25 +32,16 @@ const CardStats: React.FC<CardStatsProps> = ({
                   statIconColor
                 }
               >
-                <i className={statIconName}></i>
+                {statSubtitle == "Users" ? (
+                  <FaUser />
+                ) : statSubtitle == "Orders" ? (
+                  <FaJediOrder />
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           </div>
-          <p className="text-sm text-blueGray-400 mt-4">
-            <span className={statPercentColor + " mr-2"}>
-              <i
-                className={
-                  statArrow === "up"
-                    ? "fas fa-arrow-up"
-                    : statArrow === "down"
-                    ? "fas fa-arrow-down"
-                    : ""
-                }
-              ></i>
-              {statPercent}%
-            </span>
-            <span className="whitespace-nowrap">{statDescripiron}</span>
-          </p>
         </div>
       </div>
     </>

@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import Review from "@/components/ModalReview";
 import PriceTag from "@/components/PriceTag";
 import { order, orderDetail } from "@/types/user";
 import Image from "next/image";
@@ -11,6 +13,10 @@ const ContentOrderDetail: React.FC<ContentOrderDetailProps> = ({
   order,
   orderDetail,
 }) => {
+  const [modalReview, setModalReview] = useState(false);
+  const onCLickModalReview = () => {
+    setModalReview(!modalReview);
+  };
   const date = new Date(order?.created_at);
   return (
     <div className="mt-24 py-14 px-4 md:px-6 2xl:px-20 2xl:container 2xl:mx-auto">
@@ -175,9 +181,18 @@ const ContentOrderDetail: React.FC<ContentOrderDetailProps> = ({
                 </div>
               </div>
               <div className="flex w-full justify-center items-center md:justify-start md:items-start">
-                <button className="mt-6 md:mt-0 py-5 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 border border-gray-800 font-medium w-96 2xl:w-full text-base leading-4 text-gray-800">
+                <button
+                  className={`mt-6 md:mt-0 py-5 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 border border-gray-800 font-medium w-96 2xl:w-full text-base leading-4 text-gray-800  ${
+                    order?.status === "complete" ? "" : "hidden"
+                  }`}
+                  onClick={() => onCLickModalReview()}
+                >
                   Review
                 </button>
+                <Review
+                  modalReview={modalReview}
+                  clickModalReview={() => onCLickModalReview()}
+                />
               </div>
             </div>
           </div>

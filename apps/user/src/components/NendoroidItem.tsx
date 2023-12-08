@@ -7,7 +7,12 @@ import { AiOutlineHeart, AiOutlineShoppingCart } from "react-icons/ai";
 import PriceTag from "./PriceTag";
 
 import { Product } from "@/types/user";
-import { addToCart, useAppDispatch } from "@/lib/redux";
+import {
+  addToCart,
+  selectIsLoggedInSession,
+  useAppDispatch,
+  useAppSelector,
+} from "@/lib/redux";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
@@ -17,8 +22,13 @@ interface NendoroidItemProps {
 const NendoroidItem: React.FC<NendoroidItemProps> = ({ data }) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const isLoggedInSession: boolean = useAppSelector(selectIsLoggedInSession);
 
   const CLickAddToCart = async (data: any) => {
+    if (!isLoggedInSession) {
+      toast.error("Please login");
+      return;
+    }
     await dispatch(addToCart(data));
     toast.success("Add to cart complete");
   };

@@ -6,6 +6,7 @@ import "./globals.css";
 import "@/styles/styles.css";
 import { Providers } from "@/providers/AppProviers";
 import ToastProvider from "@/providers/ToastProvider";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 const myFont = localFont({ src: "../assets/fonts/fontawesome-webfont.woff2" });
 

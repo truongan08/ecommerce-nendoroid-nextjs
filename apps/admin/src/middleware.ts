@@ -8,16 +8,11 @@ export async function middleware(req: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
-  supabase.auth.onAuthStateChange((event, session) => {
-    if (event == "SIGNED_IN") {
-      if (session) {
-        if (session?.user.app_metadata.claims_admin == false) {
-          supabase.auth.signOut();
-        }
-      }
+  if (user) {
+    if (!user.app_metadata.claims_admin) {
+      await supabase.auth.signOut();
     }
-  });
+  }
 
   if (req.nextUrl.pathname.startsWith("/products")) {
     return NextResponse.rewrite(new URL("/products/0", req.url));

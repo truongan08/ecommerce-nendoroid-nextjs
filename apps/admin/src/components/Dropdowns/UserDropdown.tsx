@@ -9,13 +9,12 @@ import {
   DropdownItem,
 } from "ui/components";
 import { Avatar } from "ui/components";
-
-import supabase from "@/utils/SupabaseAdmin";
-
 import { useRouter } from "next/navigation";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 const UserDropdown = () => {
   const router = useRouter();
+  const supabase = createClientComponentClient();
   const items = [
     {
       key: "profile",

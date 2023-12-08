@@ -20,10 +20,10 @@ import { useRouter } from "next/navigation";
 const AddProduct = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-
+    setLoading(true);
     const formData = new FormData(event.target);
     const formEntries = Object.fromEntries(formData);
     const category_id: string = formEntries.category_id as string;
@@ -38,7 +38,7 @@ const AddProduct = () => {
       .from("products")
       .upload(`${name}.png`, file, {
         cacheControl: "3600",
-        upsert: false,
+        upsert: true,
       });
     if (!path) {
       throw Error("Can not upload image");
@@ -57,7 +57,8 @@ const AddProduct = () => {
       stock: stockS,
     });
     if (!error) {
-      onOpen();
+      onClose();
+      setLoading(false);
       alert("Add product success");
       router.refresh();
     }
@@ -223,7 +224,7 @@ const AddProduct = () => {
                   <Button color="danger" variant="flat" onPress={onClose}>
                     Close
                   </Button>
-                  <Button type="submit" color="primary">
+                  <Button type="submit" color="primary" isLoading={loading}>
                     Confirm
                   </Button>
                 </ModalFooter>

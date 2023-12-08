@@ -56,7 +56,7 @@ export class ProductSupabase implements ProductOutput {
   }: Keyword): Promise<{ product: any; error: CustomError | null }> {
     const { data: product, error } = await supabase
       .from("product")
-      .select("*")
+      .select()
       .ilike("name", keyword);
     return Promise.resolve({ product, error });
   }

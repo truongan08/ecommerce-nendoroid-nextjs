@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation";
 const AddUser = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const handleSubmit = async (event: any) => {
@@ -54,9 +55,10 @@ const AddUser = () => {
       email: email,
       password: password,
       user_metadata: { full_name: full_name, avatar_url: avatar_url },
+      email_confirm: true,
     });
     if (!error) {
-      onOpen();
+      setSuccess(true);
       alert("Add user success");
       router.refresh();
     }
@@ -161,7 +163,11 @@ const AddUser = () => {
                   <Button color="danger" variant="flat" onPress={onClose}>
                     Close
                   </Button>
-                  <Button type="submit" color="primary">
+                  <Button
+                    type="submit"
+                    color="primary"
+                    onWaiting={success ? onClose : onOpen}
+                  >
                     Confirm
                   </Button>
                 </ModalFooter>

@@ -5,7 +5,6 @@ import { Avatar, AvatarGroup, Button } from "ui/components";
 import { Pagination, PaginationItem, PaginationCursor } from "ui/components";
 import { useRouter } from "next/navigation";
 import AddUser from "@/components/Modals/User/AddUser";
-import EditUser from "@/components/Modals/User/EditUser";
 import supabase from "@/utils/SupabaseAdmin";
 import { MdDelete } from "react-icons/md";
 import { User } from "@supabase/supabase-js";
@@ -27,13 +26,16 @@ const CardTable: React.FC<CardTableProps> = ({
 }) => {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const formatDate = (date: any) => {
+    const dateNew = new Date(date);
+    return `${dateNew.getDate()}/${
+      dateNew.getMonth() + 1
+    }/${dateNew.getFullYear()} ${dateNew.getHours()}:${dateNew.getMinutes()}`;
+  };
   const handleDelete = async (id: any) => {
     const result = confirm("Are you sure, you cant back up after delete");
     if (result == true) {
-      const { error } = await supabase
-        .from("product")
-        .delete()
-        .eq("product_id", id);
+      const { data, error } = await supabase.auth.admin.deleteUser(id);
       if (!error) {
         router.refresh();
       }
@@ -112,40 +114,36 @@ const CardTable: React.FC<CardTableProps> = ({
                     {item?.email}
                   </td>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                    {item?.email_confirmed_at}
+                    {formatDate(item?.email_confirmed_at)}
                   </td>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                     {item?.phone}
                   </td>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                    {item?.confirmation_sent_at}
-                  </td>
-                  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                    {item?.confirmed_at}
-                  </td>
-                  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                    {item?.last_sign_in_at}
-                  </td>
-
-                  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                    {item?.app_metadata.claims_admin ? "Admin" : "User"}
-                  </td>
-
-                  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                    Fullname: {item?.user_metadata.full_name}
-                    <Avatar src={item?.user_metadata.avatar_url} radius="sm" />
+                    {formatDate(item?.confirmed_at)}
                   </td>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                     null
                   </td>
+                  {/* <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                    {formatDate(item?.last_sign_in_at)}
+                  </td> */}
+
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                    {item?.created_at}
+                    Role: {item?.app_metadata.claims_admin ? "Admin" : "User"}{" "}
+                    <br />
+                    Fullname: {item?.user_metadata.full_name}
+                    <Avatar src={item?.user_metadata.avatar_url} radius="sm" />
+                  </td>
+
+                  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                    null
                   </td>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                    {item?.updated_at}
+                    {formatDate(item?.created_at)}
                   </td>
-                  <td className="border-t-0 align-middle border-l-0 border-r-0 text-right">
-                    <EditUser props={item} />
+                  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                    {formatDate(item?.updated_at)}
                   </td>
                   <td className="border-t-0 align-middle border-l-0 border-r-0 text-right">
                     <Button
@@ -161,19 +159,6 @@ const CardTable: React.FC<CardTableProps> = ({
             </tbody>
           </table>
         </div>
-      </div>
-      <div className="float-right ">
-        <Pagination
-          showControls
-          isCompact
-          total={count ? count / 4 : 10}
-          isDisabled={loading}
-          disableAnimation={true}
-          onChange={(page: number) => {
-            router.push(`/products/${page}`);
-          }}
-          page={Number(page)} //! Error start in prev button when refresh page so convert it to number
-        />
       </div>
     </>
   );

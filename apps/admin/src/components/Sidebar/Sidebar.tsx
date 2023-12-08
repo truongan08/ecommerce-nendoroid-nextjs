@@ -142,7 +142,7 @@ const Sidebar = () => {
 
               <li className="items-center">
                 <Link
-                  href="/users"
+                  href="/users/0"
                   className={
                     "text-xs uppercase py-3 font-bold block " +
                     (pathname.indexOf("/users") !== -1
@@ -164,7 +164,7 @@ const Sidebar = () => {
 
               <li className="items-center">
                 <Link
-                  href="/orders"
+                  href="/orders/0"
                   className={
                     "text-xs uppercase py-3 font-bold block " +
                     (pathname.indexOf("/orders") !== -1
@@ -181,40 +181,6 @@ const Sidebar = () => {
                     }
                   ></AiOutlineShopping>
                   Orders
-                </Link>
-              </li>
-            </ul>
-
-            {/* Divider */}
-            <hr className="my-4 md:min-w-full" />
-            {/* Heading */}
-            <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-              Admin action page
-            </h6>
-            {/* Navigation */}
-
-            <ul className="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
-              <li className="items-center">
-                <Link href="/auth/login">
-                  <Link
-                    href="#pablo"
-                    className="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block"
-                  >
-                    <i className="fas fa-fingerprint text-blueGray-400 mr-2 text-sm"></i>
-                    Login
-                  </Link>
-                </Link>
-              </li>
-
-              <li className="items-center">
-                <Link href="/auth/register">
-                  <Link
-                    href="#pablo"
-                    className="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block"
-                  >
-                    <i className="fas fa-clipboard-list text-blueGray-300 mr-2 text-sm"></i>
-                    Register
-                  </Link>
                 </Link>
               </li>
             </ul>

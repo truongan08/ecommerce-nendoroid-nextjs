@@ -16,15 +16,20 @@ import { FaDongSign } from "react-icons/fa6";
 import { MdModeEdit } from "react-icons/md";
 import supabase from "@/utils/SupabaseAdmin";
 import { toast } from "react-toastify";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface EditProductProps {
   props: any;
 }
 
 const EditProduct: React.FC<EditProductProps> = ({ props }) => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
   const handleSubmit = async (event: any) => {
     event.preventDefault();
+    setLoading(true);
 
     const formData = new FormData(event.target);
     const formEntries = Object.fromEntries(formData);
@@ -59,8 +64,10 @@ const EditProduct: React.FC<EditProductProps> = ({ props }) => {
       stock: stockS,
     });
     if (!error) {
-      onOpen();
-      toast.error("Add product success");
+      onClose();
+      setLoading(false);
+      toast.error("Edit product success");
+      router.refresh();
     }
   };
   const category = [
@@ -87,7 +94,7 @@ const EditProduct: React.FC<EditProductProps> = ({ props }) => {
             <>
               <form onSubmit={(e) => handleSubmit(e)}>
                 <ModalHeader className="flex flex-col gap-1">
-                  Add product
+                  Edit product
                 </ModalHeader>
                 <ModalBody>
                   <Select
@@ -222,7 +229,7 @@ const EditProduct: React.FC<EditProductProps> = ({ props }) => {
                   <Button color="danger" variant="flat" onPress={onClose}>
                     Close
                   </Button>
-                  <Button type="submit" color="primary" onPress={onClose}>
+                  <Button type="submit" color="primary" isLoading={loading}>
                     Confirm
                   </Button>
                 </ModalFooter>

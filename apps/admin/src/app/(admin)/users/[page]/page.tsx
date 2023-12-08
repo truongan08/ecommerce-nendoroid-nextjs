@@ -18,9 +18,8 @@ const getData = async (page: number) => {
 
 const Users = async ({ params }: { params: { page: number } }) => {
   const data: any = await getData(params.page);
-  console.log(data);
 
-  if (isNaN(params.page) || params.page > data.count / 8) {
+  if (isNaN(params.page) || params.page > data.lenght / 8) {
     return <>Not found page, pls reload</>;
   }
   return (
@@ -30,7 +29,7 @@ const Users = async ({ params }: { params: { page: number } }) => {
           <CardTable
             data={data.users}
             tableName={data.tableName}
-            count={data.count}
+            count={data.length}
             page={params.page}
           />
         </div>
