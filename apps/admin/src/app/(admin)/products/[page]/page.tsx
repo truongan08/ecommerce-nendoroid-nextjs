@@ -2,13 +2,16 @@ import React from "react";
 import CardTable from "./components/CardTable";
 
 const Products = async ({ params }: { params: { page: number } }) => {
-  const response = await fetch("http://localhost:3001/api/get_product", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ page: params.page }),
-  });
+  const response = await fetch(
+    "https://wigure-admin.vercel.app/api/get_product",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ page: params.page }),
+    }
+  );
 
   const data = await response.json();
 
