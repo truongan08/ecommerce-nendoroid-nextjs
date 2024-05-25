@@ -4,7 +4,8 @@ import ProductReview from "./components/Review";
 import { cookies } from "next/headers";
 
 const Product = async ({ params }: { params: { slug: string } }) => {
-  const supabase = createServerComponentClient({ cookies });
+  const cookieStore = cookies();
+  const supabase = createServerComponentClient({ cookies: () => cookieStore });
   const { data, error } = await supabase
     .from("review")
     .select("*")
