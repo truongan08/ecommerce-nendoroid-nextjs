@@ -1,0 +1,65 @@
+{
+  "format": 1,
+  "restore": {
+    "F:\\Project\\WebProject\\ecommerce-nendoroid-nextjs\\apps\\backend\\BackEnd.Api\\BackEnd.Api.csproj": {}
+  },
+  "projects": {
+    "F:\\Project\\WebProject\\ecommerce-nendoroid-nextjs\\apps\\backend\\BackEnd.Api\\BackEnd.Api.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "F:\\Project\\WebProject\\ecommerce-nendoroid-nextjs\\apps\\backend\\BackEnd.Api\\BackEnd.Api.csproj",
+        "projectName": "BackEnd.Api",
+        "projectPath": "F:\\Project\\WebProject\\ecommerce-nendoroid-nextjs\\apps\\backend\\BackEnd.Api\\BackEnd.Api.csproj",
+        "packagesPath": "C:\\Users\\truongan\\.nuget\\packages\\",
+        "outputPath": "F:\\Project\\WebProject\\ecommerce-nendoroid-nextjs\\apps\\backend\\BackEnd.Api\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\truongan\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "C:\\Users\\truongan\\scoop\\apps\\dotnet-sdk\\current\\sdk\\7.0.302\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Users\\truongan\\scoop\\apps\\dotnet-sdk\\current\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
