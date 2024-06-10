@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackEnd.Api", "apps\backend\BackEnd.Api\BackEnd.Api.csproj", "{BC751848-D7C8-41B3-8D2F-EC1AE1A63885}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackEndR.Api", "apps\backend\BackEndR.Api\BackEndR.Api.csproj", "{BC751848-D7C8-41B3-8D2F-EC1AE1A63885}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
