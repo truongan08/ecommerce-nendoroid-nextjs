@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BackEndR.Api.Models
-{
-    public class Address
-{
+namespace BackEndR.Api.Models{ 
+    public class Address{
     [Key]
     public int Id { get; set; }
 
@@ -31,3 +29,5 @@ namespace BackEndR.Api.Models
     public string UserId { get; set; }
     public User? User { get; set; }
 }
+}
+   

@@ -6,7 +6,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BackEndR.Api.DTOs
 {
-{
     public class UserDTO
     {
         [Required]
@@ -19,5 +18,5 @@ namespace BackEndR.Api.DTOs
         public string Role { get; set; }
         public AddressDTO? Address { get; set; }
     }
-}
+
 }
